@@ -1,3 +1,13 @@
+# → Read [AGENTS.md](./AGENTS.md) first
+
+**[AGENTS.md](./AGENTS.md) is the single source of truth** for this repo:
+architecture, the token pipeline, package conventions, how-to guides, commands,
+module boundaries, and the hard-won gotchas (Jest+ESM, Storybook built-package
+consumption, the TypeScript 5.9 pin, commitlint subject-case, …).
+
+This file exists only so Claude Code has a `CLAUDE.md` and so Nx can keep its
+generated guidance block (below) up to date. Everything real lives in AGENTS.md.
+
 <!-- nx configuration start-->
 <!-- Leave the start & end comments to automatically receive updates. -->
 
