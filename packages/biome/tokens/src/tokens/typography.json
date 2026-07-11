@@ -1,0 +1,43 @@
+{
+  "font": {
+    "display": { "value": "'Newsreader', Georgia, 'Times New Roman', serif" },
+    "reading": { "value": "'Spectral', Georgia, serif" },
+    "ui": { "value": "'Space Grotesk', system-ui, -apple-system, sans-serif" },
+    "mono": { "value": "'JetBrains Mono', ui-monospace, 'SF Mono', monospace" }
+  },
+  "text": {
+    "heading": { "value": "{font.display}" },
+    "prose": { "value": "{font.reading}" },
+    "label": { "value": "{font.ui}" },
+    "code": { "value": "{font.mono}" }
+  },
+  "size": {
+    "xs": { "value": "12px" },
+    "sm": { "value": "14px" },
+    "base": { "value": "16px" },
+    "md": { "value": "19px" },
+    "lg": { "value": "26px" },
+    "xl": { "value": "34px" },
+    "2xl": { "value": "52px" },
+    "display": { "value": "clamp(52px, 10vw, 150px)" }
+  },
+  "weight": {
+    "light": { "value": "300" },
+    "regular": { "value": "400" },
+    "medium": { "value": "500" },
+    "semibold": { "value": "600" },
+    "bold": { "value": "700" }
+  },
+  "leading": {
+    "tight": { "value": "0.94" },
+    "snug": { "value": "1.1" },
+    "normal": { "value": "1.5" },
+    "relaxed": { "value": "1.62" }
+  },
+  "tracking": {
+    "display": { "value": "-0.02em" },
+    "tight": { "value": "-0.01em" },
+    "label": { "value": "0.04em" },
+    "mono": { "value": "0.08em" }
+  }
+}

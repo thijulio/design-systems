@@ -1,0 +1,15 @@
+{
+  "ease": {
+    "organic": { "value": "cubic-bezier(0.2, 0.7, 0.2, 1)" },
+    "out": { "value": "cubic-bezier(0.16, 1, 0.3, 1)" },
+    "in-out": { "value": "cubic-bezier(0.65, 0, 0.35, 1)" }
+  },
+  "dur": {
+    "fast": { "value": "0.25s" },
+    "base": { "value": "0.4s" },
+    "slow": { "value": "0.6s" }
+  },
+  "breath": { "value": "9s" },
+  "breath-slow": { "value": "13s" },
+  "flow": { "value": "9s" }
+}

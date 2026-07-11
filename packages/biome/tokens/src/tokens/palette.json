@@ -1,0 +1,23 @@
+{
+  "bm": {
+    "bone": { "value": "#F2EEE2" },
+    "bone-raised": { "value": "#F8F5EC" },
+    "ink": { "value": "#232A20" },
+    "ink-soft": { "value": "#4A4A3E" },
+    "mata": { "value": "#3F5237" },
+    "mata-deep": { "value": "#2E3D28" },
+    "cerrado": { "value": "#6E7A48" },
+    "terracotta": { "value": "#B5532A" },
+    "ipe": { "value": "#E8A627" },
+    "stone": { "value": "#8C8275" },
+    "hairline": { "value": "rgba(35, 42, 32, 0.12)" },
+
+    "canopy": { "value": "#161D16" },
+    "understory": { "value": "#1E261E" },
+    "bone-light": { "value": "#ECEFE3" },
+    "sage": { "value": "#8FB089" },
+    "sage-soft": { "value": "#6E9B7E" },
+    "terracotta-dk": { "value": "#C8693B" },
+    "hairline-dk": { "value": "rgba(236, 239, 227, 0.16)" }
+  }
+}

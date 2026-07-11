@@ -36,7 +36,8 @@
     "typescript-eslint": "^8.40.0"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/biome/*"
   ],
   "dependencies": {}
 }

@@ -1,0 +1,21 @@
+{
+  "surface": {
+    "page": { "value": "{bm.canopy}" },
+    "raised": { "value": "{bm.understory}" },
+    "inverse": { "value": "{bm.bone}" }
+  },
+  "text": {
+    "strong": { "value": "{bm.bone-light}" },
+    "body": { "value": "rgba(236, 239, 227, 0.82)" },
+    "muted": { "value": "#7E8C7A" }
+  },
+  "brand": { "value": "{bm.sage}" },
+  "brand-hover": { "value": "#A6C29F" },
+  "brand-2": { "value": "{bm.sage-soft}" },
+  "accent-warm": { "value": "{bm.terracotta-dk}" },
+  "accent-highlight": { "value": "{bm.ipe}" },
+  "border": { "value": "{bm.hairline-dk}" },
+  "focus": { "value": "{bm.sage}" },
+  "on-brand": { "value": "{bm.canopy}" },
+  "nav-bg": { "value": "rgba(22, 29, 22, 0.82)" }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "@thijulio/biome-tokens",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/tokens.js",
+  "types": "./dist/tokens.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js",
+      "default": "./dist/tokens.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node verify.mjs"
+  },
+  "devDependencies": {
+    "@thijulio/core": "*"
+  },
+  "nx": {
+    "name": "biome-tokens",
+    "tags": [
+      "scope:biome"
+    ],
+    "targets": {
+      "build": {
+        "command": "node {projectRoot}/build.mjs",
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "{projectRoot}/dist"
+        ],
+        "cache": true
+      },
+      "test": {
+        "command": "node {projectRoot}/verify.mjs",
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true
+      }
+    }
+  }
+}

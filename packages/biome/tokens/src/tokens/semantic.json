@@ -1,0 +1,21 @@
+{
+  "surface": {
+    "page": { "value": "{bm.bone}" },
+    "raised": { "value": "{bm.bone-raised}" },
+    "inverse": { "value": "{bm.canopy}" }
+  },
+  "text": {
+    "strong": { "value": "{bm.ink}" },
+    "body": { "value": "{bm.ink-soft}" },
+    "muted": { "value": "{bm.stone}" }
+  },
+  "brand": { "value": "{bm.mata}" },
+  "brand-hover": { "value": "{bm.mata-deep}" },
+  "brand-2": { "value": "{bm.cerrado}" },
+  "accent-warm": { "value": "{bm.terracotta}" },
+  "accent-highlight": { "value": "{bm.ipe}" },
+  "border": { "value": "{bm.hairline}" },
+  "focus": { "value": "{bm.cerrado}" },
+  "on-brand": { "value": "{bm.bone}" },
+  "nav-bg": { "value": "rgba(242, 238, 226, 0.86)" }
+}
