@@ -55,7 +55,8 @@
   },
   "workspaces": [
     "packages/*",
-    "packages/biome/*"
+    "packages/biome/*",
+    "packages/exodus/*"
   ],
   "dependencies": {
     "react": "^19.0.0",

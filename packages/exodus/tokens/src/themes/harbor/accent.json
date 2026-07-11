@@ -1,0 +1,17 @@
+{
+  "accent-50": { "value": "#eef4fb" },
+  "accent-100": { "value": "#d8e6f5" },
+  "accent-200": { "value": "#b3cdea" },
+  "accent-300": { "value": "#82aedb" },
+  "accent-400": { "value": "#5189c6" },
+  "accent-500": { "value": "#356daa" },
+  "accent-600": { "value": "#2a5688" },
+  "accent-700": { "value": "#24466e" },
+  "accent-800": { "value": "#213c5c" },
+  "accent-900": { "value": "#1d324d" },
+  "accent": { "value": "{accent-600}" },
+  "accent-strong": { "value": "{accent-700}" },
+  "accent-soft": { "value": "{accent-100}" },
+  "accent-fg": { "value": "{accent-700}" },
+  "accent-ring": { "value": "{accent-100}" }
+}
