@@ -1,0 +1,41 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-sans);
+}
+
+.box {
+  width: 19px;
+  height: 19px;
+  border-radius: 5px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1.5px solid var(--n-300);
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.text {
+  font-size: var(--text-body-sm);
+  color: var(--n-800);
+  font-weight: 500;
+}
+
+/* visually hidden but focusable/accessible native input */
+.native {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}

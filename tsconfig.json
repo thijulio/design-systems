@@ -8,6 +8,9 @@
     },
     {
       "path": "./packages/biome/react"
+    },
+    {
+      "path": "./packages/exodus/react"
     }
   ]
 }

@@ -1,0 +1,31 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.button {
+  cursor: pointer;
+}
+
+.mark {
+  width: var(--bm-dim);
+  height: var(--bm-dim);
+  border-radius: var(--radius-lg);
+  flex: none;
+  background: var(--accent);
+  color: var(--accent-on);
+  box-shadow: var(--shadow-xs);
+  display: grid;
+  place-items: center;
+}
+
+.name {
+  font-family: var(--bm-family);
+  font-weight: 800;
+  font-size: var(--bm-font);
+  letter-spacing: -0.02em;
+  color: var(--n-900);
+}

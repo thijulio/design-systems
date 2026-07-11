@@ -1,0 +1,19 @@
+.avatar {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  width: var(--av-size);
+  height: var(--av-size);
+  font-size: var(--av-font);
+  background: var(--av-bg);
+  color: var(--av-fg);
+}
+
+.circle {
+  border-radius: var(--radius-full);
+}
+.rounded {
+  border-radius: var(--radius-md);
+}

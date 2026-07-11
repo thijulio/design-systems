@@ -1,0 +1,22 @@
+.wrap {
+  position: relative;
+}
+
+.select {
+  composes: input from '../Input/Input.module.css';
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.invalid {
+  composes: invalid from '../Input/Input.module.css';
+}
+
+.chevron {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  pointer-events: none;
+}

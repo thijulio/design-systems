@@ -1,0 +1,28 @@
+.field {
+  display: block;
+  font-family: var(--font-sans);
+}
+
+.label {
+  display: block;
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--n-700);
+  margin-bottom: 7px;
+}
+.required {
+  color: var(--danger);
+}
+
+.hint {
+  display: block;
+  font-size: var(--text-caption);
+  color: var(--n-500);
+  margin-top: 6px;
+}
+.error {
+  display: block;
+  font-size: var(--text-caption);
+  color: var(--danger-fg);
+  margin-top: 6px;
+}
