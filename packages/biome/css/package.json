@@ -1,0 +1,45 @@
+{
+  "name": "@thijulio/biome-css",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./biome.css": "./dist/biome.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node verify.mjs"
+  },
+  "devDependencies": {
+    "@thijulio/biome-tokens": "*"
+  },
+  "nx": {
+    "name": "biome-css",
+    "tags": [
+      "scope:biome"
+    ],
+    "targets": {
+      "build": {
+        "command": "node {projectRoot}/build.mjs",
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "{projectRoot}/dist"
+        ],
+        "cache": true
+      },
+      "test": {
+        "command": "node {projectRoot}/verify.mjs",
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true
+      }
+    }
+  }
+}

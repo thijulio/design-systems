@@ -1,0 +1,41 @@
+/* Biome Modernism — motion behaviour
+   The living-geometry keyframes, reduced-motion guard, and focus ring.
+   The timing/easing *values* live in @thijulio/biome-tokens; these are the rules. */
+
+@keyframes bm-breath {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.82;
+  }
+}
+
+@keyframes bm-glow {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Visible, luminescent focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

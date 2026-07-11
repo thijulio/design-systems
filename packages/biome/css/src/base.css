@@ -1,0 +1,68 @@
+/* Biome Modernism — base element defaults
+   Consumes the design tokens. Body reads in Spectral; headings display in
+   Newsreader; code in JetBrains Mono. Warm bone ground, ink text. */
+
+body {
+  background: var(--surface-page);
+  color: var(--text-body);
+  font-family: var(--font-reading);
+  font-size: var(--size-base);
+  font-weight: var(--weight-regular);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-strong);
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+h1 {
+  font-size: var(--size-xl);
+}
+h2 {
+  font-size: var(--size-lg);
+}
+h3 {
+  font-size: var(--size-md);
+}
+
+small {
+  font-size: var(--size-sm);
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--brand);
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.15em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+a:hover {
+  color: var(--brand-hover);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+hr {
+  border: none;
+  border-top: var(--border-width) solid var(--border);
+}
+
+::selection {
+  background: var(--brand);
+  color: var(--on-brand);
+}
