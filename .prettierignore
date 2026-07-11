@@ -4,3 +4,6 @@
 /.nx/cache
 /.nx/workspace-data
 .nx/self-healing
+
+# swc runtime configs — JSON content, but the extension has no prettier parser
+**/*.swcrc
