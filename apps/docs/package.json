@@ -1,0 +1,18 @@
+{
+  "name": "@thijulio/docs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "nx": {
+    "name": "docs",
+    "tags": [
+      "scope:docs"
+    ]
+  },
+  "devDependencies": {
+    "@thijulio/biome-css": "*",
+    "@thijulio/biome-react": "*",
+    "@thijulio/exodus-css": "*",
+    "@thijulio/exodus-react": "*"
+  }
+}

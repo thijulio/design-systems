@@ -5,7 +5,12 @@ export default [
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   {
-    ignores: ['**/dist', '**/out-tsc', '**/vite.config.*.timestamp*'],
+    ignores: [
+      '**/dist',
+      '**/out-tsc',
+      '**/storybook-static',
+      '**/vite.config.*.timestamp*',
+    ],
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
@@ -30,6 +35,16 @@ export default [
             {
               sourceTag: 'scope:exodus',
               onlyDependOnLibsWithTags: ['scope:core', 'scope:exodus'],
+            },
+            // Docs (Storybook) is the one place both brands are consumed together.
+            {
+              sourceTag: 'scope:docs',
+              onlyDependOnLibsWithTags: [
+                'scope:core',
+                'scope:biome',
+                'scope:exodus',
+                'scope:docs',
+              ],
             },
           ],
         },

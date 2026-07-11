@@ -17,8 +17,11 @@
     "@nx/jest": "23.0.1",
     "@nx/js": "23.0.1",
     "@nx/react": "^23.0.1",
+    "@nx/storybook": "^23.0.1",
     "@nx/vite": "^23.0.1",
     "@nx/web": "23.0.1",
+    "@storybook/addon-docs": "^10.5.0",
+    "@storybook/react-vite": "^10.1.0",
     "@swc-node/register": "1.11.1",
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",
@@ -45,6 +48,7 @@
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "23.0.1",
     "prettier": "^3.8.1",
+    "storybook": "^10.1.0",
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
@@ -56,7 +60,8 @@
   "workspaces": [
     "packages/*",
     "packages/biome/*",
-    "packages/exodus/*"
+    "packages/exodus/*",
+    "apps/*"
   ],
   "dependencies": {
     "react": "^19.0.0",

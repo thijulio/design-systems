@@ -51,3 +51,5 @@ Thumbs.db
 test-output
 
 vite.config.*.timestamp*
+
+storybook-static
