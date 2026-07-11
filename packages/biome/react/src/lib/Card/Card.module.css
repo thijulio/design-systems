@@ -1,0 +1,75 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  padding: 28px 26px;
+}
+
+.editorial {
+  border-radius: var(--radius-ui-lg);
+  background: var(--surface-raised);
+  color: var(--text-strong);
+  border: 1px solid var(--border);
+}
+
+.expressive {
+  border-radius: var(--radius-soft);
+  background: var(--brand);
+  color: var(--on-brand);
+  border: none;
+}
+
+.inner {
+  position: relative;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.expressive .kicker {
+  color: rgba(242, 238, 226, 0.7);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.08;
+}
+.titleGap {
+  margin-bottom: 10px;
+}
+
+.body {
+  font-family: var(--font-reading);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-body);
+}
+.expressive .body {
+  color: rgba(242, 238, 226, 0.82);
+}
+
+/* decorative arcs on the expressive surface */
+.arc {
+  position: absolute;
+  border-radius: 50%;
+}
+.arc1 {
+  top: -40px;
+  right: -40px;
+  width: 150px;
+  height: 150px;
+  border: 1.5px solid rgba(242, 238, 226, 0.18);
+}
+.arc2 {
+  top: -12px;
+  right: -12px;
+  width: 92px;
+  height: 92px;
+  border: 1.5px solid rgba(232, 166, 39, 0.4);
+}
