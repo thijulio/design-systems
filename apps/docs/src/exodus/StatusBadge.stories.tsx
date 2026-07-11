@@ -1,5 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StatusBadge } from '@thijulio/exodus-react';
+import type { LifecycleState } from '@thijulio/exodus-react';
+
+const ALL_STATES: LifecycleState[] = [
+  'draft',
+  'pending',
+  'awaiting-review',
+  'on-hold',
+  'confirmed',
+  'reserved',
+  'active',
+  'available',
+  'completed',
+  'adopted',
+  'quarantined',
+  'cancelled',
+  'archived',
+];
 
 const meta: Meta<typeof StatusBadge> = {
   title: 'Exodus/StatusBadge',
@@ -15,23 +32,7 @@ export const Single: Story = { args: { state: 'active' } };
 export const AllStates: Story = {
   render: () => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, maxWidth: 520 }}>
-      {(
-        [
-          'draft',
-          'pending',
-          'awaiting-review',
-          'on-hold',
-          'confirmed',
-          'reserved',
-          'active',
-          'available',
-          'completed',
-          'adopted',
-          'quarantined',
-          'cancelled',
-          'archived',
-        ] as const
-      ).map((state) => (
+      {ALL_STATES.map((state) => (
         <StatusBadge key={state} state={state} />
       ))}
     </div>

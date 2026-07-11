@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
 import type { Preview, Decorator } from '@storybook/react-vite';
-// Built token+base CSS as strings; only the active brand's is injected per story
+// Component styles from the built packages — hash-scoped, so loading both brands
+// globally is safe (no :root collision).
+import '@thijulio/biome-react/styles.css';
+import '@thijulio/exodus-react/styles.css';
+// Token + base CSS as strings; only the active brand's is injected per story
 // (Biome and Exodus both scope tokens to :root and share a few generic var names).
 import biomeCss from '@thijulio/biome-css/biome.css?inline';
 import exodusCss from '@thijulio/exodus-css/exodus.css?inline';
