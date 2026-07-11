@@ -1,0 +1,60 @@
+/* Exodus — base element defaults. Hanken Grotesk everywhere, warm stone
+   neutrals, accent-driven links and focus. Consumes the design tokens. */
+
+body {
+  background: var(--n-50);
+  color: var(--n-800);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: var(--weight-regular);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--n-900);
+  font-family: var(--font-sans);
+  line-height: var(--leading-tight);
+}
+
+h1 {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-extra);
+  letter-spacing: var(--tracking-tight);
+}
+h2 {
+  font-size: var(--text-h2);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-snug);
+}
+h3 {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-bold);
+}
+
+small {
+  font-size: var(--text-caption);
+  color: var(--n-500);
+}
+
+a {
+  color: var(--accent-fg);
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.15em;
+}
+a:hover {
+  color: var(--accent-strong);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--n-200);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-on);
+}
