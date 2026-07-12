@@ -1,0 +1,64 @@
+name: Release
+
+# Manually-triggered publish of the six @thijulio packages to GitHub Packages.
+# Runs `nx release`: version (conventional commits) → changelog → git tag →
+# publish the built dist. Independent of the Storybook Pages deploy.
+
+on:
+  workflow_dispatch:
+    inputs:
+      first_release:
+        description: 'First release (no previous version tags exist yet)'
+        type: boolean
+        default: false
+      dry_run:
+        description: 'Dry run — compute versions and pack, but do not push or publish'
+        type: boolean
+        default: false
+
+# commit version bumps + changelogs and push tags; publish to GitHub Packages.
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  NX_DAEMON: 'false'
+
+jobs:
+  release:
+    name: nx release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Packages publish their built dist — build the whole graph first.
+      - run: npx nx run-many -t build
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: nx release
+        run: |
+          npx nx release ${{ inputs.first_release && '--first-release' || '' }} ${{ inputs.dry_run && '--dry-run' || '' }} --yes
+        env:
+          # Repo .npmrc reads _authToken=${NODE_AUTH_TOKEN}; GITHUB_TOKEN carries
+          # packages:write for this repo's GitHub Packages registry.
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
