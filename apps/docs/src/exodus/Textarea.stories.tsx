@@ -5,7 +5,12 @@ const meta: Meta<typeof Textarea> = {
   title: 'Exodus/Forms/Textarea',
   component: Textarea,
   args: { placeholder: 'Notes about this animal…', rows: 4 },
-  argTypes: { invalid: { control: 'boolean' } },
+  argTypes: {
+    invalid: {
+      control: 'boolean',
+      description: 'Flip to the danger outline.',
+    },
+  },
   decorators: [
     (Story) => (
       <div style={{ maxWidth: 360 }}>

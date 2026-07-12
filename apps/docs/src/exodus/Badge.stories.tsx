@@ -9,6 +9,8 @@ const meta: Meta<typeof Badge> = {
     tone: {
       control: 'inline-radio',
       options: ['neutral', 'accent', 'success', 'warning', 'danger', 'info'],
+      description:
+        'Fixed count/label palette. Lifecycle states should use StatusBadge.',
     },
   },
 };

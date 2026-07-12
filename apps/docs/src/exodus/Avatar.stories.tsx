@@ -6,8 +6,19 @@ const meta: Meta<typeof Avatar> = {
   component: Avatar,
   args: { initials: 'TV', size: 40 },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['accent', 'soft'] },
-    shape: { control: 'inline-radio', options: ['circle', 'rounded'] },
+    initials: {
+      description: 'One or two letters shown when there is no image.',
+    },
+    variant: {
+      control: 'inline-radio',
+      options: ['accent', 'soft'],
+      description: 'accent fill (default) or soft tint.',
+    },
+    shape: {
+      control: 'inline-radio',
+      options: ['circle', 'rounded'],
+      description: 'Circle or rounded-square silhouette.',
+    },
     tone: {
       control: 'select',
       options: [
@@ -19,8 +30,13 @@ const meta: Meta<typeof Avatar> = {
         'amber',
         'violet',
       ],
+      description:
+        'Fixed status palette, overriding variant (for profile-type avatars).',
     },
-    size: { control: { type: 'range', min: 24, max: 72, step: 4 } },
+    size: {
+      control: { type: 'range', min: 24, max: 72, step: 4 },
+      description: 'Pixel size (width/height); font scales with it.',
+    },
   },
 };
 export default meta;

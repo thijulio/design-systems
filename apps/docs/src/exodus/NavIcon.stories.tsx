@@ -8,7 +8,15 @@ const meta: Meta<typeof NavIcon> = {
   title: 'Exodus/Identity/NavIcon',
   component: NavIcon,
   args: { name: 'paw', size: 24 },
-  argTypes: { name: { control: 'select', options: NAMES } },
+  argTypes: {
+    name: {
+      control: 'select',
+      options: NAMES,
+      description: 'Which icon to render.',
+    },
+    size: { description: 'Pixel size (width/height).' },
+    strokeWidth: { description: 'Stroke width of the line icon.' },
+  },
 };
 export default meta;
 

@@ -9,8 +9,12 @@ const meta: Meta<typeof Tag> = {
     variant: {
       control: 'inline-radio',
       options: ['outline', 'solid', 'muted'],
+      description: 'outline (default), solid emphasis, or muted mono.',
     },
-    status: { control: 'boolean' },
+    status: {
+      control: 'boolean',
+      description: 'Show a pulsing status dot before the label.',
+    },
   },
 };
 export default meta;

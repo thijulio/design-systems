@@ -6,8 +6,18 @@ const meta: Meta<typeof BrandMark> = {
   component: BrandMark,
   args: { name: 'Companion' },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    wordmarkFont: { control: 'inline-radio', options: ['sans', 'baloo'] },
+    name: { description: 'Product name / wordmark text.' },
+    size: {
+      control: 'inline-radio',
+      options: ['sm', 'md', 'lg'],
+      description: 'Mark + wordmark size.',
+    },
+    wordmarkFont: {
+      control: 'inline-radio',
+      options: ['sans', 'baloo'],
+      description:
+        '`baloo` uses the reserved wordmark face (var(--font-wordmark)).',
+    },
   },
 };
 export default meta;

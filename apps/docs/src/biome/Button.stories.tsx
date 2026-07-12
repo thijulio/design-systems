@@ -9,8 +9,19 @@ const meta: Meta<typeof Button> = {
     variant: {
       control: 'inline-radio',
       options: ['primary', 'secondary', 'ghost'],
+      description:
+        'Visual weight. primary = filled mata; secondary = outline; ghost = text-only warm.',
     },
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    size: {
+      control: 'inline-radio',
+      options: ['sm', 'md', 'lg'],
+      description: 'Control size.',
+    },
+    href: {
+      control: 'text',
+      description:
+        'Render as an anchor instead of a button. Ignored when disabled.',
+    },
   },
 };
 export default meta;

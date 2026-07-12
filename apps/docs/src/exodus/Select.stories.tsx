@@ -4,7 +4,12 @@ import { Select } from '@thijulio/exodus-react';
 const meta: Meta<typeof Select> = {
   title: 'Exodus/Forms/Select',
   component: Select,
-  argTypes: { invalid: { control: 'boolean' } },
+  argTypes: {
+    invalid: {
+      control: 'boolean',
+      description: 'Flip to the danger outline.',
+    },
+  },
   decorators: [
     (Story) => (
       <div style={{ maxWidth: 320 }}>

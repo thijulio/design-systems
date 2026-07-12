@@ -10,8 +10,14 @@ const meta: Meta<typeof Card> = {
       'The standard white surface — stone border, lg radius, elevation.',
   },
   argTypes: {
-    pad: { control: 'boolean' },
-    interactive: { control: 'boolean' },
+    pad: {
+      control: 'boolean',
+      description: 'Apply the default 18/20 padding.',
+    },
+    interactive: {
+      control: 'boolean',
+      description: 'Add the hover-lift used by clickable cards.',
+    },
   },
   decorators: [
     (Story) => (

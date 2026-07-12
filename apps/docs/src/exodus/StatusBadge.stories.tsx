@@ -21,6 +21,14 @@ const ALL_STATES: LifecycleState[] = [
 const meta: Meta<typeof StatusBadge> = {
   title: 'Exodus/Feedback/StatusBadge',
   component: StatusBadge,
+  argTypes: {
+    state: {
+      description:
+        'Lifecycle state — resolves to a fixed tone + default label.',
+    },
+    tone: { description: 'Override the tone directly.' },
+    label: { description: 'Override the label text.' },
+  },
 };
 export default meta;
 

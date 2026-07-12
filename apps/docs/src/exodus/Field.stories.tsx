@@ -4,6 +4,18 @@ import { Field, Input } from '@thijulio/exodus-react';
 const meta: Meta<typeof Field> = {
   title: 'Exodus/Forms/Field',
   component: Field,
+  argTypes: {
+    label: { description: 'Field label, associated via `htmlFor`.' },
+    required: { description: 'Show the required indicator.' },
+    hint: {
+      description:
+        'Helper text shown below the control (hidden when `error` is set).',
+    },
+    error: {
+      description: 'Error text shown below the control, in danger colour.',
+    },
+    htmlFor: { description: 'id of the control this label points at.' },
+  },
   decorators: [
     (Story) => (
       <div style={{ maxWidth: 320 }}>
