@@ -123,8 +123,10 @@ Also exports `./styles.css`→`dist/index.css` (for Storybook, which consumes bu
 packages). When a prop name collides with a native HTML attribute you repurpose
 (`title`, `onChange`), `Omit` it from the extended `HTMLAttributes`.
 
-All publishable packages are `private: true` for now — flip to publishable at the
-release step.
+The six brand packages are **published** to GitHub Packages under `@thijulio`
+(`private: false` + `publishConfig`, and `files: ["dist"]` so only built output
+ships — not `src`). `core` stays `private: true` (build-only tooling, never
+published). Current published version: **0.0.2**. See **Release / publish** below.
 
 ## How to…
 
@@ -144,6 +146,18 @@ a `theme('<name>')` entry in the brand's `build.mjs` with the right selector.
 **See a change in Storybook:** components are consumed as **built** packages, so
 run `nx build <brand>-react` first, then `nx storybook docs`.
 
+**Release / publish packages:** trigger the **Release** workflow
+(`.github/workflows/release.yml`) — `gh workflow run release.yml -f
+first_release=<bool> -f dry_run=<bool>`, or the Actions UI. It runs `nx release`
+(conventional-commits version → changelog → git tag → publish to GitHub Packages
+via `GITHUB_TOKEN`), then pushes the version commit + tags back to `main`.
+Two hard-won gotchas are baked in: **`HUSKY=0`** (the pre-commit hook otherwise
+blocks nx release's automated version commit) and an explicit
+**`git push --follow-tags`** (nx release commits & tags locally but does **not**
+push). Use `dry_run=true` to preview versions without publishing. Versions are
+resolved from the `<pkg>@<version>` git tags, so never delete them. The Storybook
+Pages site redeploys automatically on push to `main` (`storybook-pages.yml`).
+
 ## Commands
 
 ```
@@ -151,7 +165,10 @@ nx run-many -t build test lint typecheck          # everything
 nx run-many -t build test lint --projects=<name>  # one project (+ its deps)
 nx build-storybook docs                            # static Storybook → apps/docs/storybook-static
 nx storybook docs --port 6006                      # dev (needs react packages built first)
+nx test-storybook docs                             # story interaction tests (headless chromium)
 nx format:write   /   nx format:check              # prettier (ignores *.swcrc)
+gh workflow run release.yml -f dry_run=true        # preview a release (no publish)
+gh workflow run release.yml -f dry_run=false       # publish packages to GitHub Packages
 ```
 
 ## Testing
