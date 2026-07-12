@@ -1,0 +1,68 @@
+name: Storybook (GitHub Pages)
+
+# Builds the static Storybook and publishes it to GitHub Pages. Independent of
+# the package release path. Storybook consumes the react packages' BUILT dist,
+# so the packages are built before build-storybook.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/docs/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.nvmrc'
+      - '.github/workflows/storybook-pages.yml'
+  workflow_dispatch:
+
+# Least privilege + the tokens the Pages deployment needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One live Pages deploy at a time; newest main wins.
+concurrency:
+  group: storybook-pages
+  cancel-in-progress: true
+
+env:
+  NX_DAEMON: 'false'
+
+jobs:
+  build:
+    name: Build Storybook (static)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Storybook loads each react package's dist (index.js + index.css) and each
+      # css package's built stylesheet — build them all first.
+      - run: npx nx run-many -t build
+
+      - run: npx nx build-storybook docs
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/docs/storybook-static
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
