@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Avatar } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Avatar> = {
-  title: 'Exodus/Avatar',
+  title: 'Exodus/Identity/Avatar',
   component: Avatar,
   args: { initials: 'TV', size: 40 },
   argTypes: {

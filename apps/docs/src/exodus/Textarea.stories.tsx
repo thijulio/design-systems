@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Textarea } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Textarea> = {
-  title: 'Exodus/Textarea',
+  title: 'Exodus/Forms/Textarea',
   component: Textarea,
   args: { placeholder: 'Notes about this animal…', rows: 4 },
   argTypes: { invalid: { control: 'boolean' } },

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Input } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Input> = {
-  title: 'Exodus/Input',
+  title: 'Exodus/Forms/Input',
   component: Input,
   args: { placeholder: 'Search animals…' },
   argTypes: { invalid: { control: 'boolean' } },

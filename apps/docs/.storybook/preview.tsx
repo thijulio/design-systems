@@ -40,9 +40,25 @@ const withBrandTokens: Decorator = (Story, context) => {
 };
 
 const preview: Preview = {
+  // Every component meta with a `component` gets an auto-generated Docs page
+  // (overview + all its stories rendered live with source). Opt a story out
+  // with `tags: ['!autodocs']`.
+  tags: ['autodocs'],
   parameters: {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
-    options: { storySort: { order: ['Biome', 'Exodus'] } },
+    options: {
+      storySort: {
+        order: [
+          'Introduction',
+          'Biome',
+          ['Foundations', 'Components'],
+          'Exodus',
+          ['Foundations', 'Core', 'Forms', 'Feedback', 'Identity'],
+        ],
+      },
+    },
+    // a11y violations surface in the Accessibility panel; don't fail the build.
+    a11y: { test: 'todo' },
   },
   // Globals only (no `toolbar`): the toolbar UI is rendered per-brand by the
   // manager addon (.storybook/manager.tsx), which shows the Biome mode control

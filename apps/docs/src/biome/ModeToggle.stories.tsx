@@ -4,7 +4,7 @@ import { ModeToggle } from '@thijulio/biome-react';
 import type { Mode } from '@thijulio/biome-react';
 
 const meta: Meta<typeof ModeToggle> = {
-  title: 'Biome/ModeToggle',
+  title: 'Biome/Components/ModeToggle',
   component: ModeToggle,
 };
 export default meta;

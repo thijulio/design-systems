@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Badge } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Badge> = {
-  title: 'Exodus/Badge',
+  title: 'Exodus/Feedback/Badge',
   component: Badge,
   args: { children: '12' },
   argTypes: {

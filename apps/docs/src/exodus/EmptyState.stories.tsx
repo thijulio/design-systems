@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EmptyState, Button, NavIcon } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof EmptyState> = {
-  title: 'Exodus/EmptyState',
+  title: 'Exodus/Feedback/EmptyState',
   component: EmptyState,
   decorators: [
     (Story) => (

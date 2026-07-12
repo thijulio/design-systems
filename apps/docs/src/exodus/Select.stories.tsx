@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Select } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Select> = {
-  title: 'Exodus/Select',
+  title: 'Exodus/Forms/Select',
   component: Select,
   argTypes: { invalid: { control: 'boolean' } },
   decorators: [

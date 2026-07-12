@@ -19,7 +19,7 @@ const ALL_STATES: LifecycleState[] = [
 ];
 
 const meta: Meta<typeof StatusBadge> = {
-  title: 'Exodus/StatusBadge',
+  title: 'Exodus/Feedback/StatusBadge',
   component: StatusBadge,
 };
 export default meta;

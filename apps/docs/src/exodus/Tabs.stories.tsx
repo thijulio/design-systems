@@ -10,7 +10,7 @@ const TABS = [
 ];
 
 const meta: Meta<typeof Tabs> = {
-  title: 'Exodus/Tabs',
+  title: 'Exodus/Core/Tabs',
   component: Tabs,
 };
 export default meta;

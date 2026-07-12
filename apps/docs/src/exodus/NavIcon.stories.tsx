@@ -5,7 +5,7 @@ import type { IconName } from '@thijulio/exodus-react';
 const NAMES = Object.keys(ICON_PATHS) as IconName[];
 
 const meta: Meta<typeof NavIcon> = {
-  title: 'Exodus/NavIcon',
+  title: 'Exodus/Identity/NavIcon',
   component: NavIcon,
   args: { name: 'paw', size: 24 },
   argTypes: { name: { control: 'select', options: NAMES } },

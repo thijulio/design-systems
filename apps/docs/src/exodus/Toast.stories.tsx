@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Toast } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Toast> = {
-  title: 'Exodus/Toast',
+  title: 'Exodus/Feedback/Toast',
   component: Toast,
   args: {
     title: 'Changes saved',

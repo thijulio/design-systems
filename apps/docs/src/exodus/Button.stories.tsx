@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Button> = {
-  title: 'Exodus/Button',
+  title: 'Exodus/Core/Button',
   component: Button,
   args: { children: 'Save changes' },
   argTypes: {

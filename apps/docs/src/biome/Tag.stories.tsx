@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tag } from '@thijulio/biome-react';
 
 const meta: Meta<typeof Tag> = {
-  title: 'Biome/Tag',
+  title: 'Biome/Components/Tag',
   component: Tag,
   args: { children: 'TypeScript' },
   argTypes: {

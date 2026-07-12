@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Field, Input } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Field> = {
-  title: 'Exodus/Field',
+  title: 'Exodus/Forms/Field',
   component: Field,
   decorators: [
     (Story) => (

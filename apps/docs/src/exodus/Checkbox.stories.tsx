@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Checkbox } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Checkbox> = {
-  title: 'Exodus/Checkbox',
+  title: 'Exodus/Forms/Checkbox',
   component: Checkbox,
 };
 export default meta;

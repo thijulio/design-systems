@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '@thijulio/biome-react';
 
 const meta: Meta<typeof Button> = {
-  title: 'Biome/Button',
+  title: 'Biome/Components/Button',
   component: Button,
   args: { children: 'Grow software' },
   argTypes: {

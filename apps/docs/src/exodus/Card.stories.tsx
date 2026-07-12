@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Card> = {
-  title: 'Exodus/Card',
+  title: 'Exodus/Core/Card',
   component: Card,
   args: {
     pad: true,

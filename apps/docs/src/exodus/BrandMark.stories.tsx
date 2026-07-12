@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BrandMark } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof BrandMark> = {
-  title: 'Exodus/BrandMark',
+  title: 'Exodus/Identity/BrandMark',
   component: BrandMark,
   args: { name: 'Companion' },
   argTypes: {

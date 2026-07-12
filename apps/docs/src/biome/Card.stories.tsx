@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card } from '@thijulio/biome-react';
 
 const meta: Meta<typeof Card> = {
-  title: 'Biome/Card',
+  title: 'Biome/Components/Card',
   component: Card,
   args: {
     kicker: 'Case study',

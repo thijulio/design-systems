@@ -1,0 +1,81 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+<style>{`
+  .ds-hero { font-family: var(--font-display, Georgia, serif); font-size: 40px; line-height: 1.1; margin: 8px 0 4px; }
+  .ds-sub { color: #6b6b6b; font-size: 16px; max-width: 60ch; }
+  .ds-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 28px 0; }
+  .ds-card { border: 1px solid #e5e2da; border-radius: 12px; padding: 18px 20px; }
+  .ds-card h3 { margin: 0 0 6px; font-size: 18px; }
+  .ds-card .tag { display: inline-block; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-bottom: 10px; }
+  .ds-biome .tag { background: #3F5237; color: #F2EEE2; }
+  .ds-exodus .tag { background: #2f6f5e; color: #eafaf3; }
+  .ds-swatches { display: flex; gap: 6px; margin-top: 12px; }
+  .ds-swatches span { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(0,0,0,.08); }
+`}</style>
+
+<div className="ds-hero">thijulio design systems</div>
+
+<p className="ds-sub">
+  Two design systems in one Nx monorepo, sharing a single token pipeline (Style
+  Dictionary → CSS variables + typed JS) and Tailwind-free React components (CSS
+  Modules over CSS vars).
+</p>
+
+<div className="ds-cards">
+  <div className="ds-card ds-biome">
+    <span className="tag">Personal · thijulio.com</span>
+    <h3>Biome Modernism</h3>
+    <p>
+      Editorial, warm, organic. Light & dark modes. Powers the personal site —
+      serif display, <code>TerminalHero</code>, Explorer/Recruiter posture.
+    </p>
+    <div className="ds-swatches">
+      <span style={{ background: '#3F5237' }} />
+      <span style={{ background: '#6E7A48' }} />
+      <span style={{ background: '#B5532A' }} />
+      <span style={{ background: '#E8A627' }} />
+      <span style={{ background: '#F2EEE2' }} />
+    </div>
+  </div>
+  <div className="ds-card ds-exodus">
+    <span className="tag">Product · PMP</span>
+    <h3>Exodus</h3>
+    <p>
+      Calm, functional product UI. Light only, with three swappable accent
+      themes — <b>Sage</b>, <b>Clay</b>, <b>Harbor</b>. Forms, feedback,
+      identity primitives.
+    </p>
+    <div className="ds-swatches">
+      <span style={{ background: '#2f6f5e' }} />
+      <span style={{ background: '#b06a4f' }} />
+      <span style={{ background: '#3a6ea5' }} />
+    </div>
+  </div>
+</div>
+
+## Using this catalog
+
+- **Foundations** — each brand's colors, typography, spacing & motion tokens.
+- **Components** — live examples with source; every component has a **Docs**
+  tab (autodocs) and an **Accessibility** panel (a11y addon).
+- **Theme toolbar** — the top-right control switches the active brand's theme:
+  Biome light/dark on Biome stories, Exodus accent on Exodus stories.
+
+## Consuming in an app
+
+```tsx
+import '@thijulio/biome-css/biome.css'; // once, at app root
+import { Button, TerminalHero } from '@thijulio/biome-react';
+// dark mode: document.documentElement.dataset.mode = 'dark'
+```
+
+```tsx
+import '@thijulio/exodus-css/exodus.css'; // once, at app root
+import { Field, Toast } from '@thijulio/exodus-react';
+// accent theme: document.documentElement.dataset.theme = 'clay'
+```
+
+Packages publish to GitHub Packages under the `@thijulio` scope. Full guide:
+the repo's `AGENTS.md`. Source: `thijulio/design-systems`.
