@@ -185,7 +185,16 @@ consumer).
 - **Storybook theming:** `preview.tsx` reads the brand from the story `title`
   prefix (`Biome/…` / `Exodus/…`) and injects only that brand's token CSS (the
   two share some `:root` var names), then sets `data-mode`/`data-theme` from the
-  toolbar. Story titles MUST be prefixed with the brand.
+  toolbar. Story titles MUST start with the brand — the first `/`-segment is the
+  brand key used by both `preview.tsx` and the per-brand toolbar in `manager.tsx`.
+- **Sidebar taxonomy:** titles are `Brand/Group/Component` — Biome uses
+  `Foundations` + `Components`; Exodus uses `Foundations`/`Core`/`Forms`/
+  `Feedback`/`Identity`. Order is fixed in `preview.tsx` `options.storySort`
+  (`Introduction` first). Adding a component = pick the right group in its title.
+- **Docs & a11y:** `preview.tsx` sets `tags: ['autodocs']` globally, so every
+  meta with a `component` gets a Docs page (define `argTypes` for a useful props
+  table — docgen doesn't run on the built packages). `@storybook/addon-a11y`
+  adds the Accessibility panel. `src/Introduction.mdx` is the landing page.
 - **prettier** has no parser for `.swcrc` → `**/*.swcrc` is in `.prettierignore`.
 - **CSS `@import`** (fonts) must be the first statement in a bundle; the css
   `verify.mjs` checks this after stripping comments.
