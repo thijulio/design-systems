@@ -45,24 +45,35 @@ const preview: Preview = {
     options: { storySort: { order: ['Biome', 'Exodus'] } },
   },
   globalTypes: {
+    // Each control is brand-specific: Mode affects Biome stories only, Accent
+    // affects Exodus stories only. Item titles name the brand so it's obvious
+    // which one a given control drives (toggling the other brand's control on a
+    // story is a no-op by design).
     mode: {
-      description: 'Biome light / dark',
+      description: 'Biome light / dark (Biome stories only)',
       defaultValue: 'light',
       toolbar: {
-        title: 'Mode',
+        title: 'Biome mode',
         icon: 'circlehollow',
-        items: ['light', 'dark'],
         dynamicTitle: true,
+        items: [
+          { value: 'light', title: 'Biome · Light', icon: 'sun' },
+          { value: 'dark', title: 'Biome · Dark', icon: 'moon' },
+        ],
       },
     },
     accent: {
-      description: 'Exodus accent theme',
+      description: 'Exodus accent theme (Exodus stories only)',
       defaultValue: 'sage',
       toolbar: {
-        title: 'Accent',
+        title: 'Exodus theme',
         icon: 'paintbrush',
-        items: ['sage', 'clay', 'harbor'],
         dynamicTitle: true,
+        items: [
+          { value: 'sage', title: 'Exodus · Sage' },
+          { value: 'clay', title: 'Exodus · Clay' },
+          { value: 'harbor', title: 'Exodus · Harbor' },
+        ],
       },
     },
   },
