@@ -1,9 +1,14 @@
 # Design Systems Monorepo — Agent & Contributor Guide
 
 > Read this first. It is the single source of truth for how this repo is built,
-> the decisions behind it, and how to extend it safely. `CLAUDE.md` is a symlink
-> to this file. Nx keeps the `<!-- nx configuration -->` block at the bottom
-> up to date — leave it alone; add everything else above it.
+> the decisions behind it, and how to extend it safely. `CLAUDE.md` points here.
+> Nx keeps the `<!-- nx configuration -->` block at the bottom up to date — leave
+> it alone; add everything else above it.
+>
+> **Planning / context layer:** the product context, decisions, and memory live in
+> the Obsidian workspace at `thijulio-os/projects/professional/design-system/`
+> (iCloud; `thijulio-os/AGENTS.md` is the top-level "read this first"). This code
+> repo is linked there via a `repo/` symlink. Read it for the "why".
 
 ## What this is
 
