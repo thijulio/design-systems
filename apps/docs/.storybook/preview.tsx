@@ -44,38 +44,12 @@ const preview: Preview = {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: { storySort: { order: ['Biome', 'Exodus'] } },
   },
+  // Globals only (no `toolbar`): the toolbar UI is rendered per-brand by the
+  // manager addon (.storybook/manager.tsx), which shows the Biome mode control
+  // only on Biome stories and the Exodus theme control only on Exodus stories.
   globalTypes: {
-    // Each control is brand-specific: Mode affects Biome stories only, Accent
-    // affects Exodus stories only. Item titles name the brand so it's obvious
-    // which one a given control drives (toggling the other brand's control on a
-    // story is a no-op by design).
-    mode: {
-      description: 'Biome light / dark (Biome stories only)',
-      defaultValue: 'light',
-      toolbar: {
-        title: 'Biome mode',
-        icon: 'circlehollow',
-        dynamicTitle: true,
-        items: [
-          { value: 'light', title: 'Biome · Light', icon: 'sun' },
-          { value: 'dark', title: 'Biome · Dark', icon: 'moon' },
-        ],
-      },
-    },
-    accent: {
-      description: 'Exodus accent theme (Exodus stories only)',
-      defaultValue: 'sage',
-      toolbar: {
-        title: 'Exodus theme',
-        icon: 'paintbrush',
-        dynamicTitle: true,
-        items: [
-          { value: 'sage', title: 'Exodus · Sage' },
-          { value: 'clay', title: 'Exodus · Clay' },
-          { value: 'harbor', title: 'Exodus · Harbor' },
-        ],
-      },
-    },
+    mode: { description: 'Biome light / dark', defaultValue: 'light' },
+    accent: { description: 'Exodus accent theme', defaultValue: 'sage' },
   },
   decorators: [withBrandTokens],
 };
