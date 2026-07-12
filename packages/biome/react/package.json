@@ -1,7 +1,7 @@
 {
   "name": "@thijulio/biome-react",
   "version": "0.0.1",
-  "private": true,
+  "private": false,
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -27,5 +27,14 @@
     "tags": [
       "scope:biome"
     ]
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/biome/react"
   }
 }

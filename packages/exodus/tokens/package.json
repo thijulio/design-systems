@@ -1,7 +1,7 @@
 {
   "name": "@thijulio/exodus-tokens",
   "version": "0.0.1",
-  "private": true,
+  "private": false,
   "type": "module",
   "main": "./dist/tokens.js",
   "types": "./dist/tokens.d.ts",
@@ -48,5 +48,14 @@
         "cache": true
       }
     }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/exodus/tokens"
   }
 }
