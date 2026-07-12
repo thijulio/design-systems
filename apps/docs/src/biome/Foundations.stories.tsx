@@ -400,26 +400,90 @@ export const Spacing: Story = {
   },
 };
 
+function MotionDemo({
+  label,
+  token,
+  children,
+}: {
+  label: string;
+  token: string;
+  children: ReactNode;
+}) {
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <div
+        style={{
+          width: 120,
+          height: 120,
+          display: 'grid',
+          placeItems: 'center',
+          background: 'var(--surface-raised)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-ui-lg)',
+        }}
+      >
+        {children}
+      </div>
+      <div style={{ marginTop: 8, ...mono, fontSize: 12 }}>
+        <div style={{ color: 'var(--text-strong)' }}>{label}</div>
+        <div style={{ color: 'var(--text-muted)' }}>{token}</div>
+      </div>
+    </div>
+  );
+}
+
 export const Motion: Story = {
   render: () => (
     <Section
       title="Motion"
-      desc="Calm by default, reactive on intent. Movement is biology, not decoration."
+      desc="Calm by default, reactive on intent. Movement is biology, not decoration. (Hover the last tile.)"
     >
-      <ul
-        style={{
-          ...mono,
-          fontSize: 14,
-          color: 'var(--text-body)',
-          lineHeight: 2,
-          paddingLeft: 18,
-        }}
-      >
-        <li>at rest → breathe (var(--breath) = 9s)</li>
-        <li>hover → quicken (var(--dur-fast) = 0.25s, var(--ease-organic))</li>
-        <li>scroll → grow &amp; reveal</li>
-        <li>prefers-reduced-motion → static</li>
-      </ul>
+      <style>{`
+        .bm-quicken { transition: transform var(--dur-fast) var(--ease-organic), box-shadow var(--dur-fast) ease; }
+        .bm-quicken:hover { transform: translateY(-6px); box-shadow: 0 16px 34px -16px rgba(35,42,32,.5); }
+      `}</style>
+      <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+        <MotionDemo label="at rest → breathe" token="--breath · 9s">
+          <div
+            style={{
+              width: 68,
+              height: 68,
+              borderRadius: '50%',
+              background: 'var(--brand)',
+              animation: 'bm-breath var(--breath) ease-in-out infinite',
+            }}
+          />
+        </MotionDemo>
+
+        <MotionDemo label="ipê glow" token="bm-glow · --breath">
+          <div
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 'var(--radius-organic)',
+              background: 'var(--accent-highlight)',
+              animation: 'bm-glow var(--breath) ease-in-out infinite',
+            }}
+          />
+        </MotionDemo>
+
+        <MotionDemo label="hover → quicken" token="--dur-fast · 0.25s">
+          <div
+            className="bm-quicken"
+            style={{
+              width: 68,
+              height: 68,
+              borderRadius: 'var(--radius-ui-lg)',
+              background: 'var(--brand-2)',
+              cursor: 'pointer',
+            }}
+          />
+        </MotionDemo>
+      </div>
+      <p style={{ color: 'var(--text-muted)', fontSize: 14, marginTop: 20 }}>
+        Everything decorative freezes under{' '}
+        <code style={{ ...mono }}>prefers-reduced-motion: reduce</code>.
+      </p>
     </Section>
   ),
 };
