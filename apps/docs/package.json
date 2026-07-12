@@ -7,7 +7,15 @@
     "name": "docs",
     "tags": [
       "scope:docs"
-    ]
+    ],
+    "targets": {
+      "test-storybook": {
+        "command": "vitest run --config vitest.config.ts",
+        "options": {
+          "cwd": "apps/docs"
+        }
+      }
+    }
   },
   "devDependencies": {
     "@thijulio/biome-css": "*",

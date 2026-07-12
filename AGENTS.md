@@ -192,9 +192,17 @@ consumer).
   `Feedback`/`Identity`. Order is fixed in `preview.tsx` `options.storySort`
   (`Introduction` first). Adding a component = pick the right group in its title.
 - **Docs & a11y:** `preview.tsx` sets `tags: ['autodocs']` globally, so every
-  meta with a `component` gets a Docs page (define `argTypes` for a useful props
-  table — docgen doesn't run on the built packages). `@storybook/addon-a11y`
-  adds the Accessibility panel. `src/Introduction.mdx` is the landing page.
+  meta with a `component` gets a Docs page. Docgen does NOT run on the built
+  packages, so props tables/descriptions come from **`argTypes` you define in
+  each story** (mirror the source JSDoc) — an empty `description` = a gap to
+  fill. `@storybook/addon-a11y` adds the Accessibility panel;
+  `src/Introduction.mdx` is the landing page.
+- **Interaction tests:** stories with a `play` (using `storybook/test`) are run
+  headlessly by `@storybook/addon-vitest` in real chromium via
+  `nx test-storybook docs` (config: `apps/docs/vitest.config.ts`, provider
+  `@vitest/browser-playwright`). Every story is also a smoke test (mount without
+  error); `play` functions add assertions. Needs `npx playwright install
+chromium` once. The addon also lights up the Storybook **Interactions** panel.
 - **prettier** has no parser for `.swcrc` → `**/*.swcrc` is in `.prettierignore`.
 - **CSS `@import`** (fonts) must be the first statement in a bundle; the css
   `verify.mjs` checks this after stripping comments.
