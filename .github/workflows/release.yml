@@ -66,3 +66,10 @@ jobs:
           # packages:write for this repo's GitHub Packages registry.
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # nx release commits the version bumps + changelogs and tags locally but
+      # does not push — send the commit and tags back to main so the repo stays
+      # in sync with what was published.
+      - name: Push release commit and tags
+        if: ${{ !inputs.dry_run }}
+        run: git push --follow-tags origin HEAD:main
