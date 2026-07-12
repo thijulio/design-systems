@@ -28,6 +28,10 @@ concurrency:
 
 env:
   NX_DAEMON: 'false'
+  # Disable husky git hooks: nx release makes an automated version/changelog
+  # commit, and the pre-commit hook (format/lint on generated CHANGELOGs) would
+  # block it. The same checks already run in the CI workflow on real changes.
+  HUSKY: '0'
 
 jobs:
   release:
