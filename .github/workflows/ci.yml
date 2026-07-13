@@ -10,6 +10,12 @@ permissions:
   actions: read
   contents: read
 
+# Supersede in-flight runs for the same ref (rapid pushes / PR updates) — the
+# newest commit is the one that matters. Cuts private-repo Actions minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -26,5 +32,9 @@ jobs:
 
       - run: npm ci
 
+      # Derive NX_BASE/NX_HEAD so `nx affected` only runs the projects touched
+      # since the last successful commit — most pushes touch one brand or docs.
+      - uses: nrwl/nx-set-shas@v4
+
       - run: npx nx format:check
-      - run: npx nx run-many -t lint test build typecheck
+      - run: npx nx affected -t lint test build typecheck
