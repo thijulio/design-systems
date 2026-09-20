@@ -26,6 +26,11 @@ export default [
               sourceTag: 'scope:core',
               onlyDependOnLibsWithTags: ['scope:core'],
             },
+            // Brand-agnostic UI primitives, styled against the --ds-* contract.
+            {
+              sourceTag: 'scope:shared',
+              onlyDependOnLibsWithTags: ['scope:shared'],
+            },
             // Personal / website design system.
             {
               sourceTag: 'scope:biome',
@@ -36,13 +41,24 @@ export default [
               sourceTag: 'scope:exodus',
               onlyDependOnLibsWithTags: ['scope:core', 'scope:exodus'],
             },
-            // Docs (Storybook) is the one place both brands are consumed together.
+            // Faune — the warm, founder-led cat-sitting brand. Builds on the shared contract + primitives.
+            {
+              sourceTag: 'scope:faune',
+              onlyDependOnLibsWithTags: [
+                'scope:core',
+                'scope:shared',
+                'scope:faune',
+              ],
+            },
+            // Docs (Storybook) is the one place all brands are consumed together.
             {
               sourceTag: 'scope:docs',
               onlyDependOnLibsWithTags: [
                 'scope:core',
+                'scope:shared',
                 'scope:biome',
                 'scope:exodus',
+                'scope:faune',
                 'scope:docs',
               ],
             },

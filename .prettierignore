@@ -7,3 +7,7 @@
 
 # swc runtime configs — JSON content, but the extension has no prettier parser
 **/*.swcrc
+
+# Docker build files — no prettier parser for Dockerfile / .dockerignore
+Dockerfile
+.dockerignore

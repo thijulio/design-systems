@@ -1,0 +1,14 @@
+# Keep the Docker build context small — only the static Storybook is copied.
+.git
+node_modules
+.nx
+.agents
+.claude
+.codex
+.cursor
+.gemini
+.opencode
+.vscode
+**/dist
+**/out-tsc
+**/node_modules

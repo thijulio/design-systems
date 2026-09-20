@@ -21,6 +21,8 @@
     "@thijulio/biome-css": "*",
     "@thijulio/biome-react": "*",
     "@thijulio/exodus-css": "*",
-    "@thijulio/exodus-react": "*"
+    "@thijulio/exodus-react": "*",
+    "@thijulio/faune-css": "*",
+    "@thijulio/primitives": "*"
   }
 }

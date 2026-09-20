@@ -1,0 +1,58 @@
+/* Faune — base element defaults. Warm paper surface, deep-teal ink, serif
+   display headings, coral accent for links and selection. */
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-regular);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+}
+
+h1 {
+  font-size: var(--text-h1);
+  letter-spacing: var(--tracking-display);
+}
+h2 {
+  font-size: var(--text-h2);
+  letter-spacing: var(--tracking-tight);
+}
+h3 {
+  font-size: var(--text-h3);
+}
+
+small {
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+a {
+  color: var(--coral-deep);
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.18em;
+}
+a:hover {
+  color: var(--coral);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--line);
+}
+
+::selection {
+  background: var(--coral);
+  color: var(--cream);
+}

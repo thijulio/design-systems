@@ -1,0 +1,54 @@
+{
+  "name": "@thijulio/faune-css",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "exports": {
+    "./faune.css": "./dist/faune.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node verify.mjs"
+  },
+  "devDependencies": {
+    "@thijulio/faune-tokens": "*"
+  },
+  "nx": {
+    "name": "faune-css",
+    "tags": [
+      "scope:faune"
+    ],
+    "targets": {
+      "build": {
+        "command": "node {projectRoot}/build.mjs",
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "{projectRoot}/dist"
+        ],
+        "cache": true
+      },
+      "test": {
+        "command": "node {projectRoot}/verify.mjs",
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true
+      }
+    }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/faune/css"
+  }
+}

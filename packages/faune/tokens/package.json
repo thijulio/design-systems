@@ -1,0 +1,68 @@
+{
+  "name": "@thijulio/faune-tokens",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "main": "./dist/tokens.js",
+  "types": "./dist/tokens.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js",
+      "default": "./dist/tokens.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./native": {
+      "types": "./dist/native/index.d.ts",
+      "import": "./dist/native/index.js",
+      "default": "./dist/native/index.js"
+    },
+    "./flutter/tokens.dart": "./dist/dart/tokens.dart",
+    "./flutter/themes.dart": "./dist/dart/themes.dart",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node verify.mjs"
+  },
+  "devDependencies": {
+    "@thijulio/core": "*"
+  },
+  "nx": {
+    "name": "faune-tokens",
+    "tags": [
+      "scope:faune"
+    ],
+    "targets": {
+      "build": {
+        "command": "node {projectRoot}/build.mjs",
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "{projectRoot}/dist"
+        ],
+        "cache": true
+      },
+      "test": {
+        "command": "node {projectRoot}/verify.mjs",
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true
+      }
+    }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/faune/tokens"
+  }
+}
