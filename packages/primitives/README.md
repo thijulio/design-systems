@@ -18,17 +18,17 @@ for the reference implementation).
 
 ## Contract reference
 
-| Group | Names |
-| --- | --- |
-| Surfaces | `--ds-surface`, `-raised`, `-sunken`, `-inverse`, `-inverse-raised` |
-| Text | `--ds-text`, `-muted`, `-inverse` |
-| Brand | `--ds-brand`, `-hover`, `--ds-on-brand` |
-| Accent | `--ds-accent`, `-hover`, `-soft`, `-fg`, `--ds-on-accent` |
-| Highlight | `--ds-highlight`, `--ds-on-highlight` |
-| Border / focus | `--ds-border`, `-inverse`, `--ds-focus` |
-| Status | `--ds-{success,warning,danger,info}` + `-soft` + `-fg` |
-| Typography | `--ds-font-{display,body,ui}`, `--ds-size-*`, `--ds-weight-*`, `--ds-leading-*`, `--ds-tracking-*` |
-| Layout | `--ds-space-*`, `--ds-radius-{control,card,sm,md,lg,full}`, `--ds-shadow-{sm,md,lg}` |
+| Group          | Names                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------- |
+| Surfaces       | `--ds-surface`, `-raised`, `-sunken`, `-inverse`, `-inverse-raised`                                |
+| Text           | `--ds-text`, `-muted`, `-inverse`                                                                  |
+| Brand          | `--ds-brand`, `-hover`, `--ds-on-brand`                                                            |
+| Accent         | `--ds-accent`, `-hover`, `-soft`, `-fg`, `--ds-on-accent`                                          |
+| Highlight      | `--ds-highlight`, `--ds-on-highlight`                                                              |
+| Border / focus | `--ds-border`, `-inverse`, `--ds-focus`                                                            |
+| Status         | `--ds-{success,warning,danger,info}` + `-soft` + `-fg`                                             |
+| Typography     | `--ds-font-{display,body,ui}`, `--ds-size-*`, `--ds-weight-*`, `--ds-leading-*`, `--ds-tracking-*` |
+| Layout         | `--ds-space-*`, `--ds-radius-{control,field,card,sm,md,lg,full}`, `--ds-shadow-{sm,md,lg}`         |
 
 ## Components
 

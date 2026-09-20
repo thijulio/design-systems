@@ -195,6 +195,9 @@
     "radius-control": {
       "value": "{radius.full}"
     },
+    "radius-field": {
+      "value": "{radius.sm}"
+    },
     "radius-card": {
       "value": "{radius.xl}"
     },

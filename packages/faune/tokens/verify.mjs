@@ -30,6 +30,11 @@ assert.match(
 );
 assert.match(
   css,
+  /--ds-radius-field: var\(--radius-sm\);/g,
+  'ds radius-field alias missing',
+);
+assert.match(
+  css,
   /--ds-font-display: var\(--font-display\);/g,
   'ds font-display alias missing',
 );
