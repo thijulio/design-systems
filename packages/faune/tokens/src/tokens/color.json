@@ -1,0 +1,86 @@
+{
+  "ink": {
+    "value": "#183d3c"
+  },
+  "ink-deep": {
+    "value": "#102e2d"
+  },
+  "ink-raised": {
+    "value": "#244e4b"
+  },
+  "ink-muted": {
+    "value": "rgba(24, 61, 60, 0.72)"
+  },
+  "paper": {
+    "value": "#f7f4ed"
+  },
+  "paper-warm": {
+    "value": "#eee4d4"
+  },
+  "cream": {
+    "value": "#fffdf8"
+  },
+  "coral": {
+    "value": "#e56c50"
+  },
+  "coral-deep": {
+    "value": "#c94e39"
+  },
+  "coral-soft": {
+    "value": "#fff4ed"
+  },
+  "yellow": {
+    "value": "#e7c35b"
+  },
+  "yellow-soft": {
+    "value": "#efe2c3"
+  },
+  "sage": {
+    "value": "#b6c8b2"
+  },
+  "sage-deep": {
+    "value": "#8fb089"
+  },
+  "line": {
+    "value": "rgba(24, 61, 60, 0.18)"
+  },
+  "light-line": {
+    "value": "rgba(255, 255, 255, 0.24)"
+  },
+  "success": {
+    "value": "#31715e"
+  },
+  "success-soft": {
+    "value": "#e9f3eb"
+  },
+  "success-fg": {
+    "value": "#27725e"
+  },
+  "warning": {
+    "value": "#b9821f"
+  },
+  "warning-soft": {
+    "value": "#fbf0d9"
+  },
+  "warning-fg": {
+    "value": "#8a5e12"
+  },
+  "danger": {
+    "value": "#c94e39"
+  },
+  "danger-soft": {
+    "value": "#ffe4dc"
+  },
+  "danger-fg": {
+    "value": "#8f3320"
+  },
+  "info": {
+    "value": "#3b6964"
+  },
+  "info-soft": {
+    "value": "#def0ef"
+  },
+  "info-fg": {
+    "value": "#1d5f5c"
+  }
+}

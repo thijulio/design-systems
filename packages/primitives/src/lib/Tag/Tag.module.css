@@ -1,0 +1,57 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-semibold);
+  font-size: var(--ds-size-body-sm);
+  line-height: 1;
+  border-radius: var(--ds-radius-full);
+  padding: 5px 13px;
+}
+
+.outline {
+  color: var(--ds-brand);
+  border: 1px solid var(--ds-border);
+  background: transparent;
+}
+
+.solid {
+  color: var(--ds-on-brand);
+  background: var(--ds-brand);
+  border: 1px solid transparent;
+}
+
+.muted {
+  color: var(--ds-text-muted);
+  border: 1px solid var(--ds-border);
+  background: transparent;
+}
+
+/* pulsing status dot — self-contained keyframe (reduced-motion safe). */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.8);
+  }
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ds-accent);
+  display: inline-block;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+  }
+}

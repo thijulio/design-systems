@@ -1,0 +1,112 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-bold);
+  white-space: nowrap;
+  border: 1.5px solid transparent;
+  border-radius: var(--ds-radius-control);
+  cursor: pointer;
+  transition:
+    background 0.14s ease,
+    border-color 0.14s ease,
+    color 0.14s ease,
+    box-shadow 0.16s ease,
+    transform 0.12s ease;
+  -webkit-font-smoothing: antialiased;
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ds-focus);
+}
+.btn:active {
+  transform: translateY(0.5px);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* sizes */
+.sm {
+  height: 34px;
+  padding: 0 13px;
+  font-size: var(--ds-size-body-sm);
+}
+.md {
+  height: 40px;
+  padding: 0 18px;
+  font-size: var(--ds-size-body);
+}
+.lg {
+  height: 48px;
+  padding: 0 24px;
+  font-size: var(--ds-size-body);
+}
+
+/* variants */
+.primary {
+  background: var(--ds-brand);
+  color: var(--ds-on-brand);
+  box-shadow: var(--ds-shadow-sm);
+}
+.primary:hover {
+  background: var(--ds-brand-hover);
+}
+
+.accent {
+  background: var(--ds-accent);
+  color: var(--ds-on-accent);
+  box-shadow: var(--ds-shadow-sm);
+}
+.accent:hover {
+  background: var(--ds-accent-hover);
+}
+
+.secondary {
+  background: var(--ds-surface-raised);
+  color: var(--ds-brand);
+  border-color: var(--ds-border);
+}
+.secondary:hover {
+  border-color: var(--ds-accent);
+  background: var(--ds-accent-soft);
+}
+
+.soft {
+  background: var(--ds-accent-soft);
+  color: var(--ds-accent-fg);
+}
+.soft:hover {
+  background: var(--ds-accent);
+  color: var(--ds-on-accent);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--ds-brand);
+}
+.ghost:hover {
+  background: var(--ds-accent-soft);
+}
+
+.danger {
+  background: var(--ds-danger);
+  color: var(--ds-on-accent);
+  box-shadow: var(--ds-shadow-sm);
+}
+.danger:hover {
+  filter: brightness(0.94);
+}
+
+.dangerOutline {
+  background: transparent;
+  color: var(--ds-danger);
+  border-color: var(--ds-danger);
+}
+.dangerOutline:hover {
+  background: var(--ds-danger-soft);
+}
