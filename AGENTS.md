@@ -85,6 +85,28 @@ is a thin, tested wrapper over Style Dictionary v5. A brand's `build.mjs` calls
    `[data-theme="clay"]`, …) filtered to only that overlay's tokens, appended to
    `tokens.css`.
 
+The same JSON also feeds **cross-platform artifacts** (additive — the web
+outputs above are byte-for-byte unchanged):
+
+- `dist/native/` — React Native. `tokens.js` + `tokens.d.ts` (nested, typed)
+  with **normalized** values, plus `themes/<name>.js` per overlay and an
+  `index.js` barrel exporting `{ tokens, themes, resolve }` (deep-merge).
+  Values are converted by a single shared classifier in `packages/core`
+  (`src/lib/values.ts`): px/rem → logical px (`rem` assumes a 16px root),
+  `s`/`ms` → ms, `cubic-bezier` → `{x1,y1,x2,y2}`, `clamp()` → its min bound,
+  colors → `#RRGGBB`/`rgba()`, and web-only strings (font stacks, shadows,
+  compound radius) pass through verbatim.
+- `dist/dart/` — Flutter. `tokens.dart` (`abstract final class <Brand>Tokens`
+  of typed `static const`s), `theme_<name>.dart` per overlay
+  (`Map<String, Color>`), and a `themes.dart` barrel (`<Brand>Themes.all`).
+  Theme overlays are color-only in this repo, so theme maps are `Map<String,
+Color>`.
+
+The native/Dart formats live in `packages/core/src/lib/formats/` and are
+registered once per build by `platforms.ts`; the pure config factories only
+reference them by name. Packages expose them via `./native` and
+`./flutter/{tokens,themes}.dart` exports.
+
 Token JSON authoring rules (relied upon — do not "fix"):
 
 - Uses legacy `value` + `{ref.path}` references.

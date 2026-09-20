@@ -12,6 +12,13 @@
       "default": "./dist/tokens.js"
     },
     "./tokens.css": "./dist/tokens.css",
+    "./native": {
+      "types": "./dist/native/index.d.ts",
+      "import": "./dist/native/index.js",
+      "default": "./dist/native/index.js"
+    },
+    "./flutter/tokens.dart": "./dist/dart/tokens.dart",
+    "./flutter/themes.dart": "./dist/dart/themes.dart",
     "./package.json": "./package.json"
   },
   "files": [
