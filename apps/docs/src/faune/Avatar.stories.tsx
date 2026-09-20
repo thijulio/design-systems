@@ -10,8 +10,13 @@ const meta: Meta<typeof Avatar> = {
     variant: {
       control: 'inline-radio',
       options: ['brand', 'accent', 'neutral'],
+      description: 'brand fill (default), accent fill, or neutral.',
     },
-    shape: { control: 'inline-radio', options: ['circle', 'rounded'] },
+    shape: {
+      control: 'inline-radio',
+      options: ['circle', 'rounded'],
+      description: 'circle (default) or rounded.',
+    },
   },
 };
 export default meta;

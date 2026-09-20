@@ -17,6 +17,7 @@ const meta: Meta<typeof Badge> = {
         'danger',
         'info',
       ],
+      description: 'Fixed label/count palette.',
     },
   },
 };

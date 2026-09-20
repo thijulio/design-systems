@@ -9,6 +9,7 @@ const meta: Meta<typeof Tag> = {
     variant: {
       control: 'inline-radio',
       options: ['outline', 'solid', 'muted'],
+      description: 'outline (default), solid brand, or muted.',
     },
     status: { description: 'Show a pulsing status dot before the label.' },
   },

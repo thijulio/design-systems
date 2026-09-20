@@ -20,6 +20,7 @@ export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
   size?: number;
   /** brand fill (default), accent fill, or neutral. */
   variant?: 'brand' | 'accent' | 'neutral';
+  /** circle (default) or rounded. */
   shape?: 'circle' | 'rounded';
   /** Fixed palette, overriding variant. */
   tone?: AvatarTone;
