@@ -1,4 +1,4 @@
-import { resolve } from 'node:path';
+import { basename, resolve } from 'node:path';
 import type { Config } from 'style-dictionary/types';
 
 /** Style Dictionary's config object type (type-only import — erased at runtime). */
@@ -23,6 +23,11 @@ export interface BuildBrandTokensOptions {
    * Most brands leave this unset and encode any namespace in the token paths.
    */
   prefix?: string;
+  /**
+   * Human brand name used to name generated Dart classes, e.g. `"Biome"` →
+   * `BiomeTokens`. Falls back to `"Brand"` when omitted.
+   */
+  displayName?: string;
   /** Optional theme overlays appended, in order, after the base `:root` block. */
   themes?: ThemeOverlay[];
 }
@@ -44,7 +49,7 @@ export const themeTempFile = (index: number): string => `__theme-${index}.css`;
 export function createBaseConfig(
   options: BuildBrandTokensOptions,
 ): StyleDictionaryConfig {
-  const { source, buildPath, prefix } = options;
+  const { source, buildPath, prefix, displayName } = options;
   const out = withSlash(buildPath);
 
   return {
@@ -70,6 +75,28 @@ export function createBaseConfig(
           { destination: 'tokens.d.ts', format: 'typescript/es6-declarations' },
         ],
       },
+      native: {
+        // Unique names (via attribute/cti + name/pascal) so reused leaf
+        // names across groups (base/ui/tight) don't trip SD's collision check.
+        // Values are left raw — the native format classifies them itself.
+        transforms: ['attribute/cti', 'name/pascal'],
+        buildPath: withSlash(resolve(buildPath, 'native')),
+        files: [
+          { destination: 'tokens.js', format: 'thijulio/native-es6' },
+          { destination: 'tokens.d.ts', format: 'thijulio/native-dts' },
+        ],
+      },
+      dart: {
+        transforms: ['attribute/cti', 'name/pascal'],
+        buildPath: withSlash(resolve(buildPath, 'dart')),
+        files: [
+          {
+            destination: 'tokens.dart',
+            format: 'thijulio/dart-base',
+            options: { displayName },
+          },
+        ],
+      },
     },
   };
 }
@@ -84,9 +111,13 @@ export function createThemeConfig(
   theme: ThemeOverlay,
   index: number,
 ): StyleDictionaryConfig {
-  const { source, buildPath, prefix } = options;
+  const { source, buildPath, prefix, displayName } = options;
   const out = withSlash(buildPath);
   const themeDir = resolve(theme.source);
+  const themeName = basename(themeDir);
+  // Emit only tokens that came from this overlay's directory.
+  const filter = (token: { filePath?: string }): boolean =>
+    resolve(token.filePath ?? '').startsWith(themeDir);
 
   return {
     source: [glob(source), glob(theme.source)],
@@ -101,8 +132,30 @@ export function createThemeConfig(
             destination: themeTempFile(index),
             format: 'css/variables',
             options: { selector: theme.selector, outputReferences: true },
-            // Emit only tokens that came from this overlay's directory.
-            filter: (token) => resolve(token.filePath).startsWith(themeDir),
+            filter,
+          },
+        ],
+      },
+      native: {
+        transforms: ['attribute/cti', 'name/pascal'],
+        buildPath: withSlash(resolve(buildPath, 'native')),
+        files: [
+          {
+            destination: `themes/${themeName}.js`,
+            format: 'thijulio/native-theme-es6',
+            filter,
+          },
+        ],
+      },
+      dart: {
+        transforms: ['attribute/cti', 'name/pascal'],
+        buildPath: withSlash(resolve(buildPath, 'dart')),
+        files: [
+          {
+            destination: `theme_${themeName}.dart`,
+            format: 'thijulio/dart-theme',
+            options: { displayName, themeName },
+            filter,
           },
         ],
       },
