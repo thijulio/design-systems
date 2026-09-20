@@ -6,10 +6,10 @@ const TONE_BG = {
   brand: ['var(--ds-brand)', 'var(--ds-on-brand)'],
   accent: ['var(--ds-accent)', 'var(--ds-on-accent)'],
   neutral: ['var(--ds-surface-sunken)', 'var(--ds-text)'],
-  success: ['var(--ds-success)', 'var(--ds-on-accent)'],
+  success: ['var(--ds-success)', 'var(--ds-text-inverse)'],
   warning: ['var(--ds-warning)', 'var(--ds-on-highlight)'],
-  danger: ['var(--ds-danger)', 'var(--ds-on-accent)'],
-  info: ['var(--ds-info)', 'var(--ds-on-accent)'],
+  danger: ['var(--ds-danger)', 'var(--ds-text-inverse)'],
+  info: ['var(--ds-info)', 'var(--ds-text-inverse)'],
 } as const;
 
 export type AvatarTone = keyof typeof TONE_BG;

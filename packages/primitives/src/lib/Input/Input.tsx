@@ -12,6 +12,7 @@ export function Input({ className, invalid, ...props }: InputProps) {
   return (
     <input
       className={cx(styles.input, invalid && styles.invalid, className)}
+      aria-invalid={invalid || undefined}
       {...props}
     />
   );
@@ -31,6 +32,7 @@ export function Textarea({ className, invalid, ...props }: TextareaProps) {
         invalid && styles.invalid,
         className,
       )}
+      aria-invalid={invalid || undefined}
       {...props}
     />
   );

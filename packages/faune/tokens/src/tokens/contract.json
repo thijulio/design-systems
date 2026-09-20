@@ -46,7 +46,7 @@
       "value": "{coral-deep}"
     },
     "on-accent": {
-      "value": "{cream}"
+      "value": "{ink-deep}"
     },
     "highlight": {
       "value": "{yellow}"
@@ -61,7 +61,7 @@
       "value": "{light-line}"
     },
     "focus": {
-      "value": "rgba(229, 108, 80, 0.5)"
+      "value": "{coral-ring}"
     },
     "success": {
       "value": "{success}"

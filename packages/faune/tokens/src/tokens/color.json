@@ -29,6 +29,9 @@
   "coral-soft": {
     "value": "#fff4ed"
   },
+  "coral-ring": {
+    "value": "rgba(229, 108, 80, 0.5)"
+  },
   "yellow": {
     "value": "#e7c35b"
   },

@@ -95,7 +95,7 @@
 
 .danger {
   background: var(--ds-danger);
-  color: var(--ds-on-accent);
+  color: var(--ds-text-inverse);
   box-shadow: var(--ds-shadow-sm);
 }
 .danger:hover {

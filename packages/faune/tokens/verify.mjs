@@ -20,25 +20,31 @@ assert.doesNotMatch(css, /\[data-(?:mode|theme)=/, 'unexpected theme overlay');
 
 // Semantic contract — every brand aliases its palette into --ds-* so
 // @thijulio/primitives skins automatically. These names are the shared language.
-assert.match(css, /--ds-surface: var\(--paper\);/g, 'ds surface alias missing');
-assert.match(css, /--ds-brand: var\(--ink\);/g, 'ds brand alias missing');
-assert.match(css, /--ds-accent: var\(--coral\);/g, 'ds accent alias missing');
+assert.match(css, /--ds-surface: var\(--paper\);/, 'ds surface alias missing');
+assert.match(css, /--ds-brand: var\(--ink\);/, 'ds brand alias missing');
+assert.match(css, /--ds-accent: var\(--coral\);/, 'ds accent alias missing');
 assert.match(
   css,
-  /--ds-radius-control: var\(--radius-full\);/g,
+  /--ds-on-accent: var\(--ink-deep\);/,
+  'ds on-accent alias missing/altered',
+);
+assert.match(
+  css,
+  /--ds-radius-control: var\(--radius-full\);/,
   'ds radius-control alias missing',
 );
 assert.match(
   css,
-  /--ds-radius-field: var\(--radius-sm\);/g,
+  /--ds-radius-field: var\(--radius-sm\);/,
   'ds radius-field alias missing',
 );
 assert.match(
   css,
-  /--ds-font-display: var\(--font-display\);/g,
+  /--ds-font-display: var\(--font-display\);/,
   'ds font-display alias missing',
 );
-assert.match(css, /--ds-danger: var\(--danger\);/g, 'ds danger alias missing');
+assert.match(css, /--ds-focus: var\(--coral-ring\);/, 'ds focus alias missing');
+assert.match(css, /--ds-danger: var\(--danger\);/, 'ds danger alias missing');
 
 // Typed objects (web JS/DTS drop-in path).
 assert.match(dts, /export const Ink: string;/, 'ink declaration missing');
