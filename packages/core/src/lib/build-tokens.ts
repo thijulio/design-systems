@@ -106,14 +106,18 @@ async function writeDartBarrel(
   const entries = names
     .map((n) => `'${n}': ${brand}Theme${pascal(n)}.colors`)
     .join(',\n    ');
+  // Zero overlays (a light-only brand) must still emit valid Dart — an empty
+  // map literal, not a stray comma.
+  const mapBody =
+    names.length > 0
+      ? `{\n    ${entries},\n  }`
+      : '<String, Map<String, Color>>{}';
   const dart = `${DART_HEADER}
 import 'dart:ui' show Color;
 ${imports}
 
 abstract final class ${brand}Themes {
-  static const Map<String, Map<String, Color>> all = {
-    ${entries},
-  };
+  static const Map<String, Map<String, Color>> all = ${mapBody};
 }
 `;
   await writeFile(join(buildPath, 'dart', 'themes.dart'), dart);
