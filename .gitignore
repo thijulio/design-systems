@@ -53,3 +53,4 @@ test-output
 vite.config.*.timestamp*
 
 storybook-static
+apps/docs/test-results

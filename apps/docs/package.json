@@ -9,8 +9,46 @@
       "scope:docs"
     ],
     "targets": {
+      "build-storybook": {
+        "command": "storybook build",
+        "dependsOn": [
+          "biome-css:build",
+          "biome-react:build",
+          "exodus-css:build",
+          "exodus-react:build"
+        ],
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "storybook"
+            ]
+          }
+        ],
+        "options": {
+          "cwd": "apps/docs"
+        }
+      },
       "test-storybook": {
         "command": "vitest run --config vitest.config.ts",
+        "dependsOn": [
+          "biome-css:build",
+          "biome-react:build",
+          "exodus-css:build",
+          "exodus-react:build"
+        ],
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest",
+              "playwright",
+              "storybook"
+            ]
+          }
+        ],
         "options": {
           "cwd": "apps/docs"
         }

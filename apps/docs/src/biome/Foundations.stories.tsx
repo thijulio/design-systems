@@ -32,7 +32,7 @@ function Section({
       {desc && (
         <p
           style={{
-            color: 'var(--text-muted)',
+            color: 'var(--text-body)',
             margin: '0 0 14px',
             fontSize: 14,
           }}
@@ -77,7 +77,7 @@ function Swatch({
         >
           {name}
         </div>
-        <div style={{ ...mono, fontSize: 12, color: 'var(--text-muted)' }}>
+        <div style={{ ...mono, fontSize: 12, color: 'var(--text-body)' }}>
           {hex} · {usage}
         </div>
       </div>
@@ -262,7 +262,7 @@ export const Typography: Story = {
                 style={{
                   ...mono,
                   fontSize: 12,
-                  color: 'var(--text-muted)',
+                  color: 'var(--text-body)',
                   width: 40,
                 }}
               >
@@ -287,9 +287,7 @@ export const Typography: Story = {
         >
           {families.map(([v, label, sample]) => (
             <div key={v} style={{ marginBottom: 16, maxWidth: 640 }}>
-              <div
-                style={{ ...mono, fontSize: 12, color: 'var(--text-muted)' }}
-              >
+              <div style={{ ...mono, fontSize: 12, color: 'var(--text-body)' }}>
                 {label}
               </div>
               <div
@@ -337,7 +335,7 @@ export const Spacing: Story = {
                 style={{
                   ...mono,
                   fontSize: 12,
-                  color: 'var(--text-muted)',
+                  color: 'var(--text-body)',
                   width: 32,
                 }}
               >
@@ -371,7 +369,7 @@ export const Spacing: Story = {
                   }}
                 />
                 <span
-                  style={{ ...mono, fontSize: 12, color: 'var(--text-muted)' }}
+                  style={{ ...mono, fontSize: 12, color: 'var(--text-body)' }}
                 >
                   {label}
                 </span>
@@ -388,7 +386,7 @@ export const Spacing: Story = {
                 }}
               />
               <span
-                style={{ ...mono, fontSize: 12, color: 'var(--text-muted)' }}
+                style={{ ...mono, fontSize: 12, color: 'var(--text-body)' }}
               >
                 organic
               </span>
@@ -426,7 +424,7 @@ function MotionDemo({
       </div>
       <div style={{ marginTop: 8, ...mono, fontSize: 12 }}>
         <div style={{ color: 'var(--text-strong)' }}>{label}</div>
-        <div style={{ color: 'var(--text-muted)' }}>{token}</div>
+        <div style={{ color: 'var(--text-body)' }}>{token}</div>
       </div>
     </div>
   );
@@ -480,7 +478,7 @@ export const Motion: Story = {
           />
         </MotionDemo>
       </div>
-      <p style={{ color: 'var(--text-muted)', fontSize: 14, marginTop: 20 }}>
+      <p style={{ color: 'var(--text-body)', fontSize: 14, marginTop: 20 }}>
         Everything decorative freezes under{' '}
         <code style={{ ...mono }}>prefers-reduced-motion: reduce</code>.
       </p>

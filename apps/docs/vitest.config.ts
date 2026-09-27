@@ -23,6 +23,9 @@ export default defineConfig({
         ],
         test: {
           name: 'storybook',
+          // Axe audits execute in a real browser and can exceed Vitest's short
+          // unit-test default while the full catalog is running concurrently.
+          testTimeout: 30_000,
           browser: {
             enabled: true,
             headless: true,

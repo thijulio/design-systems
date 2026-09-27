@@ -26,4 +26,17 @@ describe('ModeToggle', () => {
     fireEvent.click(screen.getByRole('tab', { name: 'Recruiter' }));
     expect(onChange).toHaveBeenCalledWith('recruiter');
   });
+
+  it('moves focus and selection with arrow keys', () => {
+    const onChange = jest.fn();
+    render(<ModeToggle value="explorer" onChange={onChange} />);
+
+    const explorer = screen.getByRole('tab', { name: 'Explorer' });
+    const recruiter = screen.getByRole('tab', { name: 'Recruiter' });
+    explorer.focus();
+    fireEvent.keyDown(explorer, { key: 'ArrowRight' });
+
+    expect(onChange).toHaveBeenCalledWith('recruiter');
+    expect(recruiter).toHaveFocus();
+  });
 });

@@ -26,4 +26,17 @@ describe('Tabs', () => {
     fireEvent.click(screen.getByRole('tab', { name: 'Archived' }));
     expect(onChange).toHaveBeenCalledTimes(1);
   });
+
+  it('uses arrow keys to move between enabled tabs', () => {
+    const onChange = jest.fn();
+    render(<Tabs tabs={tabs} value="active" onChange={onChange} />);
+
+    const active = screen.getByRole('tab', { name: 'Active' });
+    const all = screen.getByRole('tab', { name: /All/ });
+    active.focus();
+    fireEvent.keyDown(active, { key: 'ArrowRight' });
+
+    expect(onChange).toHaveBeenCalledWith('all');
+    expect(all).toHaveFocus();
+  });
 });

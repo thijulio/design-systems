@@ -15,7 +15,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  color: var(--n-500);
+  color: var(--n-600);
   font-weight: 500;
   border-bottom: 2px solid transparent;
   transition: color 0.12s ease;

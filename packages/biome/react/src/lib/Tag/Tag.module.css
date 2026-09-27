@@ -18,12 +18,12 @@
 
 .solid {
   color: var(--on-brand);
-  background: var(--brand-2);
+  background: var(--brand);
   border: 1px solid transparent;
 }
 
 .muted {
-  color: var(--text-muted);
+  color: var(--text-body);
   border: 1px solid var(--border);
   background: transparent;
   font-family: var(--font-mono);
