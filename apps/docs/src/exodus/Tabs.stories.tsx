@@ -23,17 +23,24 @@ export default meta;
 
 type Story = StoryObj<typeof Tabs>;
 
+export const Default: Story = { args: { tabs: TABS, value: 'all' } };
 export const Interactive: Story = {
   render: () => {
     const [value, setValue] = useState('all');
     return <Tabs tabs={TABS} value={value} onChange={setValue} />;
   },
-  // Interaction test: clicking a tab selects it.
+  // Interaction test: pointer and keyboard controls select enabled tabs.
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const active = canvas.getByRole('tab', { name: /Active/ });
     await expect(active).toHaveAttribute('aria-selected', 'false');
     await userEvent.click(active);
     await expect(active).toHaveAttribute('aria-selected', 'true');
+    active.focus();
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(canvas.getByRole('tab', { name: /Archived/ })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
   },
 };

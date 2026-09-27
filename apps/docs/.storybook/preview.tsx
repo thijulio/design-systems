@@ -57,8 +57,9 @@ const preview: Preview = {
         ],
       },
     },
-    // a11y violations surface in the Accessibility panel; don't fail the build.
-    a11y: { test: 'todo' },
+    // A component catalog is a quality gate: supported stories must not carry
+    // known accessibility violations into a release.
+    a11y: { test: 'error' },
   },
   // Globals only (no `toolbar`): the toolbar UI is rendered per-brand by the
   // manager addon (.storybook/manager.tsx), which shows the Biome mode control

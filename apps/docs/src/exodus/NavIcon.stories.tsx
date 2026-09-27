@@ -44,7 +44,7 @@ export const Registry: Story = {
             alignItems: 'center',
             gap: 6,
             fontSize: 11,
-            color: 'var(--n-500)',
+            color: 'var(--n-600)',
           }}
         >
           <NavIcon name={name} size={24} />

@@ -31,7 +31,8 @@ export default meta;
 
 type Story = StoryObj<typeof Toast>;
 
-export const Info: Story = {
+export const Info: Story = {};
+export const Interactive: Story = {
   args: { onClose: fn() },
   // Interaction test: clicking the dismiss button fires onClose.
   play: async ({ args, canvasElement }) => {
