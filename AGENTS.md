@@ -32,9 +32,9 @@ The three brands **never import from each other** (enforced by Nx module
 boundaries). They share `packages/core` (build tooling only) and
 `packages/primitives` (`scope:shared`) — brand-agnostic UI primitives styled
 against a shared **semantic contract** of `--ds-*` CSS custom properties. Each
-brand aliases its own palette into that contract (see
-`packages/faune/tokens/src/tokens/contract.json`), so the primitives skin
-automatically per brand. Beyond the contract, the brands' token schemas
+brand using primitives aliases its own tokens into that contract (see
+`packages/{faune,exodus}/tokens/src/tokens/contract.json`), so the primitives
+skin automatically per brand. Beyond the contract, the brands' token schemas
 genuinely differ — nothing else is shared.
 
 Tokens/components originate from Claude Design exports; Git is the source of
@@ -87,10 +87,12 @@ in PMP, not the reusable catalog. Same rule for Faune: pet-domain pieces (Pet
 Passport, Rocket mascot, cat portraits) live in the Maison Féline site repo, not
 in `@thijulio/primitives` or `@thijulio/faune-*`.
 
-Generic components belong in `@thijulio/primitives` (the shared layer), styled
-against the `--ds-*` contract — NOT duplicated per brand. Only genuinely
-brand-specific components live in a brand's `react` package (e.g. Biome's
-`TerminalHero`).
+New generic components belong in `@thijulio/primitives`, styled against the
+`--ds-*` contract. Existing brand React packages retain their public APIs while
+overlapping components migrate incrementally. Exodus `Card` delegates to the
+shared implementation; Exodus `Button` remains brand-owned for compatibility.
+Only genuinely brand-specific components should be added to brand React
+packages (e.g. Biome's `TerminalHero`).
 
 ## The token pipeline (how tokens become CSS + TS)
 
@@ -165,12 +167,11 @@ Also exports `./styles.css`→`dist/index.css` (for Storybook, which consumes bu
 packages). When a prop name collides with a native HTML attribute you repurpose
 (`title`, `onChange`), `Omit` it from the extended `HTMLAttributes`.
 
-The brand packages plus `@thijulio/primitives` are **published** to GitHub
-Packages under `@thijulio` (`private: false` + `publishConfig`, and
-`files: ["dist"]` so only built output ships — not `src`). `core` stays
-`private: true` (build-only tooling, never published). Current published
-version: **0.0.2** (the new Faune + primitives packages ship on their first
-release). See **Release / publish** below.
+The six existing Biome/Exodus brand packages are published to GitHub Packages
+at **0.0.2**. Faune and primitives are publishable (`private: false`,
+`publishConfig`, `files: ["dist"]`) but need their first release. `core` stays
+private and build-only. A source merge is not a package release. See
+**Release / publish** below.
 
 ## How to…
 
@@ -187,8 +188,15 @@ guarantee. Downstream css/react rebuild via the Nx graph.
 **Add a theme:** add `src/themes/<name>/*.json` (only the tokens that change) and
 a `theme('<name>')` entry in the brand's `build.mjs` with the right selector.
 
+**Add a brand that uses shared components:** map its source tokens to `--ds-*`
+in `src/tokens/contract.json`, add its CSS bundle to Storybook's brand registry,
+and add it to `apps/docs/verify-contract.mjs`. See
+`docs/architecture/multi-brand-primitives.md`. `nx verify-contract docs` checks
+the variables consumed by primitives; Storybook tests check actual themed
+rendering.
+
 **See a change in Storybook:** components are consumed as **built** packages, so
-run `nx build <brand>-react` first, then `nx storybook docs`.
+build the changed token/CSS/React package first, then `nx storybook docs`.
 
 **Release / publish packages:** trigger the **Release** workflow
 (`.github/workflows/release.yml`) — `gh workflow run release.yml -f
@@ -208,6 +216,7 @@ Pages site redeploys automatically on push to `main` (`storybook-pages.yml`).
 nx run-many -t build test lint typecheck          # everything
 nx run-many -t build test lint --projects=<name>  # one project (+ its deps)
 nx build-storybook docs                            # static Storybook → apps/docs/storybook-static
+nx verify-contract docs                           # check shared CSS variables for Faune + Exodus
 nx storybook docs --port 6006                      # dev (needs react packages built first)
 nx test-storybook docs                             # story interaction tests (headless chromium)
 nx format:write   /   nx format:check              # prettier (ignores *.swcrc, Dockerfile)
@@ -228,7 +237,7 @@ Jest-tested; the SD build itself runs at `nx build`.
 
 ESLint `@nx/enforce-module-boundaries` (`eslint.config.mjs`): `scope:core`
 depends on nothing; `scope:shared` → shared only; `scope:biome` → core+biome;
-`scope:exodus` → core+exodus; `scope:faune` → core+shared+faune (the brands
+`scope:exodus` → core+shared+exodus; `scope:faune` → core+shared+faune (the brands
 **never** import each other); `scope:docs` → core+shared+all brands (the only
 cross-brand consumer).
 
@@ -245,13 +254,13 @@ cross-brand consumer).
   `main.ts` must keep `@vitejs/plugin-react` in `viteFinal` or JSX-in-`render`
   stories fail the export-order lexer ("Parse error @:LINE").
 - **Storybook theming:** `preview.tsx` reads the brand from the story `title`
-  prefix (`Biome/…` / `Exodus/…`) and injects only that brand's token CSS (the
-  two share some `:root` var names), then sets `data-mode`/`data-theme` from the
+  prefix (`Biome/…` / `Exodus/…` / `Faune/…`) and injects only that brand's token
+  CSS (the brands share some `:root` var names), then sets `data-mode`/`data-theme` from the
   toolbar. Story titles MUST start with the brand — the first `/`-segment is the
   brand key used by both `preview.tsx` and the per-brand toolbar in `manager.tsx`.
 - **Sidebar taxonomy:** titles are `Brand/Group/Component` — Biome uses
-  `Foundations` + `Components`; Exodus uses `Foundations`/`Core`/`Forms`/
-  `Feedback`/`Identity`. Order is fixed in `preview.tsx` `options.storySort`
+  `Foundations` + `Components`; Exodus uses `Foundations`/`Shared`/`Core`/`Forms`/
+  `Feedback`/`Identity`; Faune uses `Foundations` + `Components`. Order is fixed in `preview.tsx` `options.storySort`
   (`Introduction` first). Adding a component = pick the right group in its title.
 - **Docs & a11y:** `preview.tsx` sets `tags: ['autodocs']` globally, so every
   meta with a `component` gets a Docs page. Docgen does NOT run on the built

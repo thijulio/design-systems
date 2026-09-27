@@ -31,7 +31,8 @@ export default meta;
 
 type Story = StoryObj<typeof Button>;
 
-export const Primary: Story = {
+export const Primary: Story = {};
+export const Interactive: Story = {
   args: { onClick: fn() },
   // Interaction test: clicking fires onClick exactly once.
   play: async ({ args, canvasElement }) => {
@@ -46,4 +47,20 @@ export const Secondary: Story = { args: { variant: 'secondary' } };
 export const Soft: Story = { args: { variant: 'soft' } };
 export const Danger: Story = {
   args: { variant: 'danger', children: 'Delete' },
+};
+export const Disabled: Story = {
+  args: { disabled: true, onClick: fn() },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button', { name: 'Save changes' });
+    await expect(button).toBeDisabled();
+    button.click();
+    await expect(args.onClick).not.toHaveBeenCalled();
+  },
+};
+export const Clay: Story = {
+  globals: { accent: 'clay' },
+};
+export const Harbor: Story = {
+  globals: { accent: 'harbor' },
 };

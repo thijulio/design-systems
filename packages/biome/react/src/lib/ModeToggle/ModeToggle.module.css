@@ -16,7 +16,7 @@
   padding: 8px 18px;
   cursor: pointer;
   background: transparent;
-  color: var(--text-muted);
+  color: var(--text-body);
   transition: all var(--dur-fast) var(--ease-organic);
 }
 

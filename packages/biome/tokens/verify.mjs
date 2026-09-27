@@ -29,6 +29,14 @@ assert.match(css, /--brand: var\(--bm-sage\);/, 'dark --brand alias missing');
 assert.match(css, /--space-1: 4px;/, 'spacing token altered');
 assert.match(css, /--weight-bold: 700;/, 'weight token altered');
 
+// Component decisions remain explicit tokens; the function color is bright
+// enough to be read on the terminal surface.
+assert.match(
+  css,
+  /--terminal-syntax-fn: #D1794C;/,
+  'terminal function token missing/altered',
+);
+
 // Typed JS/TS objects exist.
 assert.match(dts, /export const BmMata: string;/, 'ts declaration missing');
 

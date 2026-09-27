@@ -9,7 +9,7 @@
     "value": "#244e4b"
   },
   "ink-muted": {
-    "value": "rgba(24, 61, 60, 0.72)"
+    "value": "rgba(24, 61, 60, 0.74)"
   },
   "paper": {
     "value": "#f7f4ed"
@@ -24,7 +24,7 @@
     "value": "#e56c50"
   },
   "coral-deep": {
-    "value": "#c94e39"
+    "value": "#bf4833"
   },
   "coral-soft": {
     "value": "#fff4ed"
@@ -69,7 +69,7 @@
     "value": "#8a5e12"
   },
   "danger": {
-    "value": "#c94e39"
+    "value": "#bf4833"
   },
   "danger-soft": {
     "value": "#ffe4dc"

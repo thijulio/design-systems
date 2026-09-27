@@ -1,12 +1,13 @@
 .card {
   background: var(--ds-surface-raised);
-  border: 1px solid var(--ds-border);
+  border: 1px solid var(--ds-card-border, var(--ds-border));
   border-radius: var(--ds-radius-card);
   box-shadow: var(--ds-shadow-sm);
 }
 
 .pad {
-  padding: var(--ds-space-5) var(--ds-space-6);
+  padding: var(--ds-card-padding-y, var(--ds-space-5))
+    var(--ds-card-padding-x, var(--ds-space-6));
 }
 
 .interactive {
@@ -19,5 +20,5 @@
 .interactive:hover {
   transform: translateY(-3px);
   box-shadow: var(--ds-shadow-lg);
-  border-color: var(--ds-accent);
+  border-color: var(--ds-card-hover-border, var(--ds-accent));
 }

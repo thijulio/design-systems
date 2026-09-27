@@ -29,7 +29,7 @@ function Section({
         {title}
       </h3>
       {desc && (
-        <p style={{ color: 'var(--n-500)', margin: '0 0 14px', fontSize: 14 }}>
+        <p style={{ color: 'var(--n-600)', margin: '0 0 14px', fontSize: 14 }}>
           {desc}
         </p>
       )}
@@ -64,7 +64,7 @@ function Swatch({
       <div style={{ padding: '9px 11px' }}>
         <div style={{ fontWeight: 700, color: fg, fontSize: 13 }}>{name}</div>
         {(hex || usage) && (
-          <div style={{ fontSize: 12, color: 'var(--n-500)' }}>
+          <div style={{ fontSize: 12, color: 'var(--n-600)' }}>
             {[hex, usage].filter(Boolean).join(' · ')}
           </div>
         )}
@@ -236,7 +236,7 @@ export const Themes: Story = {
               {theme}
             </div>
             <div
-              style={{ fontSize: 12, color: 'var(--n-500)', marginBottom: 10 }}
+              style={{ fontSize: 12, color: 'var(--n-600)', marginBottom: 10 }}
             >
               {use}
             </div>
@@ -308,7 +308,7 @@ export const Typography: Story = {
             }}
           >
             PMP{' '}
-            <span style={{ ...sans, fontSize: 13, color: 'var(--n-500)' }}>
+            <span style={{ ...sans, fontSize: 13, color: 'var(--n-600)' }}>
               · Baloo 2, wordmark only
             </span>
           </div>
@@ -328,7 +328,7 @@ export const Typography: Story = {
                 style={{
                   ...sans,
                   fontSize: 12,
-                  color: 'var(--n-500)',
+                  color: 'var(--n-600)',
                   width: 60,
                 }}
               >
@@ -383,7 +383,7 @@ export const Spacing: Story = {
                 style={{
                   ...sans,
                   fontSize: 12,
-                  color: 'var(--n-500)',
+                  color: 'var(--n-600)',
                   width: 28,
                 }}
               >
@@ -413,7 +413,7 @@ export const Spacing: Story = {
                     marginBottom: 6,
                   }}
                 />
-                <span style={{ ...sans, fontSize: 12, color: 'var(--n-500)' }}>
+                <span style={{ ...sans, fontSize: 12, color: 'var(--n-600)' }}>
                   {label}
                 </span>
               </div>
@@ -434,7 +434,7 @@ export const Spacing: Story = {
                     marginBottom: 8,
                   }}
                 />
-                <span style={{ ...sans, fontSize: 12, color: 'var(--n-500)' }}>
+                <span style={{ ...sans, fontSize: 12, color: 'var(--n-600)' }}>
                   {label}
                 </span>
               </div>

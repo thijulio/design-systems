@@ -27,13 +27,22 @@ export function Tok({ c, children }: TokProps) {
 }
 
 const sp = (n: number) => ' '.repeat(n);
-const T = TERMINAL_COLORS;
+// Defaults use the canonical terminal tokens. The legacy literal export above
+// remains available for consumers that already compose their own code lines.
+const T = {
+  keyword: 'var(--terminal-syntax-keyword)',
+  fn: 'var(--terminal-syntax-fn)',
+  string: 'var(--terminal-syntax-string)',
+  comment: 'var(--terminal-syntax-comment)',
+  punct: 'var(--terminal-syntax-punct)',
+  text: 'var(--terminal-syntax-text)',
+} as const;
 
 const DEFAULT_TITLE = (
   <>
     I grow software
     <br />
-    <em style={{ fontStyle: 'italic', color: '#8FB089' }}>like ecosystems.</em>
+    <em style={{ fontStyle: 'italic', color: T.keyword }}>like ecosystems.</em>
   </>
 );
 
@@ -86,11 +95,11 @@ const DEFAULT_COMMAND = (
 
 const DEFAULT_OUTPUT = (
   <>
-    → <Tok c="#A9C0A2">{'{ state: '}</Tok>
+    → <Tok c="var(--terminal-syntax-output)">{'{ state: '}</Tok>
     <Tok c={T.string}>'growing'</Tok>
-    <Tok c="#A9C0A2">, uptime: </Tok>
+    <Tok c="var(--terminal-syntax-output)">, uptime: </Tok>
     <Tok c={T.string}>'∞'</Tok>
-    <Tok c="#A9C0A2">{' }'}</Tok>
+    <Tok c="var(--terminal-syntax-output)">{' }'}</Tok>
   </>
 );
 
@@ -177,7 +186,7 @@ export function TerminalHero({
                 cy="500"
                 r="96"
                 fill="none"
-                stroke="#8FB089"
+                stroke="var(--terminal-contour-sage)"
                 strokeWidth="1.3"
                 opacity=".55"
               />
@@ -186,7 +195,7 @@ export function TerminalHero({
                 cy="500"
                 r="176"
                 fill="none"
-                stroke="#6E9B7E"
+                stroke="var(--terminal-contour-soft)"
                 strokeWidth="1.1"
                 opacity=".42"
               />
@@ -195,7 +204,7 @@ export function TerminalHero({
                 cy="500"
                 r="258"
                 fill="none"
-                stroke="#6E9B7E"
+                stroke="var(--terminal-contour-soft)"
                 strokeWidth="1"
                 opacity=".32"
               />
@@ -206,7 +215,7 @@ export function TerminalHero({
                 cy="500"
                 r="352"
                 fill="none"
-                stroke="#C8693B"
+                stroke="var(--terminal-contour-terracotta)"
                 strokeWidth="1"
                 opacity=".26"
               />
@@ -215,7 +224,7 @@ export function TerminalHero({
                 cy="500"
                 r="452"
                 fill="none"
-                stroke="#8FB089"
+                stroke="var(--terminal-contour-sage)"
                 strokeWidth=".8"
                 opacity=".16"
               />
@@ -224,12 +233,12 @@ export function TerminalHero({
                 cy="500"
                 r="560"
                 fill="none"
-                stroke="#6E8C7A"
+                stroke="var(--terminal-contour-muted)"
                 strokeWidth=".7"
                 opacity=".12"
               />
             </g>
-            <circle cx="560" cy="500" r="4" fill="#E8A627" />
+            <circle cx="560" cy="500" r="4" fill="var(--terminal-eyebrow)" />
           </svg>
         </div>
       )}

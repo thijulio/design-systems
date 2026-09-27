@@ -36,10 +36,14 @@ export default [
               sourceTag: 'scope:biome',
               onlyDependOnLibsWithTags: ['scope:core', 'scope:biome'],
             },
-            // Professional design system (Exodus). Never imports biome, and vice versa.
+            // Exodus can consume shared primitives, but never another brand.
             {
               sourceTag: 'scope:exodus',
-              onlyDependOnLibsWithTags: ['scope:core', 'scope:exodus'],
+              onlyDependOnLibsWithTags: [
+                'scope:core',
+                'scope:shared',
+                'scope:exodus',
+              ],
             },
             // Faune — the warm, founder-led cat-sitting brand. Builds on the shared contract + primitives.
             {

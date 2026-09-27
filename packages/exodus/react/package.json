@@ -39,5 +39,8 @@
     "type": "git",
     "url": "https://github.com/thijulio/design-systems.git",
     "directory": "packages/exodus/react"
+  },
+  "dependencies": {
+    "@thijulio/primitives": "^0.0.1"
   }
 }

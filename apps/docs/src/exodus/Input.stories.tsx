@@ -5,7 +5,7 @@ import { Input } from '@thijulio/exodus-react';
 const meta: Meta<typeof Input> = {
   title: 'Exodus/Forms/Input',
   component: Input,
-  args: { placeholder: 'Search animals…' },
+  args: { id: 'animal-search', placeholder: 'Search animals…' },
   argTypes: {
     invalid: {
       control: 'boolean',
@@ -15,6 +15,7 @@ const meta: Meta<typeof Input> = {
   decorators: [
     (Story) => (
       <div style={{ maxWidth: 320 }}>
+        <label htmlFor="animal-search">Animal search</label>
         <Story />
       </div>
     ),
@@ -24,11 +25,12 @@ export default meta;
 
 type Story = StoryObj<typeof Input>;
 
-export const Default: Story = {
+export const Default: Story = {};
+export const Interactive: Story = {
   // Interaction test: typing updates the value.
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByPlaceholderText('Search animals…');
+    const input = canvas.getByRole('textbox', { name: 'Animal search' });
     await userEvent.type(input, 'Luna');
     await expect(input).toHaveValue('Luna');
   },

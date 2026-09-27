@@ -38,3 +38,36 @@ jobs:
 
       - run: npx nx format:check
       - run: npx nx affected -t lint test build typecheck
+
+  storybook:
+    name: Storybook browser checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Both targets rebuild the packages consumed through workspace exports,
+      # so this job remains valid from a fresh checkout rather than relying on
+      # a developer's prebuilt dist folders.
+      - run: npx nx build-storybook docs
+      - run: npx nx test-storybook docs
+
+      - name: Upload Storybook on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-artifacts-${{ github.run_id }}
+          path: |
+            apps/docs/storybook-static
+            apps/docs/test-results
+          if-no-files-found: warn

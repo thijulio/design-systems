@@ -9,8 +9,61 @@
       "scope:docs"
     ],
     "targets": {
+      "verify-contract": {
+        "command": "node {projectRoot}/verify-contract.mjs",
+        "dependsOn": [
+          "exodus-tokens:build",
+          "faune-tokens:build",
+          "primitives:build"
+        ],
+        "cache": true
+      },
+      "build-storybook": {
+        "command": "storybook build",
+        "dependsOn": [
+          "verify-contract",
+          "biome-css:build",
+          "biome-react:build",
+          "exodus-css:build",
+          "exodus-react:build",
+          "faune-css:build",
+          "primitives:build"
+        ],
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "storybook"
+            ]
+          }
+        ],
+        "options": {
+          "cwd": "apps/docs"
+        }
+      },
       "test-storybook": {
         "command": "vitest run --config vitest.config.ts",
+        "dependsOn": [
+          "verify-contract",
+          "biome-css:build",
+          "biome-react:build",
+          "exodus-css:build",
+          "exodus-react:build",
+          "faune-css:build",
+          "primitives:build"
+        ],
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest",
+              "playwright",
+              "storybook"
+            ]
+          }
+        ],
         "options": {
           "cwd": "apps/docs"
         }
@@ -22,7 +75,9 @@
     "@thijulio/biome-react": "*",
     "@thijulio/exodus-css": "*",
     "@thijulio/exodus-react": "*",
+    "@thijulio/exodus-tokens": "^0.0.2",
     "@thijulio/faune-css": "*",
+    "@thijulio/faune-tokens": "^0.0.1",
     "@thijulio/primitives": "*"
   }
 }

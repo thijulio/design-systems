@@ -17,7 +17,7 @@
 .hint {
   display: block;
   font-size: var(--text-caption);
-  color: var(--n-500);
+  color: var(--n-600);
   margin-top: 6px;
 }
 .error {
