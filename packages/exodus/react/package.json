@@ -29,7 +29,12 @@
     "name": "exodus-react",
     "tags": [
       "scope:exodus"
-    ]
+    ],
+    "release": {
+      "version": {
+        "preserveMatchingDependencyRanges": false
+      }
+    }
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

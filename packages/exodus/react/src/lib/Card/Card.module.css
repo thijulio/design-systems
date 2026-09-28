@@ -1,0 +1,13 @@
+/* Compatibility skin: the published Exodus 0.0.2 stylesheet predates --ds-*.
+   Keep shared markup while resolving its skin from the legacy Exodus tokens. */
+.compat {
+  --ds-surface-raised: var(--accent-on);
+  --ds-card-border: var(--n-200);
+  --ds-radius-card: var(--radius-lg);
+  --ds-shadow-sm: var(--shadow-sm);
+  --ds-shadow-lg: var(--shadow-lg);
+  --ds-card-hover-border: var(--accent-200);
+  /* Fallbacks preserve the old public spacing until the newer tokens load. */
+  --ds-card-padding-y: var(--card-padding-y, 18px);
+  --ds-card-padding-x: var(--card-padding-x, 20px);
+}

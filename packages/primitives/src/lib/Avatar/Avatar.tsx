@@ -7,7 +7,10 @@ const TONE_BG = {
   accent: ['var(--ds-accent)', 'var(--ds-on-accent)'],
   neutral: ['var(--ds-surface-sunken)', 'var(--ds-text)'],
   success: ['var(--ds-success)', 'var(--ds-text-inverse)'],
-  warning: ['var(--ds-warning)', 'var(--ds-on-highlight)'],
+  warning: [
+    'var(--ds-warning)',
+    'var(--ds-on-warning, var(--ds-on-highlight))',
+  ],
   danger: ['var(--ds-danger)', 'var(--ds-text-inverse)'],
   info: ['var(--ds-info)', 'var(--ds-text-inverse)'],
 } as const;

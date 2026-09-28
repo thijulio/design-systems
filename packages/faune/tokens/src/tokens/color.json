@@ -68,6 +68,9 @@
   "warning-fg": {
     "value": "#8a5e12"
   },
+  "warning-on": {
+    "value": "#102625"
+  },
   "danger": {
     "value": "#bf4833"
   },

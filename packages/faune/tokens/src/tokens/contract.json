@@ -48,11 +48,17 @@
     "on-accent": {
       "value": "{ink-deep}"
     },
+    "on-accent-hover": {
+      "value": "{cream}"
+    },
     "highlight": {
       "value": "{yellow}"
     },
     "on-highlight": {
       "value": "{ink}"
+    },
+    "on-warning": {
+      "value": "{warning-on}"
     },
     "border": {
       "value": "{line}"

@@ -64,6 +64,7 @@
 }
 .accent:hover {
   background: var(--ds-accent-hover);
+  color: var(--ds-on-accent-hover, var(--ds-on-accent));
 }
 
 .secondary {

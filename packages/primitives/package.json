@@ -29,7 +29,12 @@
     "name": "primitives",
     "tags": [
       "scope:shared"
-    ]
+    ],
+    "release": {
+      "version": {
+        "fallbackCurrentVersionResolver": "disk"
+      }
+    }
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Avatar } from '@thijulio/primitives';
+import { expect, within } from 'storybook/test';
+import { contrastRatio } from '../_test/contrast';
 
 const meta: Meta<typeof Avatar> = {
   title: 'Faune/Components/Avatar',
@@ -26,6 +28,15 @@ type Story = StoryObj<typeof Avatar>;
 export const Brand: Story = {};
 export const Accent: Story = { args: { variant: 'accent', initials: 'TR' } };
 export const Neutral: Story = { args: { variant: 'neutral', initials: 'MF' } };
+export const Warning: Story = {
+  args: { tone: 'warning', initials: 'KT' },
+  play: async ({ canvasElement }) => {
+    const style = getComputedStyle(within(canvasElement).getByText('KT'));
+    await expect(
+      contrastRatio(style.color, style.backgroundColor),
+    ).toBeGreaterThanOrEqual(4.5);
+  },
+};
 export const RoundedLarge: Story = {
   args: { size: 56, shape: 'rounded', initials: 'KT' },
 };

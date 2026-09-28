@@ -16,6 +16,10 @@
           "faune-tokens:build",
           "primitives:build"
         ],
+        "inputs": [
+          "default",
+          "^production"
+        ],
         "cache": true
       },
       "build-storybook": {
@@ -75,9 +79,9 @@
     "@thijulio/biome-react": "*",
     "@thijulio/exodus-css": "*",
     "@thijulio/exodus-react": "*",
-    "@thijulio/exodus-tokens": "^0.0.2",
+    "@thijulio/exodus-tokens": "*",
     "@thijulio/faune-css": "*",
-    "@thijulio/faune-tokens": "^0.0.1",
+    "@thijulio/faune-tokens": "*",
     "@thijulio/primitives": "*"
   }
 }

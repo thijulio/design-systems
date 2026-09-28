@@ -22,6 +22,11 @@
     "tags": [
       "scope:faune"
     ],
+    "release": {
+      "version": {
+        "fallbackCurrentVersionResolver": "disk"
+      }
+    },
     "targets": {
       "build": {
         "command": "node {projectRoot}/build.mjs",

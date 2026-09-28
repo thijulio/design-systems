@@ -90,7 +90,8 @@
       "conventionalCommits": true
     },
     "changelog": {
-      "projectChangelogs": true
+      "projectChangelogs": true,
+      "automaticFromRef": true
     }
   },
   "targetDefaults": {

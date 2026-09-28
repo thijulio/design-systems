@@ -5,13 +5,19 @@ const primitivesCss = await readFile(
   new URL(import.meta.resolve('@thijulio/primitives/styles.css')),
   'utf8',
 );
+const primitivesJs = await readFile(
+  new URL(import.meta.resolve('@thijulio/primitives')),
+  'utf8',
+);
 const required = new Set(
-  [...primitivesCss.matchAll(/var\((--ds-[a-z0-9-]+)\)/g)].map(
-    (match) => match[1],
-  ),
+  [
+    ...`${primitivesCss}\n${primitivesJs}`.matchAll(
+      /var\((--ds-[a-z0-9-]+)\)/g,
+    ),
+  ].map((match) => match[1]),
 );
 
-assert.ok(required.size > 0, 'primitives CSS has no contract references');
+assert.ok(required.size > 0, 'primitives output has no contract references');
 
 for (const [brand, packageName] of [
   ['Exodus', '@thijulio/exodus-tokens'],

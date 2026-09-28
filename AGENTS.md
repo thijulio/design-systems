@@ -90,7 +90,8 @@ in `@thijulio/primitives` or `@thijulio/faune-*`.
 New generic components belong in `@thijulio/primitives`, styled against the
 `--ds-*` contract. Existing brand React packages retain their public APIs while
 overlapping components migrate incrementally. Exodus `Card` delegates to the
-shared implementation; Exodus `Button` remains brand-owned for compatibility.
+shared implementation with a legacy-token compatibility skin; Exodus `Button`
+remains brand-owned for compatibility.
 Only genuinely brand-specific components should be added to brand React
 packages (e.g. Biome's `TerminalHero`).
 
@@ -207,8 +208,12 @@ Two hard-won gotchas are baked in: **`HUSKY=0`** (the pre-commit hook otherwise
 blocks nx release's automated version commit) and an explicit
 **`git push --follow-tags`** (nx release commits & tags locally but does **not**
 push). Use `dry_run=true` to preview versions without publishing. Versions are
-resolved from the `<pkg>@<version>` git tags, so never delete them. The Storybook
-Pages site redeploys automatically on push to `main` (`storybook-pages.yml`).
+resolved from the `<pkg>@<version>` git tags, so never delete them. The three
+new Faune/primitives projects have a scoped disk fallback for their initial
+release; existing projects still require their tags. Exodus React allows Nx
+to update its primitives dependency range during versioning. Use the normal
+dry run (`first_release=false`) for this mixed group. The Storybook Pages site
+redeploys automatically on push to `main` (`storybook-pages.yml`).
 
 ## Commands
 

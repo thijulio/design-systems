@@ -44,7 +44,7 @@ a {
   text-underline-offset: 0.18em;
 }
 a:hover {
-  color: var(--coral);
+  color: var(--ink);
 }
 
 hr {
@@ -54,5 +54,5 @@ hr {
 
 ::selection {
   background: var(--coral);
-  color: var(--cream);
+  color: var(--ink-deep);
 }

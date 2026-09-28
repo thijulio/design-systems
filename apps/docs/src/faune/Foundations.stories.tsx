@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactNode } from 'react';
+import { expect, waitFor, within } from 'storybook/test';
+import { contrastRatio } from '../_test/contrast';
+import { hoverInBrowserTest } from '../_test/hover';
 
 const meta: Meta = { title: 'Faune/Foundations' };
 export default meta;
@@ -44,17 +47,7 @@ function Section({
   );
 }
 
-function Swatch({
-  name,
-  bg,
-  hex,
-  fg = 'var(--ink)',
-}: {
-  name: string;
-  bg: string;
-  hex?: string;
-  fg?: string;
-}) {
+function Swatch({ name, bg, hex }: { name: string; bg: string; hex?: string }) {
   return (
     <div
       style={{
@@ -66,7 +59,9 @@ function Swatch({
     >
       <div style={{ height: 76, background: bg }} />
       <div style={{ padding: '9px 11px' }}>
-        <div style={{ fontWeight: 700, color: fg, fontSize: 13 }}>{name}</div>
+        <div style={{ fontWeight: 700, color: 'var(--ink)', fontSize: 13 }}>
+          {name}
+        </div>
         {hex && (
           <div style={{ fontSize: 12, color: 'var(--ink-muted)' }}>{hex}</div>
         )}
@@ -91,22 +86,31 @@ function Grid({ min = 130, children }: { min?: number; children: ReactNode }) {
 }
 
 const BRAND = [
-  ['ink', '#183d3c', 'var(--ink)', 'var(--cream)'],
-  ['coral', '#e56c50', 'var(--coral)', 'var(--cream)'],
-  ['yellow', '#e7c35b', 'var(--yellow)', 'var(--ink)'],
-  ['sage', '#b6c8b2', 'var(--sage)', 'var(--ink)'],
-  ['paper', '#f7f4ed', 'var(--paper)', 'var(--ink)'],
-  ['cream', '#fffdf8', 'var(--cream)', 'var(--ink)'],
+  ['ink', '#183d3c', 'var(--ink)'],
+  ['coral', '#e56c50', 'var(--coral)'],
+  ['yellow', '#e7c35b', 'var(--yellow)'],
+  ['sage', '#b6c8b2', 'var(--sage)'],
+  ['paper', '#f7f4ed', 'var(--paper)'],
+  ['cream', '#fffdf8', 'var(--cream)'],
 ] as const;
 
 const SEMANTICS = [
   ['success', '#31715e'],
   ['warning', '#b9821f'],
-  ['danger', '#c94e39'],
+  ['danger', '#bf4833'],
   ['info', '#3b6964'],
 ] as const;
 
 export const Colors: Story = {
+  play: async ({ canvasElement }) => {
+    const caption = within(canvasElement).getByText('ink', { exact: true });
+    const surface = caption.parentElement?.parentElement;
+    if (!surface) throw new Error('Palette caption surface is missing');
+    const background = getComputedStyle(surface).backgroundColor;
+    await expect(
+      contrastRatio(getComputedStyle(caption).color, background),
+    ).toBeGreaterThanOrEqual(4.5);
+  },
   render: () => (
     <div>
       <Section
@@ -114,8 +118,8 @@ export const Colors: Story = {
         desc="Deep-teal ink, coral accent, yellow highlight, sage support, warm paper surfaces."
       >
         <Grid>
-          {BRAND.map(([name, hex, bg, fg]) => (
-            <Swatch key={name} name={name} hex={hex} bg={bg} fg={fg} />
+          {BRAND.map(([name, hex, bg]) => (
+            <Swatch key={name} name={name} hex={hex} bg={bg} />
           ))}
         </Grid>
       </Section>
@@ -126,13 +130,7 @@ export const Colors: Story = {
       >
         <Grid>
           {SEMANTICS.map(([name, hex]) => (
-            <Swatch
-              key={name}
-              name={name}
-              hex={hex}
-              bg={`var(--${name})`}
-              fg="var(--cream)"
-            />
+            <Swatch key={name} name={name} hex={hex} bg={`var(--${name})`} />
           ))}
         </Grid>
       </Section>
@@ -180,6 +178,22 @@ export const Colors: Story = {
       </Section>
     </div>
   ),
+};
+
+export const LinksHovered: Story = {
+  render: () => <a href="#details">Read more about Faune</a>,
+  play: async ({ canvasElement }) => {
+    const link = within(canvasElement).getByRole('link');
+    if (!(await hoverInBrowserTest(link))) return;
+    await waitFor(() =>
+      expect(
+        contrastRatio(
+          getComputedStyle(link).color,
+          getComputedStyle(document.body).backgroundColor,
+        ),
+      ).toBeGreaterThanOrEqual(4.5),
+    );
+  },
 };
 
 export const Typography: Story = {

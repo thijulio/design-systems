@@ -1,6 +1,6 @@
 # @thijulio/primitives
 
-Brand-agnostic UI primitives shared by every `@thijulio` brand. They are styled
+Brand-agnostic UI primitives available to every `@thijulio` brand. They are styled
 against a **semantic contract** — a fixed set of `--ds-*` CSS custom properties —
 rather than any brand's palette. A brand "skins" these components by emitting the
 contract from its own tokens (see `packages/faune/tokens/src/tokens/contract.json`
@@ -13,8 +13,26 @@ for the reference implementation).
    shadow).
 2. Load that brand's CSS bundle (`@thijulio/<brand>-css`) — it defines the
    `--ds-*` vars.
-3. Import components from this package; they resolve colours and metrics
+3. Load `@thijulio/primitives/styles.css` and import components from this package; they resolve colours and metrics
    through the contract, so they skin automatically.
+
+```tsx
+import '@thijulio/faune-css/faune.css';
+import '@thijulio/primitives/styles.css';
+import { Button } from '@thijulio/primitives';
+
+export function Example() {
+  return <Button variant="accent">Save changes</Button>;
+}
+```
+
+Faune and Exodus implement the contract today. Biome still uses its existing
+brand components. Load only one brand's root-level CSS per page, or isolate
+brands in separate scopes/frames.
+
+Optional overrides include `--ds-on-accent-hover`, `--ds-on-warning`, and
+`--ds-card-{border,padding-y,padding-x,hover-border}`. Components retain their
+default contract values when these overrides are absent.
 
 ## Contract reference
 
