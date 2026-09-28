@@ -20,6 +20,7 @@ const required = new Set(
 assert.ok(required.size > 0, 'primitives output has no contract references');
 
 for (const [brand, packageName] of [
+  ['Biome', '@thijulio/biome-tokens'],
   ['Exodus', '@thijulio/exodus-tokens'],
   ['Faune', '@thijulio/faune-tokens'],
 ]) {
@@ -38,4 +39,6 @@ for (const [brand, packageName] of [
   );
 }
 
-console.log(`✓ Exodus and Faune provide all ${required.size} primitive tokens`);
+console.log(
+  `✓ Biome, Exodus and Faune provide all ${required.size} primitive tokens`,
+);

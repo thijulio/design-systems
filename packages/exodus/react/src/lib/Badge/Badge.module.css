@@ -1,13 +1,19 @@
-.badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: 700;
-  line-height: 1;
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  background: var(--badge-bg);
-  color: var(--badge-fg);
+/* Local aliases also support the published, pre-contract Exodus stylesheet. */
+.compat {
+  --ds-font-body: var(--font-sans);
+  --ds-size-caption: var(--text-caption);
+  --ds-weight-bold: var(--weight-bold);
+  --ds-radius-full: var(--radius-full);
+  --ds-surface-sunken: var(--n-200);
+  --ds-text-muted: var(--n-600);
+  --ds-accent-soft: var(--accent-soft);
+  --ds-accent-fg: var(--accent-fg);
+  --ds-success-soft: var(--success-soft);
+  --ds-success-fg: var(--success-fg);
+  --ds-warning-soft: var(--warning-soft);
+  --ds-warning-fg: var(--warning-fg);
+  --ds-danger-soft: var(--danger-soft);
+  --ds-danger-fg: var(--danger-fg);
+  --ds-info-soft: var(--info-soft);
+  --ds-info-fg: var(--info-fg);
 }

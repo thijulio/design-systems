@@ -1,0 +1,49 @@
+{
+  "ds": {
+    "surface": {
+      "value": "{surface.page}"
+    },
+    "surface-raised": {
+      "value": "{surface.raised}"
+    },
+    "surface-sunken": {
+      "value": "{surface.page}"
+    },
+    "text": {
+      "value": "{text.strong}"
+    },
+    "text-muted": {
+      "value": "{text.body}"
+    },
+    "brand": {
+      "value": "{brand}"
+    },
+    "brand-hover": {
+      "value": "{brand-hover}"
+    },
+    "on-brand": {
+      "value": "{on-brand}"
+    },
+    "accent": {
+      "value": "{brand}"
+    },
+    "accent-hover": {
+      "value": "{brand-hover}"
+    },
+    "on-accent": {
+      "value": "{on-brand}"
+    },
+    "accent-soft": {
+      "value": "{surface.raised}"
+    },
+    "accent-fg": {
+      "value": "{text.strong}"
+    },
+    "border": {
+      "value": "{border}"
+    },
+    "focus": {
+      "value": "{focus}"
+    }
+  }
+}

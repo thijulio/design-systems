@@ -1,74 +1,60 @@
+/* Skins set component tokens, not higher-specificity property overrides.
+   Consumer classes loaded after the package keep their original precedence. */
 .button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  border: 1.5px solid transparent;
-  border-radius: var(--radius-ui);
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background var(--dur-fast) var(--ease-organic),
-    color var(--dur-fast),
-    transform var(--dur-fast),
-    border-color var(--dur-fast);
+  --ds-space-2: var(--space-2);
+  --ds-font-body: var(--font-ui);
+  --ds-weight-bold: var(--weight-semibold);
+  --ds-size-body-sm: 13px;
+  --ds-size-body: 14px;
+  --ds-radius-control: var(--radius-ui);
+  --ds-brand: var(--brand);
+  --ds-brand-hover: var(--brand-hover);
+  --ds-on-brand: var(--on-brand);
+  --ds-button-height: auto;
+  --ds-button-leading: 1;
+  --ds-button-tracking: -0.01em;
+  --ds-button-justify: normal;
+  --ds-button-white-space: normal;
+  --ds-button-shadow: none;
+  --ds-button-transition:
+    background var(--dur-fast) var(--ease-organic), color var(--dur-fast),
+    transform var(--dur-fast), border-color var(--dur-fast);
+  --ds-button-focus-outline: 2px solid var(--focus);
+  --ds-button-focus-offset: 2px;
+  --ds-button-focus-shadow: none;
+  --ds-button-active-transform: none;
+  --ds-button-disabled-opacity: 0.45;
+  --ds-button-disabled-pointer-events: auto;
+  --ds-button-secondary-background: transparent;
+  --ds-button-secondary-foreground: var(--brand);
+  --ds-button-secondary-border: var(--brand);
+  --ds-button-secondary-hover-background: var(--brand);
+  --ds-button-secondary-hover-foreground: var(--on-brand);
+  --ds-button-secondary-hover-border: var(--brand);
+  --ds-button-ghost-foreground: var(--brand);
+  --ds-button-ghost-hover-background: transparent;
 }
-
-/* sizes */
 .sm {
-  padding: 8px 14px;
-  font-size: 13px;
+  --ds-button-padding: 8px 14px;
 }
 .md {
-  padding: 11px 20px;
-  font-size: 14px;
+  --ds-button-padding: 11px 20px;
 }
 .lg {
-  padding: 13px 24px;
-  font-size: 16px;
-}
-
-/* variants */
-.primary {
-  background: var(--brand);
-  color: var(--on-brand);
+  --ds-button-padding: 13px 24px;
+  --ds-size-body: 16px;
 }
 .primary:not(:disabled):hover {
-  background: var(--brand-hover);
-  transform: translateY(-1px);
+  --ds-button-transform: translateY(-1px);
+  --ds-button-active-transform: translateY(-1px);
 }
-
 .secondary {
-  background: transparent;
-  color: var(--brand);
-  border-color: var(--brand);
+  --ds-button-secondary-background: transparent;
 }
-.secondary:not(:disabled):hover {
-  background: var(--brand);
-  color: var(--on-brand);
-}
-
-.ghost {
-  background: transparent;
-  color: var(--brand);
-}
-.ghost:not(:disabled):hover {
-  color: var(--brand);
-}
-
-/* ghost uses tighter horizontal padding */
 .ghost.sm {
-  padding: 8px 6px;
+  --ds-button-padding: 8px 6px;
 }
 .ghost.md,
 .ghost.lg {
-  padding: 10px 6px;
-}
-
-.button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
+  --ds-button-padding: 10px 6px;
 }

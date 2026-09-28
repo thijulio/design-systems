@@ -1,42 +1,19 @@
 .tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 1;
-  border-radius: var(--radius-pill);
-  padding: 5px 13px;
+  --ds-font-body: var(--font-ui);
+  --ds-weight-semibold: var(--weight-semibold);
+  --ds-size-body-sm: 13px;
+  --ds-radius-full: var(--radius-pill);
+  --ds-brand: var(--brand);
+  --ds-on-brand: var(--on-brand);
+  --ds-border: var(--border);
+  --ds-text-muted: var(--text-body);
+  --ds-tag-outline-border: var(--brand);
+  --ds-tag-status-color: var(--brand-2);
+  --ds-tag-status-animation: bm-glow;
+  --ds-tag-status-duration: var(--breath);
 }
-
-.outline {
-  color: var(--brand);
-  border: 1px solid var(--brand);
-  background: transparent;
-}
-
-.solid {
-  color: var(--on-brand);
-  background: var(--brand);
-  border: 1px solid transparent;
-}
-
 .muted {
-  color: var(--text-body);
-  border: 1px solid var(--border);
-  background: transparent;
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-size: 12px;
-}
-
-/* pulsing status dot — keyframes (bm-glow) ship in @thijulio/biome-css */
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--brand-2);
-  display: inline-block;
-  animation: bm-glow var(--breath) ease-in-out infinite;
+  --ds-font-body: var(--font-mono);
+  --ds-weight-semibold: var(--weight-regular);
+  --ds-size-body-sm: 12px;
 }

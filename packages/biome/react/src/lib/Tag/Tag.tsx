@@ -1,4 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react';
+import { Tag as PrimitiveTag } from '@thijulio/primitives';
+import '@thijulio/primitives/styles.css';
 import styles from './Tag.module.css';
 
 export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
@@ -24,9 +26,8 @@ export function Tag({
     .join(' ');
 
   return (
-    <span className={cls} {...rest}>
-      {status && <span className={styles.dot} aria-hidden="true" />}
+    <PrimitiveTag variant={variant} status={status} className={cls} {...rest}>
       {children}
-    </span>
+    </PrimitiveTag>
   );
 }

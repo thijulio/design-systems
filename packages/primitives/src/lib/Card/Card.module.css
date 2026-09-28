@@ -1,6 +1,7 @@
 .card {
   background: var(--ds-surface-raised);
-  border: 1px solid var(--ds-card-border, var(--ds-border));
+  border: var(--ds-card-border-width, 1px) solid
+    var(--ds-card-border, var(--ds-border));
   border-radius: var(--ds-radius-card);
   box-shadow: var(--ds-shadow-sm);
 }

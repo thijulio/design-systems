@@ -1,0 +1,28 @@
+{
+  "ds": {
+    "brand": {
+      "value": "{accent}"
+    },
+    "brand-hover": {
+      "value": "{accent-strong}"
+    },
+    "accent": {
+      "value": "{accent}"
+    },
+    "accent-hover": {
+      "value": "{accent-strong}"
+    },
+    "accent-soft": {
+      "value": "{accent-soft}"
+    },
+    "accent-fg": {
+      "value": "{accent-fg}"
+    },
+    "focus": {
+      "value": "{accent-ring}"
+    },
+    "card-hover-border": {
+      "value": "{accent-200}"
+    }
+  }
+}

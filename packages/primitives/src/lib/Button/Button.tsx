@@ -1,4 +1,8 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  ReactNode,
+} from 'react';
 import { cx } from '../_util/style';
 import styles from './Button.module.css';
 
@@ -15,6 +19,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Intent. primary = brand fill, accent = accent fill; the rest as named. */
   variant?: ButtonVariant;
   size?: 'sm' | 'md' | 'lg';
+  /** Render a link when supplied; disabled links remain disabled buttons. */
+  href?: string;
   children?: ReactNode;
 }
 
@@ -38,19 +44,29 @@ export function Button({
   className,
   children,
   type = 'button',
+  href,
+  disabled = false,
   ...props
 }: ButtonProps) {
+  const classes = cx(
+    styles.btn,
+    styles[size],
+    VARIANT_CLASS[variant],
+    className,
+  );
+  if (href && !disabled) {
+    return (
+      <a
+        href={href}
+        className={classes}
+        {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {children}
+      </a>
+    );
+  }
   return (
-    <button
-      type={type}
-      className={cx(
-        styles.btn,
-        styles[size],
-        VARIANT_CLASS[variant],
-        className,
-      )}
-      {...props}
-    >
+    <button type={type} disabled={disabled} className={classes} {...props}>
       {children}
     </button>
   );

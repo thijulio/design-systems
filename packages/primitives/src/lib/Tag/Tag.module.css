@@ -12,7 +12,7 @@
 
 .outline {
   color: var(--ds-brand);
-  border: 1px solid var(--ds-border);
+  border: 1px solid var(--ds-tag-outline-border, var(--ds-border));
   background: transparent;
 }
 
@@ -28,8 +28,9 @@
   background: transparent;
 }
 
-/* pulsing status dot — self-contained keyframe (reduced-motion safe). */
-@keyframes pulse {
+/* A namespaced global keyframe keeps the var() fallback stable: CSS Modules
+   hashes keyframe names, but does not rewrite names inside var() fallbacks. */
+@keyframes :global(ds-tag-pulse) {
   0%,
   100% {
     opacity: 1;
@@ -45,9 +46,10 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--ds-accent);
+  background: var(--ds-tag-status-color, var(--ds-accent));
   display: inline-block;
-  animation: pulse 1.6s ease-in-out infinite;
+  animation: var(--ds-tag-status-animation, ds-tag-pulse)
+    var(--ds-tag-status-duration, 1.6s) ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

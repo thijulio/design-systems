@@ -1,4 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { Button as PrimitiveButton } from '@thijulio/primitives';
+import '@thijulio/primitives/styles.css';
 import { cx } from '../_util/style';
 import styles from './Button.module.css';
 
@@ -11,15 +13,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg';
   children?: ReactNode;
 }
-
-const VARIANT_CLASS: Record<ButtonVariant, string> = {
-  primary: styles.primary,
-  secondary: styles.secondary,
-  soft: styles.soft,
-  ghost: styles.ghost,
-  danger: styles.danger,
-  'danger-outline': styles.dangerOutline,
-};
 
 /**
  * Button — Exodus action control. Six intents, three sizes; every colour
@@ -34,17 +27,14 @@ export function Button({
   ...props
 }: ButtonProps) {
   return (
-    <button
+    <PrimitiveButton
+      variant={variant}
+      size={size}
       type={type}
-      className={cx(
-        styles.btn,
-        styles[size],
-        VARIANT_CLASS[variant],
-        className,
-      )}
+      className={cx(styles.btn, styles[size], className)}
       {...props}
     >
       {children}
-    </button>
+    </PrimitiveButton>
   );
 }
