@@ -1,6 +1,6 @@
 name: Release
 
-# Manually-triggered publish of the six @thijulio packages to GitHub Packages.
+# Manually-triggered publish of the @thijulio packages to GitHub Packages.
 # Runs `nx release`: version (conventional commits) → changelog → git tag →
 # publish the built dist. Independent of the Storybook Pages deploy.
 

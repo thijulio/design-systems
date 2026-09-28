@@ -12,8 +12,9 @@
 
 ## What this is
 
-One Nx monorepo hosting **two independent brand design systems** that share only
-build tooling, published as private npm packages under the `@thijulio` scope.
+One Nx monorepo hosting **three independent brand design systems** that share
+build tooling plus a small set of brand-agnostic UI primitives, published as
+private npm packages under the `@thijulio` scope.
 
 - **Biome Modernism** (`packages/biome/*`, tag `scope:biome`) — the personal /
   website system. Editorial: serif display (Newsreader), light/dark via
@@ -22,11 +23,19 @@ build tooling, published as private npm packages under the `@thijulio` scope.
   system consumed by the Pet Management Platform (PMP) and future client work.
   Product-grade: Hanken Grotesk, warm-stone neutrals, fixed status tones, and
   three swappable accent themes (Sage default / Clay / Harbor) via `[data-theme]`.
+- **Faune** (`packages/faune/*`, tag `scope:faune`) — the warm, founder-led
+  cat-sitting brand (Maison Féline). Editorial serif (Newsreader) + Inter, deep
+  teal ink, coral accent, generous rounded radii. Light-first (no theme overlays
+  yet).
 
-The two brands **never import from each other** (enforced by Nx module
-boundaries). They share `packages/core` — build tooling only, **no design
-tokens**. This is deliberate: the brands' token schemas genuinely differ, so
-there is nothing meaningful to share beyond the Style Dictionary harness.
+The three brands **never import from each other** (enforced by Nx module
+boundaries). They share `packages/core` (build tooling only) and
+`packages/primitives` (`scope:shared`) — brand-agnostic UI primitives styled
+against a shared **semantic contract** of `--ds-*` CSS custom properties. Each
+brand using primitives aliases its own tokens into that contract (see
+`packages/{faune,exodus}/tokens/src/tokens/contract.json`), so the primitives
+skin automatically per brand. Beyond the contract, the brands' token schemas
+genuinely differ — nothing else is shared.
 
 Tokens/components originate from Claude Design exports; Git is the source of
 truth (one-way flow — never sync back to Claude Design).
@@ -57,6 +66,7 @@ truth (one-way flow — never sync back to Claude Design).
 ```
 packages/
   core/            @thijulio/core — Style Dictionary build harness (scope:core)
+  primitives/      @thijulio/primitives — Button, Card, Tag, Badge, Avatar, Input, Eyebrow (scope:shared)
   biome/
     tokens/        @thijulio/biome-tokens — SD JSON → tokens.css (+ .js/.d.ts)
     css/           @thijulio/biome-css    → dist/biome.css (reset+base+motion)
@@ -65,12 +75,25 @@ packages/
     tokens/        @thijulio/exodus-tokens
     css/           @thijulio/exodus-css   → dist/exodus.css
     react/         @thijulio/exodus-react — 15 universal components (no PetCard)
+  faune/
+    tokens/        @thijulio/faune-tokens — palette + contract → tokens.css
+    css/           @thijulio/faune-css    → dist/faune.css
 apps/
-  docs/            Storybook (SB 10, react-vite) — both brands, theme toolbar (scope:docs)
+  docs/            Storybook (SB 10, react-vite) — all brands, theme toolbar (scope:docs)
 ```
 
 `PetCard` is intentionally NOT in Exodus — it's pet-domain-specific and belongs
-in PMP, not the reusable catalog.
+in PMP, not the reusable catalog. Same rule for Faune: pet-domain pieces (Pet
+Passport, Rocket mascot, cat portraits) live in the Maison Féline site repo, not
+in `@thijulio/primitives` or `@thijulio/faune-*`.
+
+New generic components belong in `@thijulio/primitives`, styled against the
+`--ds-*` contract. Existing brand React packages retain their public APIs while
+overlapping components migrate incrementally. Exodus `Card` delegates to the
+shared implementation with a legacy-token compatibility skin; Exodus `Button`
+remains brand-owned for compatibility.
+Only genuinely brand-specific components should be added to brand React
+packages (e.g. Biome's `TerminalHero`).
 
 ## The token pipeline (how tokens become CSS + TS)
 
@@ -145,10 +168,11 @@ Also exports `./styles.css`→`dist/index.css` (for Storybook, which consumes bu
 packages). When a prop name collides with a native HTML attribute you repurpose
 (`title`, `onChange`), `Omit` it from the extended `HTMLAttributes`.
 
-The six brand packages are **published** to GitHub Packages under `@thijulio`
-(`private: false` + `publishConfig`, and `files: ["dist"]` so only built output
-ships — not `src`). `core` stays `private: true` (build-only tooling, never
-published). Current published version: **0.0.2**. See **Release / publish** below.
+The six existing Biome/Exodus brand packages are published to GitHub Packages
+at **0.0.2**. Faune and primitives are publishable (`private: false`,
+`publishConfig`, `files: ["dist"]`) but need their first release. `core` stays
+private and build-only. A source merge is not a package release. See
+**Release / publish** below.
 
 ## How to…
 
@@ -165,8 +189,15 @@ guarantee. Downstream css/react rebuild via the Nx graph.
 **Add a theme:** add `src/themes/<name>/*.json` (only the tokens that change) and
 a `theme('<name>')` entry in the brand's `build.mjs` with the right selector.
 
+**Add a brand that uses shared components:** map its source tokens to `--ds-*`
+in `src/tokens/contract.json`, add its CSS bundle to Storybook's brand registry,
+and add it to `apps/docs/verify-contract.mjs`. See
+`docs/architecture/multi-brand-primitives.md`. `nx verify-contract docs` checks
+the variables consumed by primitives; Storybook tests check actual themed
+rendering.
+
 **See a change in Storybook:** components are consumed as **built** packages, so
-run `nx build <brand>-react` first, then `nx storybook docs`.
+build the changed token/CSS/React package first, then `nx storybook docs`.
 
 **Release / publish packages:** trigger the **Release** workflow
 (`.github/workflows/release.yml`) — `gh workflow run release.yml -f
@@ -177,8 +208,12 @@ Two hard-won gotchas are baked in: **`HUSKY=0`** (the pre-commit hook otherwise
 blocks nx release's automated version commit) and an explicit
 **`git push --follow-tags`** (nx release commits & tags locally but does **not**
 push). Use `dry_run=true` to preview versions without publishing. Versions are
-resolved from the `<pkg>@<version>` git tags, so never delete them. The Storybook
-Pages site redeploys automatically on push to `main` (`storybook-pages.yml`).
+resolved from the `<pkg>@<version>` git tags, so never delete them. The three
+new Faune/primitives projects have a scoped disk fallback for their initial
+release; existing projects still require their tags. Exodus React allows Nx
+to update its primitives dependency range during versioning. Use the normal
+dry run (`first_release=false`) for this mixed group. The Storybook Pages site
+redeploys automatically on push to `main` (`storybook-pages.yml`).
 
 ## Commands
 
@@ -186,9 +221,10 @@ Pages site redeploys automatically on push to `main` (`storybook-pages.yml`).
 nx run-many -t build test lint typecheck          # everything
 nx run-many -t build test lint --projects=<name>  # one project (+ its deps)
 nx build-storybook docs                            # static Storybook → apps/docs/storybook-static
+nx verify-contract docs                           # check shared CSS variables for Faune + Exodus
 nx storybook docs --port 6006                      # dev (needs react packages built first)
 nx test-storybook docs                             # story interaction tests (headless chromium)
-nx format:write   /   nx format:check              # prettier (ignores *.swcrc)
+nx format:write   /   nx format:check              # prettier (ignores *.swcrc, Dockerfile)
 gh workflow run release.yml -f dry_run=true        # preview a release (no publish)
 gh workflow run release.yml -f dry_run=false       # publish packages to GitHub Packages
 ```
@@ -205,9 +241,10 @@ Jest-tested; the SD build itself runs at `nx build`.
 ## Boundaries
 
 ESLint `@nx/enforce-module-boundaries` (`eslint.config.mjs`): `scope:core`
-depends on nothing; `scope:biome` → core+biome; `scope:exodus` → core+exodus
-(**never** each other); `scope:docs` → core+both brands (the only cross-brand
-consumer).
+depends on nothing; `scope:shared` → shared only; `scope:biome` → core+biome;
+`scope:exodus` → core+shared+exodus; `scope:faune` → core+shared+faune (the brands
+**never** import each other); `scope:docs` → core+shared+all brands (the only
+cross-brand consumer).
 
 ## Gotchas / hard-won lessons
 
@@ -222,13 +259,13 @@ consumer).
   `main.ts` must keep `@vitejs/plugin-react` in `viteFinal` or JSX-in-`render`
   stories fail the export-order lexer ("Parse error @:LINE").
 - **Storybook theming:** `preview.tsx` reads the brand from the story `title`
-  prefix (`Biome/…` / `Exodus/…`) and injects only that brand's token CSS (the
-  two share some `:root` var names), then sets `data-mode`/`data-theme` from the
+  prefix (`Biome/…` / `Exodus/…` / `Faune/…`) and injects only that brand's token
+  CSS (the brands share some `:root` var names), then sets `data-mode`/`data-theme` from the
   toolbar. Story titles MUST start with the brand — the first `/`-segment is the
   brand key used by both `preview.tsx` and the per-brand toolbar in `manager.tsx`.
 - **Sidebar taxonomy:** titles are `Brand/Group/Component` — Biome uses
-  `Foundations` + `Components`; Exodus uses `Foundations`/`Core`/`Forms`/
-  `Feedback`/`Identity`. Order is fixed in `preview.tsx` `options.storySort`
+  `Foundations` + `Components`; Exodus uses `Foundations`/`Shared`/`Core`/`Forms`/
+  `Feedback`/`Identity`; Faune uses `Foundations` + `Components`. Order is fixed in `preview.tsx` `options.storySort`
   (`Introduction` first). Adding a component = pick the right group in its title.
 - **Docs & a11y:** `preview.tsx` sets `tags: ['autodocs']` globally, so every
   meta with a `component` gets a Docs page. Docgen does NOT run on the built
@@ -242,7 +279,8 @@ consumer).
   `@vitest/browser-playwright`). Every story is also a smoke test (mount without
   error); `play` functions add assertions. Needs `npx playwright install
 chromium` once. The addon also lights up the Storybook **Interactions** panel.
-- **prettier** has no parser for `.swcrc` → `**/*.swcrc` is in `.prettierignore`.
+- **prettier** has no parser for `.swcrc` or `Dockerfile` → `**/*.swcrc` and
+  `Dockerfile`/`.dockerignore` are in `.prettierignore`.
 - **CSS `@import`** (fonts) must be the first statement in a bundle; the css
   `verify.mjs` checks this after stripping comments.
 

@@ -9,13 +9,29 @@
       "scope:docs"
     ],
     "targets": {
+      "verify-contract": {
+        "command": "node {projectRoot}/verify-contract.mjs",
+        "dependsOn": [
+          "exodus-tokens:build",
+          "faune-tokens:build",
+          "primitives:build"
+        ],
+        "inputs": [
+          "default",
+          "^production"
+        ],
+        "cache": true
+      },
       "build-storybook": {
         "command": "storybook build",
         "dependsOn": [
+          "verify-contract",
           "biome-css:build",
           "biome-react:build",
           "exodus-css:build",
-          "exodus-react:build"
+          "exodus-react:build",
+          "faune-css:build",
+          "primitives:build"
         ],
         "inputs": [
           "default",
@@ -33,10 +49,13 @@
       "test-storybook": {
         "command": "vitest run --config vitest.config.ts",
         "dependsOn": [
+          "verify-contract",
           "biome-css:build",
           "biome-react:build",
           "exodus-css:build",
-          "exodus-react:build"
+          "exodus-react:build",
+          "faune-css:build",
+          "primitives:build"
         ],
         "inputs": [
           "default",
@@ -59,6 +78,10 @@
     "@thijulio/biome-css": "*",
     "@thijulio/biome-react": "*",
     "@thijulio/exodus-css": "*",
-    "@thijulio/exodus-react": "*"
+    "@thijulio/exodus-react": "*",
+    "@thijulio/exodus-tokens": "*",
+    "@thijulio/faune-css": "*",
+    "@thijulio/faune-tokens": "*",
+    "@thijulio/primitives": "*"
   }
 }

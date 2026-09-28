@@ -9,6 +9,8 @@
     "8": { "value": "32px" },
     "12": { "value": "48px" }
   },
+  "card-padding-y": { "value": "18px" },
+  "card-padding-x": { "value": "20px" },
   "radius": {
     "sm": { "value": "6px" },
     "md": { "value": "9px" },

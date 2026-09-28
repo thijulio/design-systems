@@ -1,0 +1,11 @@
+# Local visual QA for the design-system docs (Storybook).
+#   docker compose up -d --build   →  http://localhost:8080
+services:
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: thijulio/docs:local
+    ports:
+      - '8080:80'
+    restart: unless-stopped

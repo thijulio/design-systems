@@ -77,7 +77,10 @@
       "biome-react",
       "exodus-tokens",
       "exodus-css",
-      "exodus-react"
+      "exodus-react",
+      "faune-tokens",
+      "faune-css",
+      "primitives"
     ],
     "projectsRelationship": "independent",
     "releaseTag": {
@@ -87,7 +90,8 @@
       "conventionalCommits": true
     },
     "changelog": {
-      "projectChangelogs": true
+      "projectChangelogs": true,
+      "automaticFromRef": true
     }
   },
   "targetDefaults": {

@@ -1,0 +1,35 @@
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-field);
+  background: var(--ds-surface-raised);
+  color: var(--ds-text);
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-body);
+  outline: none;
+  transition:
+    border-color 0.14s ease,
+    box-shadow 0.14s ease;
+}
+
+.input::placeholder {
+  color: var(--ds-text-muted);
+}
+
+.input:focus {
+  border-color: var(--ds-accent);
+  box-shadow: 0 0 0 3px var(--ds-focus);
+}
+
+.invalid {
+  border-color: var(--ds-danger);
+}
+.invalid:focus {
+  box-shadow: 0 0 0 3px var(--ds-danger-soft);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 96px;
+}
