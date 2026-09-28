@@ -1,21 +1,23 @@
 .card {
   position: relative;
+  --ds-shadow-sm: none;
   overflow: hidden;
   padding: 28px 26px;
 }
 
 .editorial {
-  border-radius: var(--radius-ui-lg);
-  background: var(--surface-raised);
+  --ds-radius-card: var(--radius-ui-lg);
+  --ds-surface-raised: var(--surface-raised);
+  --ds-card-border: var(--border);
+  --ds-card-border-width: 1px;
   color: var(--text-strong);
-  border: 1px solid var(--border);
 }
 
 .expressive {
-  border-radius: var(--radius-soft);
-  background: var(--brand);
+  --ds-radius-card: var(--radius-soft);
+  --ds-surface-raised: var(--brand);
+  --ds-card-border-width: 0;
   color: var(--on-brand);
-  border: none;
 }
 
 .inner {

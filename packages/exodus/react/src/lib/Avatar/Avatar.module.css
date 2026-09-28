@@ -1,19 +1,6 @@
-.avatar {
-  flex: none;
-  display: inline-grid;
-  place-items: center;
-  font-family: var(--font-sans);
-  font-weight: 800;
-  width: var(--av-size);
-  height: var(--av-size);
-  font-size: var(--av-font);
-  background: var(--av-bg);
-  color: var(--av-fg);
-}
-
-.circle {
-  border-radius: var(--radius-full);
-}
-.rounded {
-  border-radius: var(--radius-md);
+.compat {
+  --ds-font-body: var(--font-sans);
+  --ds-weight-extra: var(--weight-extra);
+  --ds-radius-full: var(--radius-full);
+  --ds-radius-md: var(--radius-md);
 }

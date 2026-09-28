@@ -26,13 +26,19 @@ export function Example() {
 }
 ```
 
-Faune and Exodus implement the contract today. Biome still uses its existing
-brand components. Load only one brand's root-level CSS per page, or isolate
+Biome, Exodus, and Faune implement the web contract. Existing Biome and Exodus
+imports remain supported by wrappers around the shared implementations; see
+`docs/architecture/multi-brand-primitives.md` for the adoption matrix.
+Load only one brand's root-level CSS per page, or isolate
 brands in separate scopes/frames.
 
 Optional overrides include `--ds-on-accent-hover`, `--ds-on-warning`, and
-`--ds-card-{border,padding-y,padding-x,hover-border}`. Components retain their
-default contract values when these overrides are absent.
+`--ds-card-{border,border-width,padding-y,padding-x,hover-border}`. Legacy brand
+wrappers also use local `--ds-button-*`, `--ds-input-*`, and `--ds-tag-*` skin
+overrides. These are optional, not additions to the required global contract.
+They change defaults through CSS variables instead of stronger property
+selectors, preserving consumer classes and stylesheet-order independence.
+Components retain their default contract values when overrides are absent.
 
 ## Contract reference
 

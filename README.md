@@ -1,16 +1,23 @@
 # @thijulio design systems
 
-Two independent brand design systems in one Nx monorepo, published as private
-npm packages on **GitHub Packages**:
+Three brand design systems in one Nx monorepo, with common React components
+implemented once in `@thijulio/primitives` and skinned through semantic tokens:
 
 - **Biome Modernism** — `@thijulio/biome-{tokens,css,react}` (personal / website)
 - **Exodus** — `@thijulio/exodus-{tokens,css,react}` (professional / work)
+- **Faune** — `@thijulio/faune-{tokens,css}` + shared primitives (Maison Féline)
+
+The six Biome/Exodus packages are published privately on **GitHub Packages** at
+`0.0.2`. Faune and primitives need their first package release; a source merge
+and a Storybook deployment do not publish packages.
 
 📚 **Live catalog:** https://thijulio.github.io/design-systems/
 
-Each system ships three layers: **tokens** (CSS custom properties + typed JS
+The brand layers are **tokens** (CSS custom properties + typed JS
 objects), **css** (a single reset + base + tokens stylesheet), and **react**
-(components as CSS Modules referencing the tokens — Tailwind-free).
+(CSS Modules referencing tokens — Tailwind-free). Biome and Exodus retain
+their public React imports while common implementations delegate to primitives.
+See the [adoption matrix](docs/architecture/multi-brand-primitives.md).
 
 > Building or maintaining this repo? Read **[AGENTS.md](./AGENTS.md)** — the full
 > architecture, conventions, and gotchas.
@@ -67,8 +74,9 @@ npx nx release                # version, changelog, tag
 NODE_AUTH_TOKEN=<pat> npx nx release publish   # publish to GitHub Packages
 ```
 
-Publishing needs a token with **`write:packages`**. Only the six brand packages
-publish; `core` (build tooling) and `docs` (Storybook) stay private.
+Publishing needs a token with **`write:packages`**. The nine brand/primitives
+packages are release targets; `core` and `docs` stay private. Use the normal
+release dry run for the mixed existing/new package group; see AGENTS.md.
 
 ## Common tasks
 

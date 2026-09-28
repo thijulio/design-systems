@@ -77,3 +77,26 @@ export const Harbor: Story = {
     );
   },
 };
+
+export const NestedThemes: Story = {
+  globals: { accent: 'clay' },
+  render: () => (
+    <div data-theme="harbor" style={{ display: 'grid', gap: 16 }}>
+      <Button>Harbor scope</Button>
+      <div data-theme="sage">
+        <Button>Sage scope</Button>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      getComputedStyle(canvas.getByRole('button', { name: 'Harbor scope' }))
+        .backgroundColor,
+    ).toBe('rgb(42, 86, 136)');
+    await expect(
+      getComputedStyle(canvas.getByRole('button', { name: 'Sage scope' }))
+        .backgroundColor,
+    ).toBe('rgb(61, 99, 68)');
+  },
+};

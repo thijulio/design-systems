@@ -12,6 +12,7 @@
       "verify-contract": {
         "command": "node {projectRoot}/verify-contract.mjs",
         "dependsOn": [
+          "biome-tokens:build",
           "exodus-tokens:build",
           "faune-tokens:build",
           "primitives:build"
@@ -77,6 +78,7 @@
   "devDependencies": {
     "@thijulio/biome-css": "*",
     "@thijulio/biome-react": "*",
+    "@thijulio/biome-tokens": "*",
     "@thijulio/exodus-css": "*",
     "@thijulio/exodus-react": "*",
     "@thijulio/exodus-tokens": "*",

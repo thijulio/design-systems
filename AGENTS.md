@@ -33,7 +33,7 @@ boundaries). They share `packages/core` (build tooling only) and
 `packages/primitives` (`scope:shared`) — brand-agnostic UI primitives styled
 against a shared **semantic contract** of `--ds-*` CSS custom properties. Each
 brand using primitives aliases its own tokens into that contract (see
-`packages/{faune,exodus}/tokens/src/tokens/contract.json`), so the primitives
+`packages/{biome,exodus,faune}/tokens/src/tokens/contract.json`), so the primitives
 skin automatically per brand. Beyond the contract, the brands' token schemas
 genuinely differ — nothing else is shared.
 
@@ -89,9 +89,11 @@ in `@thijulio/primitives` or `@thijulio/faune-*`.
 
 New generic components belong in `@thijulio/primitives`, styled against the
 `--ds-*` contract. Existing brand React packages retain their public APIs while
-overlapping components migrate incrementally. Exodus `Card` delegates to the
-shared implementation with a legacy-token compatibility skin; Exodus `Button`
-remains brand-owned for compatibility.
+overlapping components migrate incrementally. Biome `Button`, `Tag`, and the
+`Card` root delegate to primitives; Card retains its editorial content and arcs.
+Exodus `Button`, `Card`, `Badge`, `Avatar`, `Input`, and `Textarea` delegate to
+primitives. Local CSS-variable skins retain their native tokens, metrics, and
+consumer class overrides without requiring an immediate stylesheet upgrade.
 Only genuinely brand-specific components should be added to brand React
 packages (e.g. Biome's `TerminalHero`).
 
@@ -210,7 +212,7 @@ blocks nx release's automated version commit) and an explicit
 push). Use `dry_run=true` to preview versions without publishing. Versions are
 resolved from the `<pkg>@<version>` git tags, so never delete them. The three
 new Faune/primitives projects have a scoped disk fallback for their initial
-release; existing projects still require their tags. Exodus React allows Nx
+release; existing projects still require their tags. Biome and Exodus React allow Nx
 to update its primitives dependency range during versioning. Use the normal
 dry run (`first_release=false`) for this mixed group. The Storybook Pages site
 redeploys automatically on push to `main` (`storybook-pages.yml`).
@@ -221,7 +223,7 @@ redeploys automatically on push to `main` (`storybook-pages.yml`).
 nx run-many -t build test lint typecheck          # everything
 nx run-many -t build test lint --projects=<name>  # one project (+ its deps)
 nx build-storybook docs                            # static Storybook → apps/docs/storybook-static
-nx verify-contract docs                           # check shared CSS variables for Faune + Exodus
+nx verify-contract docs                           # check shared CSS variables for all three brands
 nx storybook docs --port 6006                      # dev (needs react packages built first)
 nx test-storybook docs                             # story interaction tests (headless chromium)
 nx format:write   /   nx format:check              # prettier (ignores *.swcrc, Dockerfile)
@@ -241,7 +243,7 @@ Jest-tested; the SD build itself runs at `nx build`.
 ## Boundaries
 
 ESLint `@nx/enforce-module-boundaries` (`eslint.config.mjs`): `scope:core`
-depends on nothing; `scope:shared` → shared only; `scope:biome` → core+biome;
+depends on nothing; `scope:shared` → shared only; `scope:biome` → core+shared+biome;
 `scope:exodus` → core+shared+exodus; `scope:faune` → core+shared+faune (the brands
 **never** import each other); `scope:docs` → core+shared+all brands (the only
 cross-brand consumer).

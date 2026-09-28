@@ -34,7 +34,11 @@ export default [
             // Personal / website design system.
             {
               sourceTag: 'scope:biome',
-              onlyDependOnLibsWithTags: ['scope:core', 'scope:biome'],
+              onlyDependOnLibsWithTags: [
+                'scope:core',
+                'scope:shared',
+                'scope:biome',
+              ],
             },
             // Exodus can consume shared primitives, but never another brand.
             {

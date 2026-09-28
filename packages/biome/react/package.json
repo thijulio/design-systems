@@ -29,7 +29,12 @@
     "name": "biome-react",
     "tags": [
       "scope:biome"
-    ]
+    ],
+    "release": {
+      "version": {
+        "preserveMatchingDependencyRanges": false
+      }
+    }
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -39,5 +44,8 @@
     "type": "git",
     "url": "https://github.com/thijulio/design-systems.git",
     "directory": "packages/biome/react"
+  },
+  "dependencies": {
+    "@thijulio/primitives": "^0.0.1"
   }
 }

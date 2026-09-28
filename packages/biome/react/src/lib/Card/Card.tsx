@@ -1,4 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react';
+import { Card as PrimitiveCard } from '@thijulio/primitives';
+import '@thijulio/primitives/styles.css';
 import styles from './Card.module.css';
 
 export interface CardProps extends Omit<
@@ -32,7 +34,7 @@ export function Card({
     .join(' ');
 
   return (
-    <div className={cls} {...rest}>
+    <PrimitiveCard className={cls} {...rest}>
       {expressive && (
         <>
           <span className={`${styles.arc} ${styles.arc1}`} aria-hidden="true" />
@@ -52,6 +54,6 @@ export function Card({
         )}
         {children && <div className={styles.body}>{children}</div>}
       </div>
-    </div>
+    </PrimitiveCard>
   );
 }
