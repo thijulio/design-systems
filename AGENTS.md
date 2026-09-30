@@ -158,8 +158,14 @@ on the built output). `package.json`: `type: module`, exports `.`→`dist/tokens
 **css package** — CSS-only. `src/{fonts,reset,base,motion}.css`; `build.mjs`
 concatenates them with the sibling tokens CSS (read via
 `import.meta.resolve('@thijulio/<brand>-tokens/tokens.css')`) into
-`dist/<brand>.css`. The fonts `@import` MUST lead the bundle (CSS rule). Exports
-only `./<brand>.css`.
+`dist/<brand>.css`. Exports only `./<brand>.css`. Fonts lead the bundle:
+Biome and Faune still `@import` Google Fonts (which MUST be the first statement —
+CSS rule); **Exodus self-hosts** its fonts — `src/fonts.css` holds `@font-face`
+rules with relative `url('./fonts/…')`, and `build.mjs` copies the variable woff2
+files (latin + latin-ext) and their OFL licenses from the exact-pinned
+`@fontsource-variable/*` devDependencies into `dist/fonts/`. Its `verify.mjs`
+fails on any `http(s)://` URL in a served file and on any `url()` that doesn't
+resolve inside `dist` (consumers must make no third-party requests — GDPR).
 
 **react package** — `@nx/react:library --bundler=vite`. Component per folder:
 `Name/{Name.tsx, Name.module.css, Name.spec.tsx}`. CSS Modules reference token
@@ -283,8 +289,9 @@ cross-brand consumer).
 chromium` once. The addon also lights up the Storybook **Interactions** panel.
 - **prettier** has no parser for `.swcrc` or `Dockerfile` → `**/*.swcrc` and
   `Dockerfile`/`.dockerignore` are in `.prettierignore`.
-- **CSS `@import`** (fonts) must be the first statement in a bundle; the css
-  `verify.mjs` checks this after stripping comments.
+- **CSS `@import`** (fonts) must be the first statement in a bundle; the Biome
+  and Faune css `verify.mjs` check this after stripping comments. Exodus has no
+  `@import` (self-hosted `@font-face`).
 
 ## Multi-agent config
 
