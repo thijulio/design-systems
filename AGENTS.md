@@ -176,11 +176,11 @@ Also exports `./styles.css`→`dist/index.css` (for Storybook, which consumes bu
 packages). When a prop name collides with a native HTML attribute you repurpose
 (`title`, `onChange`), `Omit` it from the extended `HTMLAttributes`.
 
-The six existing Biome/Exodus brand packages are published to GitHub Packages
-at **0.0.2**. Faune and primitives are publishable (`private: false`,
-`publishConfig`, `files: ["dist"]`) but need their first release. `core` stays
-private and build-only. A source merge is not a package release. See
-**Release / publish** below.
+The Biome, Exodus, Faune and primitives packages are published to GitHub
+Packages (`private: false`, `publishConfig`, `files: ["dist"]`); their current
+versions are the `<pkg>@<version>` git tags. `core` stays private and
+build-only. A merge to `main` that touches `packages/` publishes automatically —
+see **Release / publish** below.
 
 ## How to…
 
@@ -207,11 +207,18 @@ rendering.
 **See a change in Storybook:** components are consumed as **built** packages, so
 build the changed token/CSS/React package first, then `nx storybook docs`.
 
-**Release / publish packages:** trigger the **Release** workflow
-(`.github/workflows/release.yml`) — `gh workflow run release.yml -f
-first_release=<bool> -f dry_run=<bool>`, or the Actions UI. It runs `nx release`
+**Release / publish packages:** automatic. The **Release** workflow
+(`.github/workflows/release.yml`) runs on every push to `main` that touches
+`packages/**` — i.e. on merge. Every `feat`/`fix` merged there ships (while a
+package is 0.x, Nx turns both into a patch bump). It can also be run manually —
+`gh workflow run release.yml -f first_release=<bool> -f dry_run=<bool>`, or the
+Actions UI — which is how you preview. It runs `nx release`
 (conventional-commits version → changelog → git tag → publish to GitHub Packages
-via `GITHUB_TOKEN`), then pushes the version commit + tags back to `main`.
+via `GITHUB_TOKEN`), then pushes the version commit + tags back to `main`. A
+merge with no releasable commits is a no-op (nx skips publish when nothing gets
+a new version). The version commit is pushed with `GITHUB_TOKEN`, which does not
+trigger workflows, so it can't loop. Checkout uses `ref: main` so a run queued
+behind another release starts from the latest version commit.
 Two hard-won gotchas are baked in: **`HUSKY=0`** (the pre-commit hook otherwise
 blocks nx release's automated version commit) and an explicit
 **`git push --follow-tags`** (nx release commits & tags locally but does **not**
@@ -234,7 +241,7 @@ nx storybook docs --port 6006                      # dev (needs react packages b
 nx test-storybook docs                             # story interaction tests (headless chromium)
 nx format:write   /   nx format:check              # prettier (ignores *.swcrc, Dockerfile)
 gh workflow run release.yml -f dry_run=true        # preview a release (no publish)
-gh workflow run release.yml -f dry_run=false       # publish packages to GitHub Packages
+gh workflow run release.yml -f dry_run=false       # publish manually (merges to main already do)
 ```
 
 ## Testing

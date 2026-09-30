@@ -1,10 +1,19 @@
 name: Release
 
-# Manually-triggered publish of the @thijulio packages to GitHub Packages.
-# Runs `nx release`: version (conventional commits) → changelog → git tag →
-# publish the built dist. Independent of the Storybook Pages deploy.
+# Publish the @thijulio packages to GitHub Packages on every merge to main that
+# touches packages/ (or manually, e.g. for a dry run). Runs `nx release`:
+# version (conventional commits) → changelog → git tag → publish the built dist.
+# A merge with no releasable commits is a no-op: nx skips publishing when no
+# project gets a new version. The release commit is pushed with GITHUB_TOKEN,
+# which does not trigger workflows, so it can't re-trigger this one.
+# Independent of the Storybook Pages deploy.
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/**'
   workflow_dispatch:
     inputs:
       first_release:
@@ -39,8 +48,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      # Always release from the tip of main, not the triggering SHA: a run queued
+      # behind another release would otherwise start from a commit that is
+      # behind that release's version commit and fail to push.
       - uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
