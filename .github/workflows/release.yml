@@ -2,10 +2,12 @@ name: Release
 
 # Publish the @thijulio packages to GitHub Packages on every merge to main that
 # touches packages/ (or manually, e.g. for a dry run). Runs `nx release`:
-# version (conventional commits) → changelog → git tag → publish the built dist.
-# A merge with no releasable commits is a no-op: nx skips publishing when no
-# project gets a new version. The release commit is pushed with GITHUB_TOKEN,
-# which does not trigger workflows, so it can't re-trigger this one.
+# version (conventional commits) → changelog → git tag → push to main → publish
+# the built dist. Publishing comes last so the registry never holds a version
+# whose commit/tags didn't reach main. A merge with no releasable commits is a
+# no-op (no new versions; publish skips versions already in the registry). The
+# release commit is pushed with GITHUB_TOKEN, which does not trigger workflows,
+# so it can't re-trigger this one.
 # Independent of the Storybook Pages deploy.
 
 on:
@@ -48,12 +50,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      # Always release from the tip of main, not the triggering SHA: a run queued
-      # behind another release would otherwise start from a commit that is
-      # behind that release's version commit and fail to push.
+      # A real (non-dry-run) release pushes to main, so it may only run from
+      # main — a dispatch from a branch would fast-forward main to unreviewed
+      # commits. Dry runs may target any ref (to preview a branch's versions).
+      - name: Guard — real releases only from main
+        if: ${{ github.event_name == 'workflow_dispatch' && !inputs.dry_run && github.ref != 'refs/heads/main' }}
+        run: |
+          echo "::error::Real releases must be dispatched from main (got ${{ github.ref }}). Use dry_run=true to preview a branch."
+          exit 1
+
+      # Merge-triggered runs release from the tip of main, not the triggering
+      # SHA: a run queued behind another release would otherwise start from a
+      # commit that is behind that release's version commit. Dispatches keep
+      # the selected ref.
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'push' && 'main' || github.ref }}
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
@@ -71,18 +83,29 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: nx release
+      # Version → changelog → commit → tag, locally. Publishing is a separate
+      # step AFTER the push: registry versions are immutable, so we only publish
+      # once the version commit + tags are safely on main.
+      - name: nx release (version + changelog, no publish)
         run: |
-          npx nx release ${{ inputs.first_release && '--first-release' || '' }} ${{ inputs.dry_run && '--dry-run' || '' }} --yes
+          npx nx release ${{ inputs.first_release && '--first-release' || '' }} ${{ inputs.dry_run && '--dry-run' || '' }} --skip-publish
+
+      # nx release commits and tags locally but does not push. --atomic: the
+      # commit and tags land together or not at all. If main moved since
+      # checkout (another merge), this is rejected and the job stops BEFORE
+      # publishing; the run queued by that merge releases both changes.
+      - name: Push release commit and tags
+        if: ${{ !inputs.dry_run }}
+        run: git push --atomic --follow-tags origin HEAD:main
+
+      # Publishes every release project whose current version isn't in the
+      # registry yet (existing versions are skipped). Also makes a re-run the
+      # recovery path if a previous run pushed its tags but failed to publish.
+      - name: nx release publish
+        run: |
+          npx nx release publish ${{ inputs.first_release && '--first-release' || '' }} ${{ inputs.dry_run && '--dry-run' || '' }}
         env:
           # Repo .npmrc reads _authToken=${NODE_AUTH_TOKEN}; GITHUB_TOKEN carries
           # packages:write for this repo's GitHub Packages registry.
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # nx release commits the version bumps + changelogs and tags locally but
-      # does not push — send the commit and tags back to main so the repo stays
-      # in sync with what was published.
-      - name: Push release commit and tags
-        if: ${{ !inputs.dry_run }}
-        run: git push --follow-tags origin HEAD:main

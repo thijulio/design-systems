@@ -212,13 +212,18 @@ build the changed token/CSS/React package first, then `nx storybook docs`.
 `packages/**` — i.e. on merge. Every `feat`/`fix` merged there ships (while a
 package is 0.x, Nx turns both into a patch bump). It can also be run manually —
 `gh workflow run release.yml -f first_release=<bool> -f dry_run=<bool>`, or the
-Actions UI — which is how you preview. It runs `nx release`
-(conventional-commits version → changelog → git tag → publish to GitHub Packages
-via `GITHUB_TOKEN`), then pushes the version commit + tags back to `main`. A
-merge with no releasable commits is a no-op (nx skips publish when nothing gets
-a new version). The version commit is pushed with `GITHUB_TOKEN`, which does not
-trigger workflows, so it can't loop. Checkout uses `ref: main` so a run queued
-behind another release starts from the latest version commit.
+Actions UI — which is how you preview (dry runs may target any branch with
+`--ref`; real releases are refused unless dispatched from `main`). It runs
+`nx release --skip-publish` (conventional-commits version → changelog → commit
+→ git tag), pushes the version commit + tags to `main` with `--atomic`, and only
+then `nx release publish` (GitHub Packages via `GITHUB_TOKEN`). Order matters:
+registry versions are immutable, so if `main` moved during the run the push is
+rejected **before** anything is published, and the run queued by that other
+merge releases both. Publish skips versions already in the registry, so a merge
+with nothing releasable is a no-op, and re-running a run that pushed but failed
+to publish recovers it. The version commit is pushed with `GITHUB_TOKEN`, which
+does not trigger workflows, so it can't loop. Merge-triggered runs check out the
+tip of `main`, not the triggering SHA.
 Two hard-won gotchas are baked in: **`HUSKY=0`** (the pre-commit hook otherwise
 blocks nx release's automated version commit) and an explicit
 **`git push --follow-tags`** (nx release commits & tags locally but does **not**
