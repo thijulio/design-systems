@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Input, Textarea } from '@thijulio/faune-react';
+import { Input } from '@thijulio/faune-react';
 
 const meta: Meta<typeof Input> = {
   title: 'Faune/Components/Input',
@@ -15,8 +15,3 @@ type Story = StoryObj<typeof Input>;
 
 export const Default: Story = {};
 export const Invalid: Story = { args: { invalid: true, defaultValue: 'Roc' } };
-
-export const TextArea: StoryObj<typeof Textarea> = {
-  render: (args) => <Textarea {...args} />,
-  args: { placeholder: 'Notes pour la visite…', defaultValue: '' },
-};
