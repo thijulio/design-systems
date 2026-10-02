@@ -15,7 +15,8 @@ assumes one `.design-sync/config.json` per repo. State is **brand-namespaced**:
   `.design-sync/sb-reference`, storybook `apps/docs/.storybook-biome`.
 - Exodus: `.design-sync/exodus.{config.json,conventions.md,NOTES.md}`, reference
   `.design-sync/sb-reference-exodus`, storybook `apps/docs/.storybook-exodus`.
-- `faune` has no target project and is not synced.
+- Faune: `.design-sync/faune.{config.json,conventions.md,NOTES.md}`, reference
+  `.design-sync/sb-reference-faune`, storybook `apps/docs/.storybook-faune`.
 - **Always pass `--config .design-sync/<brand>.config.json`**; a bare
   `.design-sync/config.json` does not exist (and if the skill offers to create a new
   project, it missed the config — stop).

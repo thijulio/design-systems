@@ -1,0 +1,11 @@
+{
+  "projectId": "57ab62c5-e212-4939-8da4-02298548389b",
+  "pkg": "@thijulio/faune-react",
+  "shape": "storybook",
+  "storybookStatic": ".design-sync/sb-reference-faune",
+  "storybookConfigDir": "apps/docs/.storybook-faune",
+  "buildCmd": "npx nx run-many -t build --projects tag:scope:faune",
+  "tokensPkg": "@thijulio/faune-css",
+  "readmeHeader": ".design-sync/faune.conventions.md",
+  "extraFonts": ["../css/dist/faune.css"]
+}

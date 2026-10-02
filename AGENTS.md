@@ -45,7 +45,7 @@ target, not a source; nothing in it is authored back into this repo.
 
 > Historical note: this rule used to read "never sync back to Claude Design," describing the
 > original import direction (Claude Design exports → Git). The flow was deliberately reversed
-> to repo → Claude Design via `/design-sync`; see `.design-sync/{biome,exodus}.NOTES.md` for
+> to repo → Claude Design via `/design-sync`; see `.design-sync/{biome,exodus,faune}.NOTES.md` for
 > per-brand sync config, target project IDs, and the two-brand (now N-brand) setup.
 
 ## Golden rules (read before doing anything)
