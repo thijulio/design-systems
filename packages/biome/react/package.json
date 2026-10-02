@@ -37,6 +37,16 @@
     },
     "targets": {
       "typecheck": {
+        "inputs": [
+          "default",
+          "{workspaceRoot}/tsconfig.base.json",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
         "dependsOn": [
           "^typecheck",
           "^build"
