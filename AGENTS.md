@@ -230,10 +230,13 @@ with nothing releasable is a no-op, and re-running a run that pushed but failed
 to publish recovers it. The version commit is pushed with `GITHUB_TOKEN`, which
 does not trigger workflows, so it can't loop. Merge-triggered runs check out the
 tip of `main`, not the triggering SHA.
-Two hard-won gotchas are baked in: **`HUSKY=0`** (the pre-commit hook otherwise
-blocks nx release's automated version commit) and an explicit
-**`git push --follow-tags`** (nx release commits & tags locally but does **not**
-push). Use `dry_run=true` to preview versions without publishing. Versions are
+Three hard-won gotchas are baked in: **`HUSKY=0`** (the dev pre-commit hook
+otherwise blocks nx release's automated version commit), a **release-only
+pre-commit hook** (`.github/release-hooks/pre-commit`, wired via
+`git config core.hooksPath`) that prettier-formats what nx release staged —
+nx writes CHANGELOG.md without a final newline, which failed the next CI
+`nx format:check` on main — and an explicit **`git push --follow-tags`** (nx
+release commits & tags locally but does **not** push). Use `dry_run=true` to preview versions without publishing. Versions are
 resolved from the `<pkg>@<version>` git tags, so never delete them. The three
 new Faune/primitives projects have a scoped disk fallback for their initial
 release; existing projects still require their tags. Biome and Exodus React allow Nx
