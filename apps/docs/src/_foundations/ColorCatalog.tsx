@@ -179,10 +179,11 @@ function Usage({ brand, themes }: { brand: string; themes: string[] }) {
         {themes.length > 0 && (
           <>
             {' '}
-            — themed values come from <code>
-              resolve(tokens, themes.name)
-            </code>{' '}
-            ({themes.join(', ')}).
+            — themed values come from{' '}
+            {/* A real key, so the snippet works when copied: `themes.name`
+                would be undefined and resolve() would silently return base. */}
+            <code>{`resolve(tokens, themes.${themes[0]})`}</code>; available
+            themes: {themes.join(', ')}.
           </>
         )}
       </p>

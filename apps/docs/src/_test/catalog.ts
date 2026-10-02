@@ -103,6 +103,16 @@ export async function expectCompleteColorCatalog(
   );
   await expect(staleNoteKeys(manifest, notes)).toEqual([]);
 
+  // The themed RN snippet must name a real theme key so it works when copied.
+  const [firstTheme] = manifest.themes;
+  if (firstTheme) {
+    await expect(
+      within(canvasElement).getByText(
+        `resolve(tokens, themes.${firstTheme.name})`,
+      ),
+    ).toBeVisible();
+  }
+
   // Collected synchronously and asserted once, so a failure lists every
   // offender and the check stays fast on large catalogs.
   const illegible = Array.from(canvasElement.querySelectorAll<HTMLElement>('*'))
