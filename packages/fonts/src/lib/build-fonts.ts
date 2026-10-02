@@ -18,7 +18,7 @@ export interface FontsourceResolver {
 
 /**
  * Resolve fontsource packages from the brand css package (where they are
- * pinned as devDependencies), not from @thijulio/core.
+ * pinned as devDependencies), not from @thijulio/fonts.
  */
 export async function createFontsourceResolver(
   packageRoot: string,

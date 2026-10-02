@@ -29,9 +29,10 @@ private npm packages under the `@thijulio` scope.
   yet).
 
 The three brands **never import from each other** (enforced by Nx module
-boundaries). They share `packages/core` (build tooling only) and
-`packages/primitives` (`scope:shared`) — brand-agnostic UI primitives styled
-against a shared **semantic contract** of `--ds-*` CSS custom properties. Each
+boundaries). They share `packages/core` + `packages/fonts` (build tooling
+only) and `packages/primitives` (`scope:shared`) — brand-agnostic UI
+primitives styled against a shared **semantic contract** of `--ds-*` CSS
+custom properties. Each
 brand using primitives aliases its own tokens into that contract (see
 `packages/{biome,exodus,faune}/tokens/src/tokens/contract.json`), so the primitives
 skin automatically per brand. Beyond the contract, the brands' token schemas
@@ -65,7 +66,8 @@ truth (one-way flow — never sync back to Claude Design).
 
 ```
 packages/
-  core/            @thijulio/core — Style Dictionary + webfont build harness (scope:core)
+  core/            @thijulio/core — Style Dictionary token build harness (scope:core)
+  fonts/           @thijulio/fonts — webfont self-hosting build + verify (scope:core)
   primitives/      @thijulio/primitives — Button, Card, Tag, Badge, Avatar, Input, Eyebrow (scope:shared)
   biome/
     tokens/        @thijulio/biome-tokens — SD JSON → tokens.css (+ .js/.d.ts)
@@ -162,7 +164,7 @@ concatenates them with the sibling tokens CSS (read via
 self-host their webfonts** (consumers must make no third-party requests —
 GDPR): `fonts.config.mjs` is the brand's font contract (family → fontsource
 package → weights per style); `build.mjs` calls `buildFonts()` from
-`@thijulio/core`, which copies the latin + latin-ext woff2 files and each
+`@thijulio/fonts`, which copies the latin + latin-ext woff2 files and each
 family's SIL OFL licence from the exact-pinned `@fontsource(-variable)/*`
 devDependencies into `dist/fonts/` and returns generated `@font-face` rules
 (relative `url('./fonts/…')`, `font-display: swap`, unicode-ranges read from
@@ -184,8 +186,8 @@ packages). When a prop name collides with a native HTML attribute you repurpose
 
 The Biome, Exodus, Faune and primitives packages are published to GitHub
 Packages (`private: false`, `publishConfig`, `files: ["dist"]`); their current
-versions are the `<pkg>@<version>` git tags. `core` stays private and
-build-only. A merge to `main` that touches `packages/` publishes automatically —
+versions are the `<pkg>@<version>` git tags. `core` and `fonts` stay private
+and build-only (tokens build with `core`, css packages with `fonts`). A merge to `main` that touches `packages/` publishes automatically —
 see **Release / publish** below.
 
 ## How to…
@@ -267,7 +269,7 @@ Jest-tested; the SD build itself runs at `nx build`.
 ## Boundaries
 
 ESLint `@nx/enforce-module-boundaries` (`eslint.config.mjs`): `scope:core`
-depends on nothing; `scope:shared` → shared only; `scope:biome` → core+shared+biome;
+(`core`, `fonts`) depends on nothing; `scope:shared` → shared only; `scope:biome` → core+shared+biome;
 `scope:exodus` → core+shared+exodus; `scope:faune` → core+shared+faune (the brands
 **never** import each other); `scope:docs` → core+shared+all brands (the only
 cross-brand consumer).

@@ -1,10 +1,10 @@
 // Faune — webfont contract. Newsreader carries the editorial display voice;
 // Inter is body + UI. Weights are what the brand renders (and what it
-// requested from Google Fonts before self-hosting) — @thijulio/core generates
+// requested from Google Fonts before self-hosting) — @thijulio/fonts generates
 // the @font-face rules from this list and verify.mjs holds the build to it.
 // Newsreader keeps its optical-size axis (opsz 6–72), as Google served it.
 
-/** @type {import('@thijulio/core').BrandFonts} */
+/** @type {import('@thijulio/fonts').BrandFonts} */
 export const fonts = [
   {
     family: 'Inter',
