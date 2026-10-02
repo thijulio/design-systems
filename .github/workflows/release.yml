@@ -40,8 +40,9 @@ concurrency:
 env:
   NX_DAEMON: 'false'
   # Disable husky git hooks: nx release makes an automated version/changelog
-  # commit, and the pre-commit hook (format/lint on generated CHANGELOGs) would
-  # block it. The same checks already run in the CI workflow on real changes.
+  # commit, and the dev pre-commit hook (`nx format:check`) would block it on
+  # the unformatted CHANGELOGs nx writes. The release-only hook configured
+  # below formats them instead.
   HUSKY: '0'
 
 jobs:
@@ -78,10 +79,14 @@ jobs:
       # Packages publish their built dist — build the whole graph first.
       - run: npx nx run-many -t build
 
-      - name: Configure git identity
+      # Release-only git hooks: .github/release-hooks/pre-commit formats the
+      # files nx release stages (it writes CHANGELOG.md unformatted) so its
+      # commit passes the next CI `nx format:check` on main.
+      - name: Configure git identity and release hooks
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config core.hooksPath .github/release-hooks
 
       # Version → changelog → commit → tag, locally. Publishing is a separate
       # step AFTER the push: registry versions are immutable, so we only publish
