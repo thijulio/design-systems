@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Tag } from '@thijulio/primitives';
+import { Tag } from '@thijulio/faune-react';
 import { expect, waitFor, within } from 'storybook/test';
 
 const meta: Meta<typeof Tag> = {

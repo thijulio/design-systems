@@ -11,7 +11,7 @@ a brand package. Biome, Exodus, and Faune all implement this web contract.
 | ------ | ---------------------------------------------------- | ----------------------------------------------------- |
 | Biome  | Button, Tag, Card root                               | Editorial Card content/arcs, ModeToggle, TerminalHero |
 | Exodus | Button, Card, Badge, Avatar, Input, Textarea, Select | Existing non-migrated components                      |
-| Faune  | Direct consumption of all primitives                 | Domain-specific pieces belong in the consuming site   |
+| Faune  | All primitives, re-exported by `faune-react`         | Domain-specific pieces belong in the consuming site   |
 
 Existing Biome and Exodus import paths, props, defaults, and consumer styles
 remain supported. Their wrappers adapt brand choices rather than reimplement
@@ -58,7 +58,9 @@ browser stories verify nested dark, Harbor, and Sage scopes.
 
 ## Adding another brand
 
-1. Create its tokens and CSS packages and map source tokens to `--ds-*`.
+1. Create its tokens, CSS, and React packages (mirror `packages/faune/*`; the
+   React package starts as a re-export of the primitives) and map source tokens
+   to `--ds-*`.
 2. Register its CSS bundle in Storybook and add the brand to
    `apps/docs/verify-contract.mjs`.
 3. Demonstrate shared components, states, and interactions in Storybook.

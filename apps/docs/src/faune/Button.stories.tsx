@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
-import { Button } from '@thijulio/primitives';
+import { Button } from '@thijulio/faune-react';
 import { contrastRatio } from '../_test/contrast';
 import { hoverInBrowserTest } from '../_test/hover';
 

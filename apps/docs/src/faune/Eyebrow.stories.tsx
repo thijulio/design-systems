@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Eyebrow } from '@thijulio/primitives';
+import { Eyebrow } from '@thijulio/faune-react';
 
 const meta: Meta<typeof Eyebrow> = {
   title: 'Faune/Components/Eyebrow',

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Card } from '@thijulio/primitives';
+import { Card } from '@thijulio/faune-react';
 
 const meta: Meta<typeof Card> = {
   title: 'Faune/Components/Card',
