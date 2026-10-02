@@ -65,7 +65,7 @@ truth (one-way flow — never sync back to Claude Design).
 
 ```
 packages/
-  core/            @thijulio/core — Style Dictionary build harness (scope:core)
+  core/            @thijulio/core — Style Dictionary + webfont build harness (scope:core)
   primitives/      @thijulio/primitives — Button, Card, Tag, Badge, Avatar, Input, Eyebrow (scope:shared)
   biome/
     tokens/        @thijulio/biome-tokens — SD JSON → tokens.css (+ .js/.d.ts)
@@ -158,14 +158,20 @@ on the built output). `package.json`: `type: module`, exports `.`→`dist/tokens
 **css package** — CSS-only. `src/{fonts,reset,base,motion}.css`; `build.mjs`
 concatenates them with the sibling tokens CSS (read via
 `import.meta.resolve('@thijulio/<brand>-tokens/tokens.css')`) into
-`dist/<brand>.css`. Exports only `./<brand>.css`. Fonts lead the bundle:
-Biome and Faune still `@import` Google Fonts (which MUST be the first statement —
-CSS rule); **Exodus self-hosts** its fonts — `src/fonts.css` holds `@font-face`
-rules with relative `url('./fonts/…')`, and `build.mjs` copies the variable woff2
-files (latin + latin-ext) and their OFL licenses from the exact-pinned
-`@fontsource-variable/*` devDependencies into `dist/fonts/`. Its `verify.mjs`
-fails on any `http(s)://` URL in a served file and on any `url()` that doesn't
-resolve inside `dist` (consumers must make no third-party requests — GDPR).
+`dist/<brand>.css`. Exports `./<brand>.css` and `./fonts/*`. **All three brands
+self-host their webfonts** (consumers must make no third-party requests —
+GDPR): `fonts.config.mjs` is the brand's font contract (family → fontsource
+package → weights per style); `build.mjs` calls `buildFonts()` from
+`@thijulio/core`, which copies the latin + latin-ext woff2 files and each
+family's SIL OFL licence from the exact-pinned `@fontsource(-variable)/*`
+devDependencies into `dist/fonts/` and returns generated `@font-face` rules
+(relative `url('./fonts/…')`, `font-display: swap`, unicode-ranges read from
+fontsource's `unicode.json`) that lead the bundle. `verify.mjs` calls
+`verifyFonts()`, which re-derives the contract independently and fails on any
+`http(s)://` in a served file, any `url()`/`@import` not resolving inside
+`dist`, any family × style × weight without both a latin and a latin-ext face,
+shipped-but-unused fonts, or a missing licence. Bundlers rewrite the relative
+urls (Angular → hashed `media/`, Vite → hashed `assets/`).
 
 **react package** — `@nx/react:library --bundler=vite`. Component per folder:
 `Name/{Name.tsx, Name.module.css, Name.spec.tsx}`. CSS Modules reference token
@@ -301,9 +307,19 @@ cross-brand consumer).
 chromium` once. The addon also lights up the Storybook **Interactions** panel.
 - **prettier** has no parser for `.swcrc` or `Dockerfile` → `**/*.swcrc` and
   `Dockerfile`/`.dockerignore` are in `.prettierignore`.
-- **CSS `@import`** (fonts) must be the first statement in a bundle; the Biome
-  and Faune css `verify.mjs` check this after stripping comments. Exodus has no
-  `@import` (self-hosted `@font-face`).
+- **Webfonts are self-hosted — never add a font CDN `@import`/`<link>`.**
+  Consumers promise visitors no third-party requests (GDPR); every css
+  `verify.mjs` fails on any `http(s)://` in a served file. To change a brand's
+  fonts, edit its `fonts.config.mjs` (family, fontsource package, weights per
+  style) and add the fontsource package as an **exact-pinned** devDependency.
+  Prefer `@fontsource-variable/*` (what Google Fonts serves: same axes, same
+  bytes); use static `@fontsource/*` only when no variable cut exists (Spectral)
+  or a family needs ≤2 weights and the static files are smaller (JetBrains
+  Mono). Keep `opsz` for Newsreader — dropping it changes the rendering. The
+  `font-weight` range declared is the contracted weights, not the file's full
+  axis, so out-of-contract weights snap to the nearest one as they did on Google.
+- **latin-ext is emitted before latin** in the generated CSS: the subsets'
+  unicode-ranges overlap (U+0304/0308/0329) and the last-declared face wins.
 
 ## Multi-agent config
 

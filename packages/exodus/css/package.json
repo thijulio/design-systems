@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./exodus.css": "./dist/exodus.css",
+    "./fonts/*": "./dist/fonts/*",
     "./package.json": "./package.json"
   },
   "files": [
@@ -17,6 +18,7 @@
   "devDependencies": {
     "@fontsource-variable/baloo-2": "5.3.0",
     "@fontsource-variable/hanken-grotesk": "5.3.0",
+    "@thijulio/core": "*",
     "@thijulio/exodus-tokens": "*"
   },
   "nx": {
