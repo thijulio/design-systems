@@ -57,7 +57,9 @@ component, `components/<group>/<Name>/<Name>.prompt.md` + `.d.ts`.
   style={{ background: 'var(--surface-page)', padding: 'var(--space-12)' }}
 >
   <Card variant="editorial" kicker="Case study" title="Living interface">
-    <p style={{ color: 'var(--text-muted)', font: 'var(--font-reading)' }}>
+    <p
+      style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-reading)' }}
+    >
       A resilient, real-time surface that grows with its data.
     </p>
     <Button variant="primary" size="md" href="#">

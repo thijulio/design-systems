@@ -3,68 +3,86 @@
 Target project: `6b197fe5-87b8-4631-9ba2-b8f702fcc603` (PMP Design System).
 Source: `packages/exodus/*`. React 19, npm workspaces, node 24.
 
-> ⚠️ **This sync was run from a branch ~10 commits behind `main` (2026-10-02).** Since then
-> main **self-hosted the webfonts** (#6/#7 — the CDN-`@import` note below is stale),
-> **adopted shared/contract-driven primitives across brands** (#3/#5 — exodus component
-> _names_ unchanged, rendering may differ), and added a **third brand `faune`** plus a
-> `primitives` package. The repo is **no longer two brands** — the section below should read
-> as "N brands"; `faune` is unsynced with no target project. Re-sync against current `main`
-> before trusting the uploaded project as live.
+Last re-synced from `main` on **2026-10-02** (self-hosted fonts + `@thijulio/primitives`
+adoption + the `Select` primitive fix).
 
-## Two-brand monorepo — READ FIRST
+## Multi-brand repo — READ FIRST
 
-This repo hosts TWO design systems (biome + exodus) but the design-sync skill assumes
-one `.design-sync/config.json` per repo. To keep both, state is **brand-namespaced**:
+This repo hosts several design systems (biome, exodus, faune) but the design-sync skill
+assumes one `.design-sync/config.json` per repo. State is **brand-namespaced**:
 
-- Biome: `.design-sync/biome.config.json`, `biome.conventions.md`, `biome.NOTES.md`,
-  reference `.design-sync/sb-reference`, storybook `apps/docs/.storybook-biome`.
-- Exodus: `.design-sync/exodus.config.json`, `exodus.conventions.md`, `exodus.NOTES.md`,
-  reference `.design-sync/sb-reference-exodus`, storybook `apps/docs/.storybook-exodus`.
-- **Always pass `--config .design-sync/exodus.config.json`** to the converter/driver;
-  a bare `.design-sync/config.json` does not exist.
-- **The shared cache `.design-sync/.cache/compare` is keyed by component name and biome +
-  exodus share names (Button, Card).** Clear `.design-sync/.cache` when switching brands
-  so a stale same-named grade can't leak across. (Component srcSha differs, so a leak
-  would recapture anyway, but clearing is the safe habit.)
+- Biome: `.design-sync/biome.{config.json,conventions.md,NOTES.md}`, reference
+  `.design-sync/sb-reference`, storybook `apps/docs/.storybook-biome`.
+- Exodus: `.design-sync/exodus.{config.json,conventions.md,NOTES.md}`, reference
+  `.design-sync/sb-reference-exodus`, storybook `apps/docs/.storybook-exodus`.
+- `faune` has no target project and is not synced.
+- **Always pass `--config .design-sync/<brand>.config.json`**; a bare
+  `.design-sync/config.json` does not exist (and if the skill offers to create a new
+  project, it missed the config — stop).
+- **Clear `.design-sync/.cache` when switching brands** — the compare cache is keyed by
+  component name and brands share names (Button, Card).
+- **[GENERAL] Never own a preview (`.design-sync/previews/<Name>.tsx`) for a name two
+  brands share.** The converter reads owned previews by name only — no per-brand knob —
+  so a biome `Button.tsx` gets compiled into the exodus build (2026-10-02: exodus Button
+  showed biome's `Dark/Ghost/Large` cells + 2 unpaired stories). Fix rendering in the
+  story source instead. If owned previews ever become unavoidable, move to per-brand
+  `.design-sync/` homes (each brand runs from its own directory).
 
 ## Setup / build
 
 - Build: `npx nx run-many -t build --projects tag:scope:exodus`
-  (dep chain: exodus-tokens → exodus-css → exodus-react).
-- Converter: `--config .design-sync/exodus.config.json --node-modules ./node_modules
---entry packages/exodus/react/dist/index.js`. Global name `window.ThijulioExodusReact`.
+  (dep chain: exodus-tokens → exodus-css → exodus-react, plus primitives).
+- Driver: `--config .design-sync/exodus.config.json --node-modules ./node_modules
+--entry packages/exodus/react/dist/index.js --max-stories 8`. Button has 8 stories; the
+  default cap (6) skips the `Clay`/`Harbor` theme samples. Global name
+  `window.ThijulioExodusReact`.
 - `cfg.tokensPkg: "@thijulio/exodus-css"` ships `exodus.css` (tokens + the 3 accent themes
-  `[data-theme="sage|clay|harbor"]` + reset + fonts). Same reason as biome: exodus-react
-  declares no deps, so token auto-detect finds nothing → set it explicitly. Validate clean
-  on first build with it (no `[TOKENS_MISSING]`).
-- Scoped storybook `apps/docs/.storybook-exodus` (glob narrowed to `../src/exodus/**`,
-  exodus-only preview) so biome stories can't cross-pair against the exodus bundle.
+  `[data-theme="sage|clay|harbor"]` + reset); `cfg.extraFonts: ["../css/dist/exodus.css"]`
+  self-hosts Hanken Grotesk + Baloo 2 (4 faces) to `fonts/`.
+- Scoped storybook `apps/docs/.storybook-exodus`: glob
+  `../src/exodus/**/!(Shared*).@(mdx|stories.…)`. The `Shared*` exclusion matters:
+  `SharedButton`/`SharedCard.stories.tsx` document `@thijulio/primitives` under
+  `Exodus/Shared/Button|Card` titles, and `titleMap` matches a single title segment, so
+  they'd merge into the exodus-react Button/Card cards (duplicate `Default`/`Interactive`
+  grade keys).
 
-## Grades (first sync) — 15 components
+## [GENERAL] Stories must not depend on storybook globals
 
-12 fully match. 3 have one `close` story each — all the SAME storybook-`play()` pattern
-(the story runs an interaction the compiled preview can't; styling/composition identical):
+- Compiled previews get no storybook `globals`; `Button/Clay` and `Button/Harbor` rendered
+  sage until they got a story-level `withAccent()` decorator (`<div data-theme=…>`;
+  `exodus.css` keys accents on any `[data-theme]` ancestor). Same rule as biome's `Dark`.
 
-- **Tabs / Interactive** — storybook play() selects the "Active" tab (+ focus ring); preview shows initial "All".
-- **Input / Default** — storybook play() types "Luna" + focuses; preview shows the placeholder state. (Invalid + Disabled match — proves fidelity.)
-- **Checkbox / Interactive** — checked state differs (storybook vs preview) due to play().
-  All acceptable, not defects. Everything else (Button, Card, Toast, Field, Select, Textarea,
-  Badge, StatusBadge, EmptyState, Avatar, BrandMark, NavIcon) matches exactly.
+## Component-specific
 
-`Foundations` story dropped (`[TITLE_UNMAPPED]` — not a component).
+- **Select** (fixed 2026-10-02): since #5 `Select.module.css` composed exodus `.input`,
+  which had become a variables-only compat class — Select rendered as a bare native
+  control in storybook too. It now delegates to the new primitives `Select`. If a sync
+  shows a form control unstyled on BOTH panels, suspect the component, not the sync.
+- **Tabs**: `cfg.overrides.Tabs.cardMode: "column"` — stories are wider than a grid cell
+  (`[GRID_OVERFLOW] wide`).
+- **NavIcon / Registry**: the auto-fill grid reflows 7→8 columns in the wider preview
+  canvas — same icons/order, graded match.
+
+## Grades (2026-10-02) — 15 components
+
+All match except the storybook-`play()` interaction stories, graded **close** (the
+story clicks/types/selects and leaves state + a focus ring the static preview can't
+reproduce; styling/composition identical): Tabs, Checkbox, Input, Select, Textarea,
+Toast — each `Interactive`. Tabs' `[RENDER_THIN] variants render identically` warn is the
+same cause.
+
+## Known validate warnings (triaged — not new)
+
+- `! preview decorator bundle failed: No loader … ".woff2"` — harmless; tokens/fonts ship
+  via `styles.css`.
+- `[TITLE_UNMAPPED] Foundations, Compatibility` — doc stories, not components.
 
 ## Re-sync risks (watch-list)
 
-- **Fonts — CHANGED ON MAIN.** At sync time (this branch) Hanken Grotesk loaded via the
-  `exodus.css` Google Fonts `@import` (CDN). **Main now self-hosts it (#6/#7)** — uploaded
-  bundle's font handling is stale; re-sync against current main to pick up self-hosted faces.
-- **The three `close` interactive stories carry forward** — re-verify only if those story
-  files change. They are interaction-state deltas, not fixable without reducing fidelity.
-- **PMP project had a large curated tree the converter does NOT regenerate**: a full
-  `design_handoff_pmp_design_system/` duplicate export, `guidelines/*`, `templates/*`
-  (companion-site, vivarium-admin), `screenshots/`, `uploads/`, `assets/`, a `patterns/PetCard`
-  component (no exodus story), plus prior aux. The first upload was a FULL REPLACE (owner
-  decision) — see the upload record. Once anchored, the anchor tracks only converter output.
-- **Group divergence**: converter groups from story titles = core/feedback/forms/identity;
-  the old remote used core/display/forms/navigation/patterns. No group-remap knob exists
-  (would require editing story titles), so components live under the title-derived groups.
+- **Remote content the converter doesn't own**: `_ds/biome-modernism-…/` and
+  `_ds/nocturne-…/` are design-system copies Claude Design binds into the project; and
+  `_vendor/preview-decorators.{js,css}` are unreferenced orphans from the first sync. The
+  anchor doesn't track any of them, so diffs never delete them — leave `_ds/` alone.
+- **Group layout**: components live under title-derived groups
+  (core/feedback/forms/identity); no group-remap knob exists.
+- The `close` interaction grades carry forward — re-verify only if those stories change.
