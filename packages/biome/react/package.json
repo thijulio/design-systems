@@ -34,6 +34,14 @@
       "version": {
         "preserveMatchingDependencyRanges": false
       }
+    },
+    "targets": {
+      "typecheck": {
+        "dependsOn": [
+          "^typecheck",
+          "^build"
+        ]
+      }
     }
   },
   "publishConfig": {
