@@ -85,7 +85,9 @@ const SECTIONS: ColorSection[] = [
 export const Colors: Story = {
   parameters: colorCatalogParameters,
   play: async ({ canvasElement }) => {
-    await expectCompleteColorCatalog(canvasElement, manifest);
+    await expectCompleteColorCatalog(canvasElement, manifest, {
+      sections: SECTIONS,
+    });
     await expectCopyInteraction(canvasElement, 'var(--ink)');
     await expectCopyInteraction(canvasElement, 'tokens.ink');
   },

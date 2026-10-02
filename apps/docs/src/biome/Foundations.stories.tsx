@@ -105,7 +105,10 @@ const NOTES: Record<string, string> = {
 export const Colors: Story = {
   parameters: colorCatalogParameters,
   play: async ({ canvasElement }) => {
-    await expectCompleteColorCatalog(canvasElement, manifest, NOTES);
+    await expectCompleteColorCatalog(canvasElement, manifest, {
+      sections: SECTIONS,
+      notes: NOTES,
+    });
     await expectCopyInteraction(canvasElement, 'var(--brand)');
     await expectCopyInteraction(canvasElement, 'tokens.brand');
   },
@@ -117,6 +120,22 @@ export const Colors: Story = {
       notes={NOTES}
     />
   ),
+};
+
+// Test-only: the same catalog under dark mode, so the dark chrome and
+// overrides get the completeness + contrast checks too. Hidden from the
+// sidebar; use the toolbar Mode toggle to view it.
+export const ColorsDark: Story = {
+  ...Colors,
+  name: 'Colors (dark)',
+  globals: { mode: 'dark' },
+  tags: ['!dev', '!autodocs'],
+  play: async ({ canvasElement }) => {
+    await expectCompleteColorCatalog(canvasElement, manifest, {
+      sections: SECTIONS,
+      notes: NOTES,
+    });
+  },
 };
 
 export const Typography: Story = {

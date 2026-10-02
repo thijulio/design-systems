@@ -62,7 +62,8 @@ export function CopyButton({ text }: { text: string }) {
     <>
       <button
         type="button"
-        aria-label={`Copy ${text}`}
+        // Name follows the visible label (WCAG 2.5.3, label in name).
+        aria-label={`${COPY_LABEL[state]} ${text}`}
         onClick={copy}
         style={{
           font: 'inherit',

@@ -184,8 +184,10 @@ plus `themes: [{ name, selector, tokens }]`.
   token gets a card with its Web name (`var(--name)`) and RN accessor, both
   copyable, plus value, alias and per-theme overrides. The story only declares
   editorial sections (`title`, `description`, `match`); the first match wins.
-  A new color token no section claims shows under **Uncategorized**: add or
-  extend a matcher. Human labels go in the story's `notes`, keyed by CSS name;
+  A new color token no section claims still renders (under **Uncategorized**),
+  but the story's play test fails until you add or extend a matcher. Matchers
+  often key on `source` (the JSON file name), so renaming a token file means
+  updating them. Human labels go in the story's `notes`, keyed by CSS name;
   the play test fails on notes for tokens that no longer exist.
 - **Web Components** (ADR-0001) read the same inherited `var(--ds-*)` / brand
   vars, so the Web names in the catalog apply to them unchanged.
@@ -195,8 +197,11 @@ plus `themes: [{ name, selector, tokens }]`.
   which turns off **only** axe's `color-contrast` rule. That rule took ~12.5s
   of a ~16s run on the 95-swatch Exodus catalog. Instead, the play
   (`expectCompleteColorCatalog`) asserts WCAG AA for every text element
-  against its effective background, compositing translucent text. Don't
-  disable it for other stories.
+  against its effective background, compositing translucent text. It first
+  checks that the brand's `--ds-*` vars resolved, and it throws on a
+  translucent background rather than guess. Biome's catalog also runs under
+  dark mode (`ColorsDark`, test-only via `!dev`). Don't disable the axe rule
+  for other stories.
 
 ## Package conventions
 

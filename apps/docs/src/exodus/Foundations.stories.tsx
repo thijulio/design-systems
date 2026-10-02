@@ -94,7 +94,10 @@ const NOTES: Record<string, string> = {
 export const Colors: Story = {
   parameters: colorCatalogParameters,
   play: async ({ canvasElement }) => {
-    await expectCompleteColorCatalog(canvasElement, manifest, NOTES);
+    await expectCompleteColorCatalog(canvasElement, manifest, {
+      sections: SECTIONS,
+      notes: NOTES,
+    });
     await expectCopyInteraction(canvasElement, 'var(--accent)');
     await expectCopyInteraction(canvasElement, 'tokens.accent');
   },
