@@ -1,6 +1,6 @@
 {
   "name": "@thijulio/faune-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "type": "module",
   "files": [
@@ -65,6 +65,6 @@
     "directory": "packages/faune/react"
   },
   "dependencies": {
-    "@thijulio/primitives": "^0.0.5"
+    "@thijulio/primitives": "^0.0.6"
   }
 }

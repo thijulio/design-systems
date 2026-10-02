@@ -11,3 +11,6 @@
 # Docker build files — no prettier parser for Dockerfile / .dockerignore
 Dockerfile
 .dockerignore
+
+# Stencil regenerates its component type map on every build
+packages/primitives-web-components/src/components.d.ts

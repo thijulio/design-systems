@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "declaration": true,
+    "outDir": "out-tsc",
+    "types": [],
+    "tsBuildInfoFile": "out-tsc/tsconfig.tsbuildinfo",
+    "experimentalDecorators": true,
+    "lib": ["dom", "dom.iterable", "es2022"],
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "es2022",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "composite": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

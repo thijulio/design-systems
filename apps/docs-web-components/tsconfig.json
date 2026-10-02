@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "out-tsc",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "types": ["node"],
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "tsBuildInfoFile": "out-tsc/tsconfig.tsbuildinfo"
+  },
+  "include": [".storybook/*.ts", "src/**/*.ts", "vitest.config.ts"],
+  "references": [
+    {
+      "path": "../../packages/primitives-web-components"
+    },
+    {
+      "path": "../../packages/faune/web-components"
+    }
+  ]
+}

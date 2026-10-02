@@ -1,0 +1,67 @@
+{
+  "name": "@thijulio/docs-web-components",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "nx": {
+    "name": "docs-web-components",
+    "tags": [
+      "scope:docs"
+    ],
+    "targets": {
+      "storybook": {
+        "command": "storybook dev -p 6007",
+        "options": {
+          "cwd": "apps/docs-web-components"
+        }
+      },
+      "build-storybook": {
+        "command": "storybook build",
+        "dependsOn": [
+          "faune-css:build",
+          "primitives-web-components:build",
+          "faune-web-components:build"
+        ],
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "storybook"
+            ]
+          }
+        ],
+        "options": {
+          "cwd": "apps/docs-web-components"
+        }
+      },
+      "test-storybook": {
+        "command": "vitest run --config vitest.config.ts",
+        "dependsOn": [
+          "faune-css:build",
+          "primitives-web-components:build",
+          "faune-web-components:build"
+        ],
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest",
+              "playwright",
+              "storybook"
+            ]
+          }
+        ],
+        "options": {
+          "cwd": "apps/docs-web-components"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@thijulio/faune-css": "*",
+    "@thijulio/faune-web-components": "*",
+    "@thijulio/primitives-web-components": "*"
+  }
+}

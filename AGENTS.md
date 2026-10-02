@@ -76,6 +76,7 @@ packages/
   core/            @thijulio/core — Style Dictionary token build harness (scope:core)
   fonts/           @thijulio/fonts — webfont self-hosting build + verify (scope:core)
   primitives/      @thijulio/primitives — Button, Card, Tag, Badge, Avatar, Input (+Textarea, Select), Eyebrow (scope:shared)
+  primitives-web-components/  @thijulio/primitives-web-components — Stencil tj-button, tj-input (scope:shared; private, ADR-0001 spike)
   biome/
     tokens/        @thijulio/biome-tokens — SD JSON → tokens.css (+ .js/.d.ts)
     css/           @thijulio/biome-css    → dist/biome.css (reset+base+motion)
@@ -88,8 +89,10 @@ packages/
     tokens/        @thijulio/faune-tokens — palette + contract → tokens.css
     css/           @thijulio/faune-css    → dist/faune.css
     react/         @thijulio/faune-react  — re-exports every primitive (no wrappers)
+    web-components/ @thijulio/faune-web-components — re-exports the tj-* elements (private, ADR-0001 spike)
 apps/
   docs/            Storybook (SB 10, react-vite) — all brands, theme toolbar (scope:docs)
+  docs-web-components/ Storybook (web-components-vite) — tj-* elements, composed into docs via refs
 ```
 
 `PetCard` is intentionally NOT in Exodus — it's pet-domain-specific and belongs
@@ -114,6 +117,8 @@ primitives with no wrappers, because its tokens implement the `--ds-*` contract
 natively. Biome and Exodus wrappers (compatibility skins) are a migration bridge
 and should shrink toward that, component by component. Brands keep different
 component _sets_ and themes; only the structure is uniform.
+Vue/Angular support: Web Components alongside `-react` (accepted) — see
+[ADR-0001](docs/architecture/adr/0001-multi-framework-web-components.md).
 
 ## The token pipeline (how tokens become CSS + TS)
 

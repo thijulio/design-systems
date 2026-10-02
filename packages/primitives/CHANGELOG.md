@@ -1,3 +1,14 @@
+## 0.0.6 (2026-10-02)
+
+### 🚀 Features
+
+- **web-components:** tj-button and tj-input spike for ADR-0001 ([#17](https://github.com/thijulio/design-systems/pull/17))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Thiago Valença @thijulio
+
 ## 0.0.5 (2026-10-02)
 
 This was a version bump only for primitives to align it with other projects, there were no code changes.

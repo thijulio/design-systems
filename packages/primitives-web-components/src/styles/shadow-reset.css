@@ -1,0 +1,12 @@
+/* Page resets don't cross shadow boundaries. Every brand reset (biome, exodus,
+   faune css/src/reset.css) declares these two rules, and the shared component
+   CSS assumes them, so each element's shadow root carries its own copy. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
