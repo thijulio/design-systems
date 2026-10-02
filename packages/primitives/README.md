@@ -56,4 +56,4 @@ Components retain their default contract values when overrides are absent.
 
 ## Components
 
-Button, Card, Tag, Badge, Avatar, Input (+`Textarea`), Eyebrow.
+Button, Card, Tag, Badge, Avatar, Input (+`Textarea`, `Select`), Eyebrow.

@@ -42,3 +42,20 @@
   resize: vertical;
   min-height: var(--ds-input-min-height, 96px);
 }
+.selectWrap {
+  position: relative;
+}
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  cursor: pointer;
+}
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: var(--ds-text-muted);
+  pointer-events: none;
+}
