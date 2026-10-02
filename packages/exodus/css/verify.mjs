@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
-import { verifyFonts } from '@thijulio/core';
+import { verifyFonts } from '@thijulio/fonts';
 import { fonts } from './fonts.config.mjs';
 
 const here = import.meta.dirname;

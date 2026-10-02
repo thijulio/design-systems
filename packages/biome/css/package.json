@@ -21,7 +21,7 @@
     "@fontsource/jetbrains-mono": "5.3.0",
     "@fontsource/spectral": "5.3.0",
     "@thijulio/biome-tokens": "*",
-    "@thijulio/core": "*"
+    "@thijulio/fonts": "*"
   },
   "nx": {
     "name": "biome-css",

@@ -37,7 +37,20 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
 
       - run: npx nx format:check
-      - run: npx nx affected -t lint test build typecheck
+
+      # nx.json sets projectsAffectedByDependencyUpdates: 'auto' so nx release
+      # only versions packages whose dependencies really changed. That also
+      # narrows `nx affected`, and no project has a graph edge to the toolchain
+      # (typescript, jest, eslint, @nx/*) — so any lockfile change runs
+      # everything here, as CI did before the setting.
+      - name: lint / test / build / typecheck
+        run: |
+          changed="$(git diff --name-only "$NX_BASE" "$NX_HEAD")"
+          if grep -qx 'package-lock.json' <<< "$changed"; then
+            npx nx run-many -t lint test build typecheck
+          else
+            npx nx affected -t lint test build typecheck
+          fi
 
   storybook:
     name: Storybook browser checks

@@ -1,7 +1,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildFonts } from '@thijulio/core';
+import { buildFonts } from '@thijulio/fonts';
 import { fonts } from './fonts.config.mjs';
 
 const here = import.meta.dirname;
