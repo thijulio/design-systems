@@ -114,6 +114,8 @@ primitives with no wrappers, because its tokens implement the `--ds-*` contract
 natively. Biome and Exodus wrappers (compatibility skins) are a migration bridge
 and should shrink toward that, component by component. Brands keep different
 component _sets_ and themes; only the structure is uniform.
+Vue/Angular support is planned as Web Components alongside `-react` — see
+[ADR-0001](docs/architecture/adr/0001-multi-framework-web-components.md).
 
 ## The token pipeline (how tokens become CSS + TS)
 
