@@ -8,6 +8,7 @@ import {
   type TokenManifest,
 } from '../_foundations/token-manifest';
 import {
+  colorCatalogParameters,
   expectCompleteColorCatalog,
   expectCopyInteraction,
 } from '../_test/catalog';
@@ -91,6 +92,7 @@ const NOTES: Record<string, string> = {
 };
 
 export const Colors: Story = {
+  parameters: colorCatalogParameters,
   play: async ({ canvasElement }) => {
     await expectCompleteColorCatalog(canvasElement, manifest, NOTES);
     await expectCopyInteraction(canvasElement, 'var(--accent)');

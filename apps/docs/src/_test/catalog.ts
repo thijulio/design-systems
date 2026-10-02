@@ -7,8 +7,34 @@ import {
 import { contrastRatio } from './contrast.js';
 
 /**
+ * Story parameters for a color catalog. axe's `color-contrast` rule costs
+ * ~12.5s of a ~16s run on the 95-swatch Exodus catalog (measured), which
+ * puts the story near the 30s test timeout. `expectCompleteColorCatalog`
+ * asserts the same WCAG AA ratio for every text element in milliseconds;
+ * every other axe rule still runs.
+ */
+export const colorCatalogParameters = {
+  a11y: { config: { rules: [{ id: 'color-contrast', enabled: false }] } },
+};
+
+/** First opaque background behind `element`, falling back to the page's. */
+function effectiveBackground(element: HTMLElement): string {
+  for (
+    let node: HTMLElement | null = element;
+    node;
+    node = node.parentElement
+  ) {
+    const background = getComputedStyle(node).backgroundColor;
+    const alpha = background.match(/[\d.]+/g)?.[3];
+    if (alpha === undefined || Number(alpha) === 1) return background;
+  }
+  return 'rgb(255, 255, 255)';
+}
+
+/**
  * Every color token in the manifest renders exactly once, every note names a
- * real token, and every caption stays legible on its card.
+ * real token, and every piece of text in the catalog meets WCAG AA (4.5:1)
+ * against its effective background.
  */
 export async function expectCompleteColorCatalog(
   canvasElement: HTMLElement,
@@ -27,17 +53,20 @@ export async function expectCompleteColorCatalog(
   );
   await expect(staleNoteKeys(manifest, notes)).toEqual([]);
 
-  for (const card of cards) {
-    const background = getComputedStyle(card).backgroundColor;
-    const labels = Array.from(
-      card.querySelectorAll<HTMLElement>('figcaption code, figcaption > span'),
-    );
-    for (const label of labels) {
-      await expect(
-        contrastRatio(getComputedStyle(label).color, background),
-      ).toBeGreaterThanOrEqual(4.5);
-    }
-  }
+  // Collected synchronously and asserted once, so a failure lists every
+  // offender and the check stays fast on large catalogs.
+  const illegible = Array.from(canvasElement.querySelectorAll<HTMLElement>('*'))
+    .filter((el) =>
+      Array.from(el.childNodes).some(
+        (n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim(),
+      ),
+    )
+    .map((el) => ({
+      text: el.textContent?.trim().slice(0, 40),
+      ratio: contrastRatio(getComputedStyle(el).color, effectiveBackground(el)),
+    }))
+    .filter(({ ratio }) => ratio < 4.5);
+  await expect(illegible).toEqual([]);
 }
 
 /**

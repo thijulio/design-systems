@@ -85,6 +85,43 @@ export function CopyButton({ text }: { text: string }) {
   );
 }
 
+/** One platform's name for the token, labelled, with a copy button. */
+function PlatformName({
+  platform,
+  bold = false,
+  children,
+}: {
+  platform: 'Web' | 'RN';
+  bold?: boolean;
+  children: string;
+}) {
+  // Web copies a ready-to-use `var(--name)`; RN copies the accessor as shown.
+  const copyText = platform === 'Web' ? `var(${children})` : children;
+  return (
+    <span style={row}>
+      <span
+        style={{ display: 'flex', alignItems: 'baseline', gap: 6, minWidth: 0 }}
+      >
+        <span
+          style={{
+            ...muted,
+            fontSize: 10,
+            fontWeight: 700,
+            width: 22,
+            flexShrink: 0,
+          }}
+        >
+          {platform}
+        </span>
+        <code style={{ ...mono, fontWeight: bold ? 700 : 400 }}>
+          {children}
+        </code>
+      </span>
+      <CopyButton text={copyText} />
+    </span>
+  );
+}
+
 function TokenSwatch({ token, note }: { token: CatalogToken; note?: string }) {
   return (
     <figure
@@ -106,14 +143,10 @@ function TokenSwatch({ token, note }: { token: CatalogToken; note?: string }) {
         }}
       />
       <figcaption style={{ display: 'grid', gap: 4, padding: '8px 10px' }}>
-        <span style={row}>
-          <code style={{ ...mono, fontWeight: 700 }}>{token.name}</code>
-          <CopyButton text={`var(${token.name})`} />
-        </span>
-        <span style={row}>
-          <code style={mono}>{token.native.accessor}</code>
-          <CopyButton text={token.native.accessor} />
-        </span>
+        <PlatformName platform="Web" bold>
+          {token.name}
+        </PlatformName>
+        <PlatformName platform="RN">{token.native.accessor}</PlatformName>
         {note && <span style={muted}>{note}</span>}
         <span style={muted}>
           {token.themeOnly ? 'theme only' : token.value}
