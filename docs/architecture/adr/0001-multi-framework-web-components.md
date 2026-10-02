@@ -1,6 +1,6 @@
 # ADR-0001: Multi-framework components via Web Components (Stencil), alongside React
 
-**Status:** Proposed
+**Status:** Accepted (2026-10-02)
 **Date:** 2026-10-02
 **Deciders:** Thiago Valença
 
@@ -59,8 +59,9 @@ each score 100% on Custom Elements Everywhere.
    `[data-mode]`); there is no per-element theme prop.
 4. **Encapsulation: Shadow DOM** (`shadow: true`). Customization is exposed only through
    `--ds-*` / component custom properties declared on `:host` and through `::part()`
-   (`exportparts` for nested elements). This is the one point the owner has not confirmed
-   yet; see _Open questions_.
+   (`exportparts` for nested elements). Confirmed by the owner. `scoped: true` was
+   rejected: it lets light-DOM styles reach inside, which only helps a possible Phase 2,
+   and Phase 1 has no legacy consumers of the new packages.
 5. **Phased rollout. `<brand>-react` is untouched in Phase 1.**
    - **Phase 1 (additive, zero risk for current consumers).** Ship `-web-components` and,
      on demand, `-angular`/`-vue`. `@thijulio/primitives` and every `<brand>-react` keep
@@ -162,10 +163,8 @@ native form participation, SSR. Phase 1 removes that risk entirely by not touchi
 
 ## Open questions
 
-1. **Shadow DOM vs scoped CSS.** Proposed: Shadow DOM (point 4). Stencil's `scoped: true`
-   lets light-DOM styles reach inside, which would ease a future Phase 2 (`className`
-   overrides) at the cost of encapsulation. Phase 1 has no legacy consumers of the new
-   packages, so Shadow DOM costs nothing now. Needs the owner's confirmation.
+1. ~~Shadow DOM vs scoped CSS.~~ Resolved: Shadow DOM (Decision 4). If Phase 2 is ever
+   attempted, `className` compatibility must be solved there (Decision 5 gates).
 2. **How component CSS is shared** between `@thijulio/primitives` (CSS Modules) and the
    Stencil elements, so visual parity has one source. To be settled by the spike.
 3. **Form participation:** form-associated custom elements (`ElementInternals`) for
@@ -173,7 +172,7 @@ native form participation, SSR. Phase 1 removes that risk entirely by not touchi
 
 ## Action Items
 
-1. [ ] Owner confirms this ADR (and open question 1). Status → Accepted.
+1. [x] Owner confirms this ADR (and open question 1). Status → Accepted.
 2. [ ] Spike, Button + Input, end to end:
        `primitives-web-components`, one brand package, the Angular output target with a
        reactive form, Vue usage with `v-model`, a Web Components Storybook composed into
