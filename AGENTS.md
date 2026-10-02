@@ -218,7 +218,9 @@ build the changed token/CSS/React package first, then `nx storybook docs`.
 **Release / publish packages:** automatic. The **Release** workflow
 (`.github/workflows/release.yml`) runs on every push to `main` that touches
 `packages/**` — i.e. on merge. Every `feat`/`fix` merged there ships (while a
-package is 0.x, Nx turns both into a patch bump). It can also be run manually —
+package is 0.x, Nx turns both into a patch bump) to each package it
+**affects** — see the "Release bumps follow `nx affected`" gotcha. It can also
+be run manually —
 `gh workflow run release.yml -f first_release=<bool> -f dry_run=<bool>`, or the
 Actions UI — which is how you preview (dry runs may target any branch with
 `--ref`; real releases are refused unless dispatched from `main`). It runs
@@ -322,6 +324,22 @@ chromium` once. The addon also lights up the Storybook **Interactions** panel.
   axis, so out-of-contract weights snap to the nearest one as they did on Google.
 - **latin-ext is emitted before latin** in the generated CSS: the subsets'
   unicode-ranges overlap (U+0304/0308/0329) and the last-declared face wins.
+- **Release bumps follow `nx affected`, not "files in the package".** For each
+  `feat`/`fix` since a package's last tag, `nx release` bumps every package the
+  commit _affects_: files under its root, anything it depends on (`core` →
+  tokens, `fonts` → css, `primitives` → react), and workspace-wide inputs —
+  `nx.json`, `eslint.config.mjs`, `jest.preset.js` hit all nine packages,
+  `tsconfig.base.json` six. (Project changelogs only list commits touching the
+  package's own files, hence "version bump only" entries.) So: keep build
+  tooling split by consumer (tokens use `core`, css uses `fonts` — don't merge
+  them back), and type commits that only touch root config/tooling as
+  `build:`/`ci:`/`chore:`/`refactor:`, never `feat:`/`fix:`. `nx.json` sets
+  `@nx/js` `projectsAffectedByDependencyUpdates: 'auto'` so a lockfile change
+  only affects projects whose dependencies changed (the default `'all'` bumped
+  every package on any install). That also narrows `nx affected`, and no project
+  has a graph edge to the toolchain — hence `ci.yml` runs `run-many` whenever
+  `package-lock.json` changed. Preview with
+  `npx nx release --dry-run --skip-publish`.
 
 ## Multi-agent config
 

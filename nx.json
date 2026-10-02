@@ -69,6 +69,11 @@
       }
     }
   ],
+  "pluginsConfig": {
+    "@nx/js": {
+      "projectsAffectedByDependencyUpdates": "auto"
+    }
+  },
   "analytics": false,
   "release": {
     "projects": [
