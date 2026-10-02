@@ -6,11 +6,12 @@ const here = import.meta.dirname;
 await buildBrandTokens({
   source: join(here, 'src/tokens'),
   buildPath: join(here, 'dist'),
+  displayName: 'Biome',
   themes: [
     { selector: '[data-mode="dark"]', source: join(here, 'src/themes/dark') },
   ],
 });
 
 console.log(
-  '✓ @thijulio/biome-tokens built → dist/{tokens.css,tokens.js,tokens.d.ts}',
+  '✓ @thijulio/biome-tokens built → dist/{tokens.css,tokens.js,tokens.d.ts,native,dart}',
 );

@@ -10,11 +10,12 @@ const theme = (name) => ({
 await buildBrandTokens({
   source: join(here, 'src/tokens'),
   buildPath: join(here, 'dist'),
+  displayName: 'Exodus',
   // Sage is also the :root default (in tokens/color.json); the overlay lets a
   // subtree be forced back to Sage under another theme. Clay & Harbor reskin the accent.
   themes: [theme('sage'), theme('clay'), theme('harbor')],
 });
 
 console.log(
-  '✓ @thijulio/exodus-tokens built → dist/{tokens.css,tokens.js,tokens.d.ts}',
+  '✓ @thijulio/exodus-tokens built → dist/{tokens.css,tokens.js,tokens.d.ts,native,dart}',
 );

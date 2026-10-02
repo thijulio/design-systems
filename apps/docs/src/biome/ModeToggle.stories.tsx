@@ -18,17 +18,26 @@ export default meta;
 
 type Story = StoryObj<typeof ModeToggle>;
 
+export const Default: Story = {
+  args: { value: 'explorer' },
+};
 export const Interactive: Story = {
   render: () => {
     const [value, setValue] = useState<Mode>('explorer');
     return <ModeToggle value={value} onChange={setValue} />;
   },
-  // Interaction test: clicking Recruiter switches the selected posture.
+  // Interaction test: pointer and keyboard controls switch the selected posture.
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const recruiter = canvas.getByRole('tab', { name: 'Recruiter' });
     await expect(recruiter).toHaveAttribute('aria-selected', 'false');
     await userEvent.click(recruiter);
     await expect(recruiter).toHaveAttribute('aria-selected', 'true');
+    recruiter.focus();
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(canvas.getByRole('tab', { name: 'Explorer' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
   },
 };

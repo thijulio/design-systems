@@ -6,10 +6,14 @@
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"]
+    "types": ["node", "vite/client"],
+    "lib": ["es2022", "dom"]
   },
   "include": ["src/**/*.ts"],
   "references": [
+    {
+      "path": "../../packages/primitives/tsconfig.lib.json"
+    },
     {
       "path": "../../packages/exodus/react/tsconfig.lib.json"
     },

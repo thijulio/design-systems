@@ -1,4 +1,6 @@
 import type { HTMLAttributes } from 'react';
+import { Avatar as PrimitiveAvatar } from '@thijulio/primitives';
+import '@thijulio/primitives/styles.css';
 import { cx, type StyleWithVars } from '../_util/style';
 import styles from './Avatar.module.css';
 
@@ -40,23 +42,18 @@ export function Avatar({
   const key: AvatarTone = tone ?? (variant === 'soft' ? 'soft' : 'accent');
   const [bg, fg] = TONE_BG[key];
   const vars: StyleWithVars = {
-    '--av-size': `${size}px`,
-    '--av-font': `${size * 0.38}px`,
     '--av-bg': bg,
     '--av-fg': fg,
     ...style,
   };
   return (
-    <span
-      className={cx(
-        styles.avatar,
-        shape === 'circle' ? styles.circle : styles.rounded,
-        className,
-      )}
+    <PrimitiveAvatar
+      initials={initials}
+      size={size}
+      shape={shape}
+      className={cx(styles.compat, className)}
       style={vars}
       {...props}
-    >
-      {initials}
-    </span>
+    />
   );
 }

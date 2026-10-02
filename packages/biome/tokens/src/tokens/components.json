@@ -1,0 +1,32 @@
+{
+  "terminal": {
+    "gradient-start": { "value": "#18382F" },
+    "gradient-middle": { "value": "#11271F" },
+    "gradient-end": { "value": "#0E211C" },
+    "surface": { "value": "#13201B" },
+    "eyebrow": { "value": "{bm.ipe}" },
+    "title": { "value": "#F4F6EC" },
+    "lede": { "value": "rgba(236, 239, 227, 0.82)" },
+    "action-bg": { "value": "{bm.sage}" },
+    "action-fg": { "value": "{terminal.gradient-end}" },
+    "border": { "value": "rgba(143, 176, 137, 0.22)" },
+    "border-subtle": { "value": "rgba(143, 176, 137, 0.14)" },
+    "shadow": { "value": "0 40px 90px -50px rgba(0, 0, 0, 0.9)" },
+    "titlebar-text": { "value": "#6E8C7A" },
+    "syntax": {
+      "keyword": { "value": "{bm.sage}" },
+      "fn": { "value": "#D1794C" },
+      "string": { "value": "{bm.ipe}" },
+      "comment": { "value": "#6E8C7A" },
+      "punct": { "value": "#7E8C7A" },
+      "text": { "value": "{bm.bone-light}" },
+      "output": { "value": "#A9C0A2" }
+    },
+    "contour": {
+      "sage": { "value": "{bm.sage}" },
+      "soft": { "value": "{bm.sage-soft}" },
+      "terracotta": { "value": "{bm.terracotta-dk}" },
+      "muted": { "value": "#6E8C7A" }
+    }
+  }
+}

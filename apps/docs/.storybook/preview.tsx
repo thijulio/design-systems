@@ -4,14 +4,17 @@ import type { Preview, Decorator } from '@storybook/react-vite';
 // globally is safe (no :root collision).
 import '@thijulio/biome-react/styles.css';
 import '@thijulio/exodus-react/styles.css';
+import '@thijulio/primitives/styles.css';
 // Token + base CSS as strings; only the active brand's is injected per story
 // (Biome and Exodus both scope tokens to :root and share a few generic var names).
 import biomeCss from '@thijulio/biome-css/biome.css?inline';
 import exodusCss from '@thijulio/exodus-css/exodus.css?inline';
+import fauneCss from '@thijulio/faune-css/faune.css?inline';
 
 const BRAND_CSS: Record<string, string> = {
   Biome: biomeCss,
   Exodus: exodusCss,
+  Faune: fauneCss,
 };
 
 const withBrandTokens: Decorator = (Story, context) => {
@@ -53,12 +56,15 @@ const preview: Preview = {
           'Biome',
           ['Foundations', 'Components'],
           'Exodus',
-          ['Foundations', 'Core', 'Forms', 'Feedback', 'Identity'],
+          ['Foundations', 'Shared', 'Core', 'Forms', 'Feedback', 'Identity'],
+          'Faune',
+          ['Foundations', 'Components'],
         ],
       },
     },
-    // a11y violations surface in the Accessibility panel; don't fail the build.
-    a11y: { test: 'todo' },
+    // A component catalog is a quality gate: supported stories must not carry
+    // known accessibility violations into a release.
+    a11y: { test: 'error' },
   },
   // Globals only (no `toolbar`): the toolbar UI is rendered per-brand by the
   // manager addon (.storybook/manager.tsx), which shows the Biome mode control

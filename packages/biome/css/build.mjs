@@ -1,9 +1,12 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildFonts } from '@thijulio/core';
+import { fonts } from './fonts.config.mjs';
 
 const here = import.meta.dirname;
 const src = join(here, 'src');
+const dist = join(here, 'dist');
 
 // Token vars come from the sibling package's build output (Nx builds it first).
 const tokensCss = await readFile(
@@ -12,23 +15,26 @@ const tokensCss = await readFile(
 );
 
 const read = (file) => readFile(join(src, file), 'utf-8');
-const [fonts, reset, base, motion] = await Promise.all([
-  read('fonts.css'),
+const [reset, base, motion] = await Promise.all([
   read('reset.css'),
   read('base.css'),
   read('motion.css'),
 ]);
 
-// The fonts @import must precede every rule, so it leads the bundle.
+// Self-hosted webfonts: copies the woff2 files + OFL licences into dist/fonts/
+// and returns the @font-face rules that reference them by relative url.
+await mkdir(dist, { recursive: true });
+const fontsCss = await buildFonts({ packageRoot: here, outDir: dist, fonts });
+
+// @font-face rules lead the bundle, ahead of the tokens that name the families.
 const bundle =
   [
-    fonts.trim(),
+    fontsCss.trim(),
     tokensCss.trim(),
     reset.trim(),
     base.trim(),
     motion.trim(),
   ].join('\n\n') + '\n';
 
-await mkdir(join(here, 'dist'), { recursive: true });
-await writeFile(join(here, 'dist', 'biome.css'), bundle);
-console.log('✓ @thijulio/biome-css built → dist/biome.css');
+await writeFile(join(dist, 'biome.css'), bundle);
+console.log('✓ @thijulio/biome-css built → dist/biome.css + dist/fonts/');

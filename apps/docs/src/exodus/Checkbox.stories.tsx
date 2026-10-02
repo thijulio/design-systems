@@ -14,6 +14,9 @@ export default meta;
 
 type Story = StoryObj<typeof Checkbox>;
 
+export const Default: Story = {
+  args: { checked: true, label: 'Vaccinated', readOnly: true },
+};
 export const Interactive: Story = {
   render: () => {
     const [checked, setChecked] = useState(true);
@@ -25,12 +28,13 @@ export const Interactive: Story = {
       />
     );
   },
-  // Interaction test: starts checked, clicking toggles it off.
+  // Interaction test: the native control remains keyboard-operable.
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const box = canvas.getByRole('checkbox');
     await expect(box).toBeChecked();
-    await userEvent.click(box);
+    box.focus();
+    await userEvent.keyboard(' ');
     await expect(box).not.toBeChecked();
   },
 };

@@ -1,0 +1,63 @@
+{
+  "name": "@thijulio/faune-css",
+  "version": "0.0.3",
+  "private": false,
+  "type": "module",
+  "exports": {
+    "./faune.css": "./dist/faune.css",
+    "./fonts/*": "./dist/fonts/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node verify.mjs"
+  },
+  "devDependencies": {
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/newsreader": "5.3.0",
+    "@thijulio/core": "*",
+    "@thijulio/faune-tokens": "*"
+  },
+  "nx": {
+    "name": "faune-css",
+    "tags": [
+      "scope:faune"
+    ],
+    "release": {
+      "version": {
+        "fallbackCurrentVersionResolver": "disk"
+      }
+    },
+    "targets": {
+      "build": {
+        "command": "node {projectRoot}/build.mjs",
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "{projectRoot}/dist"
+        ],
+        "cache": true
+      },
+      "test": {
+        "command": "node {projectRoot}/verify.mjs",
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true
+      }
+    }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/faune/css"
+  }
+}

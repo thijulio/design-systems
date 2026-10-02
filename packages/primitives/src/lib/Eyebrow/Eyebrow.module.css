@@ -1,0 +1,18 @@
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-caption);
+  font-weight: var(--ds-weight-extra);
+  letter-spacing: var(--ds-tracking-label);
+  text-transform: uppercase;
+}
+
+.line {
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+}

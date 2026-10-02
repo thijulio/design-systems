@@ -9,8 +9,66 @@
       "scope:docs"
     ],
     "targets": {
+      "verify-contract": {
+        "command": "node {projectRoot}/verify-contract.mjs",
+        "dependsOn": [
+          "biome-tokens:build",
+          "exodus-tokens:build",
+          "faune-tokens:build",
+          "primitives:build"
+        ],
+        "inputs": [
+          "default",
+          "^production"
+        ],
+        "cache": true
+      },
+      "build-storybook": {
+        "command": "storybook build",
+        "dependsOn": [
+          "verify-contract",
+          "biome-css:build",
+          "biome-react:build",
+          "exodus-css:build",
+          "exodus-react:build",
+          "faune-css:build",
+          "primitives:build"
+        ],
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "storybook"
+            ]
+          }
+        ],
+        "options": {
+          "cwd": "apps/docs"
+        }
+      },
       "test-storybook": {
         "command": "vitest run --config vitest.config.ts",
+        "dependsOn": [
+          "verify-contract",
+          "biome-css:build",
+          "biome-react:build",
+          "exodus-css:build",
+          "exodus-react:build",
+          "faune-css:build",
+          "primitives:build"
+        ],
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest",
+              "playwright",
+              "storybook"
+            ]
+          }
+        ],
         "options": {
           "cwd": "apps/docs"
         }
@@ -20,7 +78,12 @@
   "devDependencies": {
     "@thijulio/biome-css": "*",
     "@thijulio/biome-react": "*",
+    "@thijulio/biome-tokens": "*",
     "@thijulio/exodus-css": "*",
-    "@thijulio/exodus-react": "*"
+    "@thijulio/exodus-react": "*",
+    "@thijulio/exodus-tokens": "*",
+    "@thijulio/faune-css": "*",
+    "@thijulio/faune-tokens": "*",
+    "@thijulio/primitives": "*"
   }
 }

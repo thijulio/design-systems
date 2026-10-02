@@ -1,0 +1,25 @@
+.card {
+  background: var(--ds-surface-raised);
+  border: var(--ds-card-border-width, 1px) solid
+    var(--ds-card-border, var(--ds-border));
+  border-radius: var(--ds-radius-card);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.pad {
+  padding: var(--ds-card-padding-y, var(--ds-space-5))
+    var(--ds-card-padding-x, var(--ds-space-6));
+}
+
+.interactive {
+  cursor: pointer;
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+.interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ds-shadow-lg);
+  border-color: var(--ds-card-hover-border, var(--ds-accent));
+}

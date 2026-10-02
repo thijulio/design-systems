@@ -1,8 +1,6 @@
-import type {
-  AnchorHTMLAttributes,
-  ButtonHTMLAttributes,
-  ReactNode,
-} from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { Button as PrimitiveButton } from '@thijulio/primitives';
+import '@thijulio/primitives/styles.css';
 import styles from './Button.module.css';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -32,21 +30,16 @@ export function Button({
     .filter(Boolean)
     .join(' ');
 
-  if (href && !disabled) {
-    return (
-      <a
-        href={href}
-        className={cls}
-        {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
-      >
-        {children}
-      </a>
-    );
-  }
-
   return (
-    <button type="button" className={cls} disabled={disabled} {...rest}>
+    <PrimitiveButton
+      variant={variant}
+      size={size}
+      href={href}
+      className={cls}
+      disabled={disabled}
+      {...rest}
+    >
       {children}
-    </button>
+    </PrimitiveButton>
   );
 }

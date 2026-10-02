@@ -67,6 +67,7 @@
     "packages/*",
     "packages/biome/*",
     "packages/exodus/*",
+    "packages/faune/*",
     "apps/*"
   ],
   "dependencies": {

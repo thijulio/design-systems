@@ -1,0 +1,81 @@
+{
+  "font": {
+    "display": {
+      "value": "'Newsreader', Georgia, 'Times New Roman', serif"
+    },
+    "body": {
+      "value": "'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "ui": {
+      "value": "{font.body}"
+    }
+  },
+  "text": {
+    "caption": {
+      "value": "0.75rem"
+    },
+    "body-sm": {
+      "value": "0.8438rem"
+    },
+    "body": {
+      "value": "1rem"
+    },
+    "h3": {
+      "value": "1.25rem"
+    },
+    "h2": {
+      "value": "2rem"
+    },
+    "h1": {
+      "value": "clamp(2.75rem, 4.5vw, 4.55rem)"
+    },
+    "display": {
+      "value": "clamp(3rem, 5.3vw, 5.5rem)"
+    }
+  },
+  "weight": {
+    "regular": {
+      "value": "400"
+    },
+    "medium": {
+      "value": "500"
+    },
+    "semibold": {
+      "value": "600"
+    },
+    "bold": {
+      "value": "700"
+    },
+    "extra": {
+      "value": "800"
+    }
+  },
+  "leading": {
+    "tight": {
+      "value": "0.92"
+    },
+    "snug": {
+      "value": "1.15"
+    },
+    "normal": {
+      "value": "1.5"
+    },
+    "relaxed": {
+      "value": "1.62"
+    }
+  },
+  "tracking": {
+    "display": {
+      "value": "-0.06em"
+    },
+    "tight": {
+      "value": "-0.04em"
+    },
+    "normal": {
+      "value": "0"
+    },
+    "label": {
+      "value": "0.08em"
+    }
+  }
+}

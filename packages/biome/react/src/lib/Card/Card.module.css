@@ -1,21 +1,23 @@
 .card {
   position: relative;
+  --ds-shadow-sm: none;
   overflow: hidden;
   padding: 28px 26px;
 }
 
 .editorial {
-  border-radius: var(--radius-ui-lg);
-  background: var(--surface-raised);
+  --ds-radius-card: var(--radius-ui-lg);
+  --ds-surface-raised: var(--surface-raised);
+  --ds-card-border: var(--border);
+  --ds-card-border-width: 1px;
   color: var(--text-strong);
-  border: 1px solid var(--border);
 }
 
 .expressive {
-  border-radius: var(--radius-soft);
-  background: var(--brand);
+  --ds-radius-card: var(--radius-soft);
+  --ds-surface-raised: var(--brand);
+  --ds-card-border-width: 0;
   color: var(--on-brand);
-  border: none;
 }
 
 .inner {
@@ -27,11 +29,11 @@
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-body);
   margin-bottom: 14px;
 }
 .expressive .kicker {
-  color: rgba(242, 238, 226, 0.7);
+  color: var(--on-brand);
 }
 
 .title {
