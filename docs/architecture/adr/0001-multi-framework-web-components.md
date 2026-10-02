@@ -81,6 +81,32 @@ each score 100% on Custom Elements Everywhere.
      **integration** stories (forms, `v-model`, reactive forms, events), not
      re-documented visual variants.
 
+7. **Element contract** (settled by the spike, 2026-10-02):
+   - **Tags:** shared elements use one system prefix, `tj-` (`<tj-button>`,
+     `<tj-input>`). Brand-only elements use the brand name (`<faune-…>`,
+     `<exodus-…>`) so they can never collide with shared ones. Tags become public API
+     in Angular/Vue templates, so they don't get renamed later. This follows the
+     market pattern of one prefix per system: `ui5-`, `ion-`, `sp-`.
+   - **One copy per page:** custom element tags are global. Stencil's generated define
+     does `customElements.get(tag) || customElements.define(tag, …)`: a second copy is
+     **silently skipped** and the first one loaded wins. So
+     `@thijulio/primitives-web-components` is a **peerDependency** of every
+     `<brand>-web-components` package, and an app resolves exactly one version.
+   - **Build output:** `dist-custom-elements` with
+     `customElementsExportBehavior: 'single-export-module'` (required by Stencil's
+     Angular standalone target), and the package exports `./components` and
+     `./components/*`, the paths the generated Angular/Vue proxies import.
+     Adapters register each element they use. Apps without an adapter call the
+     `defineCustomElementTj*()` helpers once.
+   - **Shadow reset:** page resets don't cross shadow roots, so each element's shadow
+     root loads `src/styles/shadow-reset.css` (`box-sizing: border-box`,
+     `margin: 0`, identical in all three brand resets). Without it, `tj-input`
+     overflowed its host by its own padding.
+   - **Accessible name:** a light-DOM `<label for>` can't reach the native control in
+     the shadow root. Name controls with `aria-label` on the host (forwarded to the
+     inner control). Richer labelling (`ElementInternals` ARIA, a label slot) is a
+     follow-up.
+
 ## Options Considered
 
 ### Option A: Stencil Web Components + generated framework wrappers (chosen)
@@ -165,23 +191,48 @@ native form participation, SSR. Phase 1 removes that risk entirely by not touchi
 
 1. ~~Shadow DOM vs scoped CSS.~~ Resolved: Shadow DOM (Decision 4). If Phase 2 is ever
    attempted, `className` compatibility must be solved there (Decision 5 gates).
-2. **How component CSS is shared** between `@thijulio/primitives` (CSS Modules) and the
-   Stencil elements, so visual parity has one source. To be settled by the spike.
-3. **Form participation:** form-associated custom elements (`ElementInternals`) for
-   Input/Select/Textarea/Checkbox. To be validated in the spike.
+2. ~~How component CSS is shared.~~ Resolved: **the same file.** Each element's
+   `styleUrls` points at `@thijulio/primitives`' `*.module.css`; Stencil inlines it as
+   plain CSS in the shadow root (CSS Modules hashing only applies to the React build).
+   React and Web Components therefore can't drift visually. Measured on Faune: Button
+   Accent matches on all 14 computed properties checked and has the same 189.797×40 box;
+   Input Invalid matches on every property and on its rendered box.
+3. ~~Form participation.~~ Resolved: **works.** `formAssociated` + `ElementInternals`:
+   `tj-input` contributes to `FormData` and clears on `form.reset()`; a
+   `tj-button type="submit"` inside the shadow root submits its light-DOM form
+   (`requestSubmit()`).
+
+## Spike results (2026-10-02)
+
+Faune brand, `tj-button` + `tj-input`; framework apps consumed the `npm pack` tarball.
+
+| Check                                                                                                                                           | Result                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Web Components Storybook, interaction + a11y tests (real Chromium)                                                                              | 10/10 pass                                         |
+| Visual parity vs React primitives (computed styles + box)                                                                                       | identical                                          |
+| Angular 22 reactive form via generated `ControlValueAccessor` (model → element, element → model, `setValue`, `Validators.required`, `ngSubmit`) | 7/7 pass                                           |
+| Vue 3.5 `v-model` via generated wrapper (both directions, submit)                                                                               | 6/6 pass                                           |
+| Faune tokens style the shadow DOM in Angular and Vue apps                                                                                       | pass                                               |
+| `@thijulio/primitives` and every `-react` package changed                                                                                       | no (React consumers and `/design-sync` unaffected) |
+
+Two harness lessons, not component defects: assert after the framework re-renders
+(Angular is zoneless by default, Vue batches to the next tick), and measure colours
+off-hover (the hover transition was caught mid-way once).
 
 ## Action Items
 
 1. [x] Owner confirms this ADR (and open question 1). Status → Accepted.
-2. [ ] Spike, Button + Input, end to end:
-       `primitives-web-components`, one brand package, the Angular output target with a
-       reactive form, Vue usage with `v-model`, a Web Components Storybook composed into
-       `apps/docs`, and a visual parity check against the React primitives. Confirm
-       `/design-sync` is unaffected (it keeps using `-react`).
-3. [ ] Decide open questions 2–3 from the spike; record them here.
+2. [x] Spike, Button + Input, end to end (see _Spike results_).
+3. [x] Decide open questions 2–3 from the spike; record them here.
 4. [ ] Migrate remaining primitives component by component, parity-checked.
 5. [ ] Create `-angular` / `-vue` adapter packages when their first consumer arrives.
 6. [ ] Phase 2 go/no-go review against the gates in Decision 5.
+7. [ ] Publish the Web Components Storybook with the Pages site and add its production
+       `refs` entry (composed in development only today).
+8. [ ] Exodus migration: move the compatibility-skin variables that `exodus-react`'s
+       wrappers set on their own classes (`--ds-input-height: 40px`, 1.5px borders,
+       focus shadows…) into `exodus-css`, so `tj-*` elements match `exodus-react`.
+9. [ ] Decide when the elements leave `private` and join the `nx release` group.
 
 ## Sources
 

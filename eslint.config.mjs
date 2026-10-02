@@ -13,6 +13,16 @@ export default [
     ],
   },
   {
+    // Stencil compiles JSX to its `h` factory, which ESLint can't see as used.
+    files: ['packages/primitives-web-components/src/**/*.tsx'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { varsIgnorePattern: '^h$' },
+      ],
+    },
+  },
+  {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
       '@nx/enforce-module-boundaries': [

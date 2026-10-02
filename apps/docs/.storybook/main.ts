@@ -17,6 +17,21 @@ const config: StorybookConfig = {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {},
   },
+  // Storybook Composition (ADR-0001): the Web Components catalog runs as its
+  // own Storybook (apps/docs-web-components, port 6007). Only composed in
+  // development until the Pages workflow publishes that build too.
+  refs: (
+    _config,
+    { configType },
+  ): Record<string, { title: string; url: string }> =>
+    configType === 'DEVELOPMENT'
+      ? {
+          'web-components': {
+            title: 'Web Components',
+            url: 'http://localhost:6007',
+          },
+        }
+      : {},
   // Components are consumed as BUILT packages (dist/index.js + dist/index.css),
   // resolved via the workspace node_modules symlinks — not remapped to source —
   // so their CSS-Module classes match the bundled stylesheet.
