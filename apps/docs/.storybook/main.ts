@@ -20,7 +20,10 @@ const config: StorybookConfig = {
   // Storybook Composition (ADR-0001): the Web Components catalog runs as its
   // own Storybook (apps/docs-web-components, port 6007). Only composed in
   // development until the Pages workflow publishes that build too.
-  refs: (_config, { configType }) =>
+  refs: (
+    _config,
+    { configType },
+  ): Record<string, { title: string; url: string }> =>
     configType === 'DEVELOPMENT'
       ? {
           'web-components': {

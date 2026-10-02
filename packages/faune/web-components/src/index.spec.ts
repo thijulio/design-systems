@@ -11,11 +11,12 @@ describe('@thijulio/faune-web-components', () => {
     }
   });
 
-  it('registers the tj-* tags once defineCustomElements() runs', () => {
+  it('registers each tj-* tag through its define helper', () => {
     expect(customElements.get('tj-button')).toBeUndefined();
-    faune.defineCustomElements();
+    faune.defineCustomElementTjButton();
+    faune.defineCustomElementTjInput();
     // Idempotent: Stencil skips tags that are already defined.
-    expect(() => faune.defineCustomElements()).not.toThrow();
+    expect(() => faune.defineCustomElementTjButton()).not.toThrow();
     expect(customElements.get('tj-button')).toBeDefined();
     expect(customElements.get('tj-input')).toBeDefined();
   });

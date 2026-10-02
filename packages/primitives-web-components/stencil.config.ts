@@ -8,7 +8,9 @@ export const config: Config = {
     {
       type: 'dist-custom-elements',
       dir: 'dist/components',
-      customElementsExportBehavior: 'bundle',
+      // Framework adapters (Angular standalone, Vue) import one module per
+      // element from ./components/*; Angular standalone requires this mode.
+      customElementsExportBehavior: 'single-export-module',
       externalRuntime: false,
       generateTypeDeclarations: true,
     },
