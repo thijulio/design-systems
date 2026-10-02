@@ -153,24 +153,31 @@ export async function buildBrandTokens(
     await readFile(manifestPath, 'utf-8'),
   ) as TokenManifest;
   for (let i = 0; i < themes.length; i++) {
-    await new StyleDictionary(
-      createThemeConfig(options, themes[i], i),
-    ).buildAllPlatforms();
-
     const tempPath = join(buildPath, themeTempFile(i));
-    const overlay = stripHeader(await readFile(tempPath, 'utf-8'));
-    await appendFile(tokensCss, `\n${overlay}`);
-    await rm(tempPath);
-
     const manifestTemp = join(buildPath, themeManifestTempFile(i));
-    manifest.themes.push({
-      name: names[i],
-      selector: themes[i].selector,
-      tokens: JSON.parse(
-        await readFile(manifestTemp, 'utf-8'),
-      ) as ManifestToken[],
-    });
-    await rm(manifestTemp);
+    try {
+      await new StyleDictionary(
+        createThemeConfig(options, themes[i], i),
+      ).buildAllPlatforms();
+
+      const overlay = stripHeader(await readFile(tempPath, 'utf-8'));
+      await appendFile(tokensCss, `\n${overlay}`);
+
+      manifest.themes.push({
+        name: names[i],
+        selector: themes[i].selector,
+        tokens: JSON.parse(
+          await readFile(manifestTemp, 'utf-8'),
+        ) as ManifestToken[],
+      });
+    } finally {
+      // dist ships as-is (`files: ["dist"]`): never leave temps behind, even
+      // when a theme build throws.
+      await Promise.all([
+        rm(tempPath, { force: true }),
+        rm(manifestTemp, { force: true }),
+      ]);
+    }
   }
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 

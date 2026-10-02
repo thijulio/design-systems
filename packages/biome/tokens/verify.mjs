@@ -154,22 +154,33 @@ const canonicalColor = (value) => {
     ? `#${short[1]}${short[1]}${short[2]}${short[2]}${short[3]}${short[3]}`
     : v;
 };
-for (const token of manifest.tokens) {
-  const leaf = new Function('tokens', `return ${token.native.accessor};`)(
-    nativeTree,
-  );
-  assert.notEqual(
-    leaf,
-    undefined,
-    `${token.native.accessor} is not in native/tokens.js`,
-  );
-  if (token.kind === 'color') {
-    assert.equal(
-      canonicalColor(leaf),
-      canonicalColor(token.value),
-      `${token.native.accessor} ≠ ${token.name}`,
+const expectAccessors = (tokens, tree, file) => {
+  for (const token of tokens) {
+    const leaf = new Function('tokens', `return ${token.native.accessor};`)(
+      tree,
     );
+    assert.notEqual(
+      leaf,
+      undefined,
+      `${token.native.accessor} is not in ${file}`,
+    );
+    if (token.kind === 'color') {
+      assert.equal(
+        canonicalColor(leaf),
+        canonicalColor(token.value),
+        `${file}: ${token.native.accessor} ≠ ${token.name}`,
+      );
+    }
   }
+};
+expectAccessors(manifest.tokens, nativeTree, 'native/tokens.js');
+// Theme entries (including theme-only tokens) resolve in that theme's RN overlay.
+for (const theme of manifest.themes) {
+  const file = `native/themes/${theme.name}.js`;
+  const { default: themeTree } = await import(
+    pathToFileURL(join(dist, file)).href
+  );
+  expectAccessors(theme.tokens, themeTree, file);
 }
 
 assert.deepEqual(

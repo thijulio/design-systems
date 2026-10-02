@@ -96,6 +96,17 @@ describe('manifestTokens', () => {
     ).toEqual(['--x', '--c']);
   });
 
+  it('finds references inside object-valued (composite) tokens', () => {
+    const color = token('c', ['c'], '#000');
+    const shadow = {
+      ...token('shadow', ['shadow'], '0 1px 2px #000'),
+      original: { value: { offsetY: '1px', color: '{c}' } },
+    } as unknown as TransformedToken;
+    expect(manifestTokens(dictionary([shadow, color]))[0].references).toEqual([
+      '--c',
+    ]);
+  });
+
   it('ignores brace text that names no token', () => {
     const odd = token('odd', ['odd'], 'url({nope})');
     expect(manifestTokens(dictionary([odd]))[0].references).toEqual([]);
@@ -110,6 +121,8 @@ describe('nativeAccessor', () => {
     [['ds', 'surface-raised'], "tokens.ds['surface-raised']"],
     [['size', '2xl'], "tokens.size['2xl']"],
     [['bm', 'bone'], 'tokens.bm.bone'],
+    [["it's"], "tokens['it\\'s']"],
+    [['back\\slash'], "tokens['back\\\\slash']"],
   ])(
     'maps %j to %s, the key buildTree nests the RN token tree by',
     (path, expected) => {

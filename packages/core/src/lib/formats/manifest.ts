@@ -64,7 +64,7 @@ const KIND: Record<Normalized['kind'], ManifestKind> = {
   opaque: 'other',
 };
 
-const REFERENCE_RE = /\{([^}]+)\}/g;
+const REFERENCE_RE = /\{([^{}]+)\}/g;
 const IDENTIFIER_RE = /^[A-Za-z_$][\w$]*$/;
 
 /**
@@ -74,7 +74,9 @@ const IDENTIFIER_RE = /^[A-Za-z_$][\w$]*$/;
 export function nativeAccessor(path: string[]): string {
   return path.reduce(
     (expr, seg) =>
-      IDENTIFIER_RE.test(seg) ? `${expr}.${seg}` : `${expr}['${seg}']`,
+      IDENTIFIER_RE.test(seg)
+        ? `${expr}.${seg}`
+        : `${expr}['${seg.replace(/[\\']/g, '\\$&')}']`,
     'tokens',
   );
 }
@@ -99,7 +101,9 @@ function toEntry(
   lookup: Map<string, TransformedToken>,
 ): ManifestToken {
   const value = String(token.value);
-  const original = String(token.original.value ?? '');
+  // Composite (object-valued) tokens keep their references inside the object.
+  const raw: unknown = token.original.value;
+  const original = typeof raw === 'string' ? raw : JSON.stringify(raw ?? '');
   const references = [...original.matchAll(REFERENCE_RE)]
     .map(([, ref]) => lookup.get(ref))
     .filter((t): t is TransformedToken => t !== undefined)
