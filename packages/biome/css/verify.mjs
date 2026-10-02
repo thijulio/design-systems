@@ -1,23 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
+import { verifyFonts } from '@thijulio/core';
+import { fonts } from './fonts.config.mjs';
 
-const css = await readFile(
-  join(import.meta.dirname, 'dist', 'biome.css'),
-  'utf-8',
-);
+const here = import.meta.dirname;
+const dist = join(here, 'dist');
+const css = await readFile(join(dist, 'biome.css'), 'utf-8');
 
-// The @import must be the first statement — only comments/whitespace may precede it.
-// Strip CSS comments first so a semicolon inside a comment isn't mistaken for a rule.
-const beforeImport = css
-  .slice(0, css.indexOf('@import'))
-  .replace(/\/\*[\s\S]*?\*\//g, '');
-assert.ok(
-  !/[{;]/.test(beforeImport),
-  '@import is not first in the bundle — invalid CSS ordering',
-);
-
-assert.match(css, /fonts\.googleapis\.com/, 'font @import missing');
 assert.match(css, /:root \{/, 'token vars not bundled');
 assert.match(css, /\[data-mode="dark"\]/, 'dark block not bundled');
 assert.match(
@@ -27,5 +17,10 @@ assert.match(
 );
 assert.match(css, /@keyframes bm-breath/, 'motion keyframes missing');
 assert.match(css, /:focus-visible/, 'focus ring missing');
+
+// Self-hosted fonts: no http(s) URL in any served file; every url()/@import
+// resolves inside dist; every family × style × weight has a latin and a
+// latin-ext face (font-display: swap) leading the bundle; OFL licences ship.
+await verifyFonts({ packageRoot: here, dist, bundle: 'biome.css', fonts });
 
 console.log('✓ @thijulio/biome-css output verified');

@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./biome.css": "./dist/biome.css",
+    "./fonts/*": "./dist/fonts/*",
     "./package.json": "./package.json"
   },
   "files": [
@@ -15,7 +16,12 @@
     "test": "node verify.mjs"
   },
   "devDependencies": {
-    "@thijulio/biome-tokens": "*"
+    "@fontsource-variable/newsreader": "5.3.0",
+    "@fontsource-variable/space-grotesk": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@fontsource/spectral": "5.3.0",
+    "@thijulio/biome-tokens": "*",
+    "@thijulio/core": "*"
   },
   "nx": {
     "name": "biome-css",
