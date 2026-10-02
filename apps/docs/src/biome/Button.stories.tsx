@@ -56,4 +56,18 @@ export const Disabled: Story = {
 };
 export const Dark: Story = {
   globals: { mode: 'dark' },
+  // Scope dark mode on the story itself too: the `mode` global only reaches
+  // <html> through the toolbar decorator, which docs pages and compiled
+  // previews (design-sync) don't run. biome.css keys dark tokens on any
+  // [data-mode="dark"] ancestor.
+  decorators: [
+    (Story) => (
+      <div
+        data-mode="dark"
+        style={{ background: 'var(--surface-page)', padding: 'var(--space-4)' }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
 };

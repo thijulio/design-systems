@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Decorator, Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Button } from '@thijulio/exodus-react';
 
@@ -58,9 +58,23 @@ export const Disabled: Story = {
     await expect(args.onClick).not.toHaveBeenCalled();
   },
 };
+// Scope the accent on the story itself too: the `accent` global only reaches
+// <html> through the toolbar decorator, which docs pages and compiled
+// previews (design-sync) don't run. exodus.css keys accent themes on any
+// [data-theme] ancestor.
+const withAccent =
+  (theme: 'clay' | 'harbor'): Decorator =>
+  (Story) => (
+    <div data-theme={theme}>
+      <Story />
+    </div>
+  );
+
 export const Clay: Story = {
   globals: { accent: 'clay' },
+  decorators: [withAccent('clay')],
 };
 export const Harbor: Story = {
   globals: { accent: 'harbor' },
+  decorators: [withAccent('harbor')],
 };
