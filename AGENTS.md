@@ -162,13 +162,50 @@ Token JSON authoring rules (relied upon — do not "fix"):
 - The CSS `prefix` option applies to the CSS platform only (JS token names stay
   prefix-free); most brands leave it unset and encode any namespace in paths.
 
+## Token manifest & generated color catalog
+
+Every tokens package also builds and exports `dist/tokens.manifest.json`
+(`@thijulio/<brand>-tokens/tokens.manifest.json`), a machine-readable index of
+every token: `{ name, path, source, value, references, kind, native: { accessor } }`
+plus `themes: [{ name, selector, tokens }]`.
+
+- **Where it comes from:** `packages/core/src/lib/formats/manifest.ts`. It's built
+  with the CSS transforms and `prefix`, so `name` is the exact custom property.
+  `kind` comes from the shared `normalize()` classifier, and `native.accessor`
+  is the React Native expression into `@thijulio/<brand>-tokens/native`
+  (`tokens.n['500']`, `tokens.ds.brand`). Bump `MANIFEST_VERSION` on any
+  breaking shape change; the docs catalog rejects versions it doesn't know.
+- **What `verify.mjs` guarantees:** manifest names equal the custom properties
+  declared in each `tokens.css` block (`:root` and every theme selector), and
+  every RN accessor, evaluated as written, resolves in `native/tokens.js`
+  (colors to the same color).
+- **Storybook:** each brand's `Foundations → Colors` story renders
+  `apps/docs/src/_foundations/ColorCatalog.tsx` from its manifest. Every color
+  token gets a card with its Web name (`var(--name)`) and RN accessor, both
+  copyable, plus value, alias and per-theme overrides. The story only declares
+  editorial sections (`title`, `description`, `match`); the first match wins.
+  A new color token no section claims shows under **Uncategorized**: add or
+  extend a matcher. Human labels go in the story's `notes`, keyed by CSS name;
+  the play test fails on notes for tokens that no longer exist.
+- **Web Components** (ADR-0001) read the same inherited `var(--ds-*)` / brand
+  vars, so the Web names in the catalog apply to them unchanged.
+- **Testing:** `nx test-storybook docs` runs two Vitest projects, `unit` (node,
+  `src/**/*.spec.ts`, e.g. `_foundations/token-manifest.spec.ts`) and
+  `storybook` (browser). The catalog stories use `colorCatalogParameters`,
+  which turns off **only** axe's `color-contrast` rule. That rule took ~12.5s
+  of a ~16s run on the 95-swatch Exodus catalog. Instead, the play
+  (`expectCompleteColorCatalog`) asserts WCAG AA for every text element
+  against its effective background, compositing translucent text. Don't
+  disable it for other stories.
+
 ## Package conventions
 
 **tokens package** — package.json-based, NO tsconfig/tsc. Structure:
 `src/tokens/*.json` (base), `src/themes/<name>/*.json` (overlays), `build.mjs`
 (imports `@thijulio/core`, uses `import.meta.dirname`), `verify.mjs` (node:assert
 on the built output). `package.json`: `type: module`, exports `.`→`dist/tokens.js`
-(+`.d.ts`) and `./tokens.css`→`dist/tokens.css`, `files: ["dist"]`, devDep
+(+`.d.ts`), `./tokens.css`→`dist/tokens.css` and
+`./tokens.manifest.json`→`dist/tokens.manifest.json`, `files: ["dist"]`, devDep
 `@thijulio/core: "*"`, nx targets `build` (`node {projectRoot}/build.mjs`,
 `dependsOn: ["^build"]`, `outputs: ["{projectRoot}/dist"]`) and `test`
 (`node {projectRoot}/verify.mjs`, `dependsOn: ["build"]`).
