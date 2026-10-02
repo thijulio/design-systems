@@ -20,6 +20,7 @@ import {
 @Component({
   tag: 'tj-input',
   styleUrls: [
+    '../../styles/shadow-reset.css',
     '../../../../primitives/src/lib/Input/Input.module.css',
     'tj-input.css',
   ],

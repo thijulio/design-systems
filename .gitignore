@@ -63,3 +63,6 @@ apps/docs/test-results
 .design-sync/*.log
 .ds-sync/
 ds-bundle/
+
+# Stencil build cache
+.stencil/

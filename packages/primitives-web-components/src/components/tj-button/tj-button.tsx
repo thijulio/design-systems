@@ -30,6 +30,7 @@ const VARIANT_CLASS: Record<ButtonVariant, string> = {
 @Component({
   tag: 'tj-button',
   styleUrls: [
+    '../../styles/shadow-reset.css',
     '../../../../primitives/src/lib/Button/Button.module.css',
     'tj-button.css',
   ],
