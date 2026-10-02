@@ -34,6 +34,20 @@
       "version": {
         "preserveMatchingDependencyRanges": false
       }
+    },
+    "targets": {
+      "typecheck": {
+        "inputs": [
+          "default",
+          "{workspaceRoot}/tsconfig.base.json",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ]
+      }
     }
   },
   "publishConfig": {
