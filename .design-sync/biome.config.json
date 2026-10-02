@@ -13,5 +13,6 @@
       "primaryStory": "Default",
       "viewport": "1280x820"
     }
-  }
+  },
+  "extraFonts": ["../css/dist/biome.css"]
 }

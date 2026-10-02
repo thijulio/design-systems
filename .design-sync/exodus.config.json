@@ -6,5 +6,6 @@
   "storybookConfigDir": "apps/docs/.storybook-exodus",
   "buildCmd": "npx nx run-many -t build --projects tag:scope:exodus",
   "tokensPkg": "@thijulio/exodus-css",
-  "readmeHeader": ".design-sync/exodus.conventions.md"
+  "readmeHeader": ".design-sync/exodus.conventions.md",
+  "extraFonts": ["../css/dist/exodus.css"]
 }

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { Preview, Decorator } from '@storybook/react-vite';
 // Biome-scoped design-sync reference config — component styles from the built
 // biome package (hash-scoped classes match the bundled stylesheet).
+import '@thijulio/primitives/styles.css';
 import '@thijulio/biome-react/styles.css';
 // Token + base CSS as a string, injected per story.
 import biomeCss from '@thijulio/biome-css/biome.css?inline';

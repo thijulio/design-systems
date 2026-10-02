@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { Preview, Decorator } from '@storybook/react-vite';
 // Exodus-scoped design-sync reference config — component styles from the built
 // exodus package (hash-scoped classes match the bundled stylesheet).
+import '@thijulio/primitives/styles.css';
 import '@thijulio/exodus-react/styles.css';
 // Token + base CSS as a string, injected per story.
 import exodusCss from '@thijulio/exodus-css/exodus.css?inline';
