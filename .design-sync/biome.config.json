@@ -1,0 +1,18 @@
+{
+  "projectId": "f9ab4b18-4451-4f23-a084-1d628aaa271e",
+  "pkg": "@thijulio/biome-react",
+  "shape": "storybook",
+  "storybookStatic": ".design-sync/sb-reference",
+  "storybookConfigDir": "apps/docs/.storybook-biome",
+  "buildCmd": "npx nx run-many -t build --projects tag:scope:biome",
+  "tokensPkg": "@thijulio/biome-css",
+  "readmeHeader": ".design-sync/biome.conventions.md",
+  "overrides": {
+    "TerminalHero": {
+      "cardMode": "single",
+      "primaryStory": "Default",
+      "viewport": "1280x820"
+    }
+  },
+  "extraFonts": ["../css/dist/biome.css"]
+}

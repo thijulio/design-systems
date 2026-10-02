@@ -54,3 +54,12 @@ vite.config.*.timestamp*
 
 storybook-static
 apps/docs/test-results
+
+# design-sync (repo -> Claude Design) scratch — see .design-sync/*.NOTES.md
+.design-sync/sb-reference*/
+.design-sync/learnings/
+.design-sync/.cache/
+.design-sync/node_modules
+.design-sync/*.log
+.ds-sync/
+ds-bundle/

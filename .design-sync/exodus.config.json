@@ -1,0 +1,11 @@
+{
+  "projectId": "6b197fe5-87b8-4631-9ba2-b8f702fcc603",
+  "pkg": "@thijulio/exodus-react",
+  "shape": "storybook",
+  "storybookStatic": ".design-sync/sb-reference-exodus",
+  "storybookConfigDir": "apps/docs/.storybook-exodus",
+  "buildCmd": "npx nx run-many -t build --projects tag:scope:exodus",
+  "tokensPkg": "@thijulio/exodus-css",
+  "readmeHeader": ".design-sync/exodus.conventions.md",
+  "extraFonts": ["../css/dist/exodus.css"]
+}
