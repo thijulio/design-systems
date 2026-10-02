@@ -75,7 +75,7 @@ target, not a source; nothing in it is authored back into this repo.
 packages/
   core/            @thijulio/core — Style Dictionary token build harness (scope:core)
   fonts/           @thijulio/fonts — webfont self-hosting build + verify (scope:core)
-  primitives/      @thijulio/primitives — Button, Card, Tag, Badge, Avatar, Input, Eyebrow (scope:shared)
+  primitives/      @thijulio/primitives — Button, Card, Tag, Badge, Avatar, Input (+Textarea, Select), Eyebrow (scope:shared)
   biome/
     tokens/        @thijulio/biome-tokens — SD JSON → tokens.css (+ .js/.d.ts)
     css/           @thijulio/biome-css    → dist/biome.css (reset+base+motion)
@@ -100,7 +100,7 @@ New generic components belong in `@thijulio/primitives`, styled against the
 `--ds-*` contract. Existing brand React packages retain their public APIs while
 overlapping components migrate incrementally. Biome `Button`, `Tag`, and the
 `Card` root delegate to primitives; Card retains its editorial content and arcs.
-Exodus `Button`, `Card`, `Badge`, `Avatar`, `Input`, and `Textarea` delegate to
+Exodus `Button`, `Card`, `Badge`, `Avatar`, `Input`, `Textarea`, and `Select` delegate to
 primitives. Local CSS-variable skins retain their native tokens, metrics, and
 consumer class overrides without requiring an immediate stylesheet upgrade.
 Only genuinely brand-specific components should be added to brand React
