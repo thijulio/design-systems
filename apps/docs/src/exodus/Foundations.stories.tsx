@@ -1,5 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactNode } from 'react';
+import exodusTokens from '@thijulio/exodus-tokens/tokens.manifest.json';
+import { ColorCatalog } from '../_foundations/ColorCatalog';
+import {
+  isSemanticColor,
+  type ColorSection,
+  type TokenManifest,
+} from '../_foundations/token-manifest';
+import {
+  expectCompleteColorCatalog,
+  expectCopyInteraction,
+} from '../_test/catalog';
+
+const manifest: TokenManifest = exodusTokens;
 
 const meta: Meta = { title: 'Exodus/Foundations' };
 export default meta;
@@ -38,168 +51,58 @@ function Section({
   );
 }
 
-function Swatch({
-  name,
-  bg,
-  hex,
-  usage,
-  fg = 'var(--n-800)',
-}: {
-  name: string;
-  bg: string;
-  hex?: string;
-  usage?: string;
-  fg?: string;
-}) {
-  return (
-    <div
-      style={{
-        borderRadius: 'var(--radius-lg)',
-        overflow: 'hidden',
-        border: '1px solid var(--n-200)',
-        background: '#fff',
-      }}
-    >
-      <div style={{ height: 76, background: bg }} />
-      <div style={{ padding: '9px 11px' }}>
-        <div style={{ fontWeight: 700, color: fg, fontSize: 13 }}>{name}</div>
-        {(hex || usage) && (
-          <div style={{ fontSize: 12, color: 'var(--n-600)' }}>
-            {[hex, usage].filter(Boolean).join(' · ')}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+const SECTIONS: ColorSection[] = [
+  {
+    title: 'Accent — theme-driven',
+    description:
+      'The brand ramp reskins per data-theme (Sage default). Switch theme in the toolbar; see Themes.',
+    match: (t) => t.name.startsWith('--accent'),
+  },
+  {
+    title: 'Neutrals — warm stone',
+    description:
+      'Warm, not cool grey. Surfaces 50/100, borders 200/300, text 700/900.',
+    match: (t) => t.name.startsWith('--n-'),
+  },
+  {
+    title: 'Semantics — fixed meaning',
+    description:
+      'success / warning / danger / info. Never reskin with the accent theme.',
+    match: isSemanticColor,
+  },
+  {
+    title: 'Status tones — 7 fixed',
+    description:
+      "Lifecycle states map onto these; a state's colour never themes.",
+    match: (t) => t.name.startsWith('--tone-'),
+  },
+  {
+    title: 'Contract — --ds-*',
+    description:
+      'What @thijulio/primitives reads. Each aliases an Exodus token above.',
+    match: (t) => t.source === 'contract.json',
+  },
+];
 
-function Grid({ min = 130, children }: { min?: number; children: ReactNode }) {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(auto-fill, minmax(${min}px, 1fr))`,
-        gap: 10,
-        maxWidth: 760,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-const NEUTRALS = [
-  ['50', '#f8f7f5'],
-  ['100', '#f0eeea'],
-  ['200', '#e3e0d9'],
-  ['300', '#cbc6bb'],
-  ['400', '#a8a294'],
-  ['500', '#847d6e'],
-  ['600', '#696255'],
-  ['700', '#524d43'],
-  ['800', '#3a3730'],
-  ['900', '#26241f'],
-] as const;
-
-const SEMANTICS = [
-  ['success', '#3f8f5b'],
-  ['warning', '#b9821f'],
-  ['danger', '#c0492f'],
-  ['info', '#3a6ea5'],
-] as const;
-
-const TONES = ['neutral', 'amber', 'blue', 'green', 'teal', 'violet', 'red'];
+const NOTES: Record<string, string> = {
+  '--accent-soft': 'tint bg',
+  '--accent': 'primary fill',
+  '--accent-strong': 'hover',
+};
 
 export const Colors: Story = {
+  play: async ({ canvasElement }) => {
+    await expectCompleteColorCatalog(canvasElement, manifest, NOTES);
+    await expectCopyInteraction(canvasElement, 'var(--accent)');
+    await expectCopyInteraction(canvasElement, 'tokens.accent');
+  },
   render: () => (
-    <div>
-      <Section
-        title="Accent — theme-driven"
-        desc="The brand ramp reskins per data-theme (Sage default). See Themes."
-      >
-        <Grid>
-          <Swatch name="accent-soft" bg="var(--accent-soft)" usage="tint bg" />
-          <Swatch
-            name="accent"
-            bg="var(--accent)"
-            usage="primary fill"
-            fg="var(--n-900)"
-          />
-          <Swatch
-            name="accent-strong"
-            bg="var(--accent-strong)"
-            usage="hover"
-          />
-        </Grid>
-      </Section>
-
-      <Section
-        title="Neutrals — warm stone"
-        desc="Warm, not cool grey. Surfaces 50/100, borders 200/300, text 700/900."
-      >
-        <Grid min={92}>
-          {NEUTRALS.map(([step, hex]) => (
-            <Swatch
-              key={step}
-              name={`n-${step}`}
-              bg={`var(--n-${step})`}
-              hex={hex}
-            />
-          ))}
-        </Grid>
-      </Section>
-
-      <Section
-        title="Semantics — fixed meaning"
-        desc="success / warning / danger / info. Never reskin with the accent theme."
-      >
-        <Grid>
-          {SEMANTICS.map(([name, hex]) => (
-            <Swatch
-              key={name}
-              name={name}
-              bg={`var(--${name})`}
-              hex={hex}
-              fg="var(--n-900)"
-            />
-          ))}
-        </Grid>
-      </Section>
-
-      <Section
-        title="Status tones — 7 fixed"
-        desc="Lifecycle states map onto these; a state's colour never themes."
-      >
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {TONES.map((t) => (
-            <span
-              key={t}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 7,
-                padding: '5px 12px',
-                borderRadius: 'var(--radius-full)',
-                background: `var(--tone-${t}-soft)`,
-                color: `var(--tone-${t}-fg)`,
-                fontSize: 13,
-                fontWeight: 600,
-              }}
-            >
-              <span
-                style={{
-                  width: 7,
-                  height: 7,
-                  borderRadius: '50%',
-                  background: `var(--tone-${t}-dot)`,
-                }}
-              />
-              {t}
-            </span>
-          ))}
-        </div>
-      </Section>
-    </div>
+    <ColorCatalog
+      brand="exodus"
+      manifest={manifest}
+      sections={SECTIONS}
+      notes={NOTES}
+    />
   ),
 };
 
