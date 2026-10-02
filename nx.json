@@ -85,6 +85,7 @@
       "exodus-react",
       "faune-tokens",
       "faune-css",
+      "faune-react",
       "primitives"
     ],
     "projectsRelationship": "independent",

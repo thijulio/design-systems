@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Avatar } from '@thijulio/primitives';
+import { Avatar } from '@thijulio/faune-react';
 import { expect, within } from 'storybook/test';
 import { contrastRatio } from '../_test/contrast';
 

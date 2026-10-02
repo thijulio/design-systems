@@ -87,6 +87,7 @@ packages/
   faune/
     tokens/        @thijulio/faune-tokens — palette + contract → tokens.css
     css/           @thijulio/faune-css    → dist/faune.css
+    react/         @thijulio/faune-react  — re-exports every primitive (no wrappers)
 apps/
   docs/            Storybook (SB 10, react-vite) — all brands, theme toolbar (scope:docs)
 ```
@@ -105,6 +106,14 @@ primitives. Local CSS-variable skins retain their native tokens, metrics, and
 consumer class overrides without requiring an immediate stylesheet upgrade.
 Only genuinely brand-specific components should be added to brand React
 packages (e.g. Biome's `TerminalHero`).
+
+**Every brand has the same shape: `<brand>-tokens → <brand>-css → <brand>-react`.**
+Consumers always import components from `@thijulio/<brand>-react`, never from
+primitives directly. Faune is the target state: `faune-react` re-exports the
+primitives with no wrappers, because its tokens implement the `--ds-*` contract
+natively. Biome and Exodus wrappers (compatibility skins) are a migration bridge
+and should shrink toward that, component by component. Brands keep different
+component _sets_ and themes; only the structure is uniform.
 
 ## The token pipeline (how tokens become CSS + TS)
 
@@ -212,8 +221,9 @@ guarantee. Downstream css/react rebuild via the Nx graph.
 **Add a theme:** add `src/themes/<name>/*.json` (only the tokens that change) and
 a `theme('<name>')` entry in the brand's `build.mjs` with the right selector.
 
-**Add a brand that uses shared components:** map its source tokens to `--ds-*`
-in `src/tokens/contract.json`, add its CSS bundle to Storybook's brand registry,
+**Add a brand that uses shared components:** create its `tokens`, `css`, and
+`react` packages (copy `packages/faune/*` — `react` starts as a re-export of the
+primitives), map its source tokens to `--ds-*` in `src/tokens/contract.json`, add its CSS bundle to Storybook's brand registry,
 and add it to `apps/docs/verify-contract.mjs`. See
 `docs/architecture/multi-brand-primitives.md`. `nx verify-contract docs` checks
 the variables consumed by primitives; Storybook tests check actual themed
@@ -248,9 +258,9 @@ pre-commit hook** (`.github/release-hooks/pre-commit`, wired via
 nx writes CHANGELOG.md without a final newline, which failed the next CI
 `nx format:check` on main — and an explicit **`git push --follow-tags`** (nx
 release commits & tags locally but does **not** push). Use `dry_run=true` to preview versions without publishing. Versions are
-resolved from the `<pkg>@<version>` git tags, so never delete them. The three
-new Faune/primitives projects have a scoped disk fallback for their initial
-release; existing projects still require their tags. Biome and Exodus React allow Nx
+resolved from the `<pkg>@<version>` git tags, so never delete them. The new
+Faune/primitives projects (including `faune-react`) have a scoped disk fallback
+for their initial release; existing projects still require their tags. Biome and Exodus React allow Nx
 to update its primitives dependency range during versioning. Use the normal
 dry run (`first_release=false`) for this mixed group. The Storybook Pages site
 redeploys automatically on push to `main` (`storybook-pages.yml`).

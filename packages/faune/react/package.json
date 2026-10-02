@@ -1,0 +1,70 @@
+{
+  "name": "@thijulio/faune-react",
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/index.css"
+  },
+  "nx": {
+    "name": "faune-react",
+    "tags": [
+      "scope:faune"
+    ],
+    "release": {
+      "version": {
+        "fallbackCurrentVersionResolver": "disk",
+        "preserveMatchingDependencyRanges": false
+      }
+    },
+    "targets": {
+      "typecheck": {
+        "inputs": [
+          "default",
+          "{workspaceRoot}/tsconfig.base.json",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "dependsOn": [
+          "^typecheck",
+          "^build"
+        ]
+      }
+    }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/faune/react"
+  },
+  "dependencies": {
+    "@thijulio/primitives": "^0.0.3"
+  }
+}

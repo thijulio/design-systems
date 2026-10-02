@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Input, Textarea } from '@thijulio/primitives';
+import { Input, Textarea } from '@thijulio/faune-react';
 
 const meta: Meta<typeof Input> = {
   title: 'Faune/Components/Input',

@@ -19,6 +19,9 @@
     },
     {
       "path": "../../packages/biome/react/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/faune/react/tsconfig.lib.json"
     }
   ],
   "exclude": [

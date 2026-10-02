@@ -89,6 +89,7 @@
     "@thijulio/exodus-react": "*",
     "@thijulio/exodus-tokens": "*",
     "@thijulio/faune-css": "*",
+    "@thijulio/faune-react": "*",
     "@thijulio/faune-tokens": "*",
     "@thijulio/primitives": "*"
   }

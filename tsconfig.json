@@ -13,6 +13,9 @@
       "path": "./packages/exodus/react"
     },
     {
+      "path": "./packages/faune/react"
+    },
+    {
       "path": "./apps/docs"
     },
     {
