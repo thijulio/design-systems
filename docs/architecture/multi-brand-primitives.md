@@ -7,11 +7,11 @@ a brand package. Biome, Exodus, and Faune all implement this web contract.
 
 ## Current adoption
 
-| Brand  | Shared implementation                        | Brand-owned composition                               |
-| ------ | -------------------------------------------- | ----------------------------------------------------- |
-| Biome  | Button, Tag, Card root                       | Editorial Card content/arcs, ModeToggle, TerminalHero |
-| Exodus | Button, Card, Badge, Avatar, Input, Textarea | Existing non-migrated components                      |
-| Faune  | Direct consumption of all primitives         | Domain-specific pieces belong in the consuming site   |
+| Brand  | Shared implementation                                | Brand-owned composition                               |
+| ------ | ---------------------------------------------------- | ----------------------------------------------------- |
+| Biome  | Button, Tag, Card root                               | Editorial Card content/arcs, ModeToggle, TerminalHero |
+| Exodus | Button, Card, Badge, Avatar, Input, Textarea, Select | Existing non-migrated components                      |
+| Faune  | Direct consumption of all primitives                 | Domain-specific pieces belong in the consuming site   |
 
 Existing Biome and Exodus import paths, props, defaults, and consumer styles
 remain supported. Their wrappers adapt brand choices rather than reimplement

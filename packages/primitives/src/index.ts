@@ -13,8 +13,8 @@ export type { BadgeProps, BadgeTone } from './lib/Badge/Badge';
 export { Avatar } from './lib/Avatar/Avatar';
 export type { AvatarProps, AvatarTone } from './lib/Avatar/Avatar';
 
-export { Input, Textarea } from './lib/Input/Input';
-export type { InputProps, TextareaProps } from './lib/Input/Input';
+export { Input, Select, Textarea } from './lib/Input/Input';
+export type { InputProps, SelectProps, TextareaProps } from './lib/Input/Input';
 
 export { Eyebrow } from './lib/Eyebrow/Eyebrow';
 export type { EyebrowProps } from './lib/Eyebrow/Eyebrow';

@@ -1,4 +1,9 @@
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import type {
+  InputHTMLAttributes,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from 'react';
 import { cx } from '../_util/style';
 import styles from './Input.module.css';
 
@@ -35,5 +40,48 @@ export function Textarea({ className, invalid, ...props }: TextareaProps) {
       aria-invalid={invalid || undefined}
       {...props}
     />
+  );
+}
+
+export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  invalid?: boolean;
+  children?: ReactNode;
+}
+
+/** Select — native select with the Input skin and a custom chevron. */
+export function Select({
+  className,
+  invalid,
+  children,
+  ...props
+}: SelectProps) {
+  return (
+    <div className={styles.selectWrap}>
+      <select
+        className={cx(
+          styles.input,
+          styles.select,
+          invalid && styles.invalid,
+          className,
+        )}
+        aria-invalid={invalid || undefined}
+        {...props}
+      >
+        {children}
+      </select>
+      <svg
+        className={styles.chevron}
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        aria-hidden="true"
+      >
+        <path d="M6 9l6 6 6-6" />
+      </svg>
+    </div>
   );
 }
