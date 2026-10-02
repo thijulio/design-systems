@@ -46,6 +46,10 @@
               "typescript"
             ]
           }
+        ],
+        "dependsOn": [
+          "^typecheck",
+          "^build"
         ]
       }
     }

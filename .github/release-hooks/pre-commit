@@ -1,0 +1,16 @@
+#!/bin/sh
+# Release-only pre-commit hook. release.yml points git at this directory
+# (`git config core.hooksPath .github/release-hooks`); husky is off there
+# (HUSKY=0), so this is the only hook nx release's commit runs.
+#
+# nx release prettier-formats the package.json/lockfile it versions, but writes
+# CHANGELOG.md files unformatted (no final newline), which would fail the next
+# CI `nx format:check` on main. Format everything nx staged and re-stage it, so
+# the fix lands in nx's own release commit — the one its tags point at.
+set -eu
+
+files=$(git diff --cached --name-only --diff-filter=ACMR | paste -sd, -)
+[ -z "$files" ] && exit 0
+
+npx nx format:write --files="$files"
+git diff --cached --name-only --diff-filter=ACMR | xargs git add --
