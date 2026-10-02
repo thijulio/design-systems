@@ -3,6 +3,20 @@ import type { CSSProperties, ReactNode } from 'react';
 import { expect, waitFor, within } from 'storybook/test';
 import { contrastRatio } from '../_test/contrast';
 import { hoverInBrowserTest } from '../_test/hover';
+import fauneTokens from '@thijulio/faune-tokens/tokens.manifest.json';
+import { ColorCatalog } from '../_foundations/ColorCatalog';
+import {
+  isSemanticColor,
+  type ColorSection,
+  type TokenManifest,
+} from '../_foundations/token-manifest';
+import {
+  colorCatalogParameters,
+  expectCompleteColorCatalog,
+  expectCopyInteraction,
+} from '../_test/catalog';
+
+const manifest: TokenManifest = fauneTokens;
 
 const meta: Meta = { title: 'Faune/Foundations' };
 export default meta;
@@ -47,136 +61,36 @@ function Section({
   );
 }
 
-function Swatch({ name, bg, hex }: { name: string; bg: string; hex?: string }) {
-  return (
-    <div
-      style={{
-        borderRadius: 'var(--radius-md)',
-        overflow: 'hidden',
-        border: '1px solid var(--line)',
-        background: 'var(--cream)',
-      }}
-    >
-      <div style={{ height: 76, background: bg }} />
-      <div style={{ padding: '9px 11px' }}>
-        <div style={{ fontWeight: 700, color: 'var(--ink)', fontSize: 13 }}>
-          {name}
-        </div>
-        {hex && (
-          <div style={{ fontSize: 12, color: 'var(--ink-muted)' }}>{hex}</div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function Grid({ min = 130, children }: { min?: number; children: ReactNode }) {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(auto-fill, minmax(${min}px, 1fr))`,
-        gap: 10,
-        maxWidth: 760,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-const BRAND = [
-  ['ink', '#183d3c', 'var(--ink)'],
-  ['coral', '#e56c50', 'var(--coral)'],
-  ['yellow', '#e7c35b', 'var(--yellow)'],
-  ['sage', '#b6c8b2', 'var(--sage)'],
-  ['paper', '#f7f4ed', 'var(--paper)'],
-  ['cream', '#fffdf8', 'var(--cream)'],
-] as const;
-
-const SEMANTICS = [
-  ['success', '#31715e'],
-  ['warning', '#b9821f'],
-  ['danger', '#bf4833'],
-  ['info', '#3b6964'],
-] as const;
+const SECTIONS: ColorSection[] = [
+  {
+    title: 'Brand palette — warm & founder-led',
+    description:
+      'Deep-teal ink, coral accent, yellow highlight, sage support, warm paper surfaces.',
+    match: (t) => t.source === 'color.json' && !isSemanticColor(t),
+  },
+  {
+    title: 'Semantics — fixed meaning',
+    description:
+      'success / warning / danger / info. Never reskin with a theme.',
+    match: isSemanticColor,
+  },
+  {
+    title: 'Contract — the shared language',
+    description:
+      'Every brand aliases its palette into --ds-*; @thijulio/primitives skins from these.',
+    match: (t) => t.source === 'contract.json',
+  },
+];
 
 export const Colors: Story = {
+  parameters: colorCatalogParameters,
   play: async ({ canvasElement }) => {
-    const caption = within(canvasElement).getByText('ink', { exact: true });
-    const surface = caption.parentElement?.parentElement;
-    if (!surface) throw new Error('Palette caption surface is missing');
-    const background = getComputedStyle(surface).backgroundColor;
-    await expect(
-      contrastRatio(getComputedStyle(caption).color, background),
-    ).toBeGreaterThanOrEqual(4.5);
+    await expectCompleteColorCatalog(canvasElement, manifest);
+    await expectCopyInteraction(canvasElement, 'var(--ink)');
+    await expectCopyInteraction(canvasElement, 'tokens.ink');
   },
   render: () => (
-    <div>
-      <Section
-        title="Brand palette — warm & founder-led"
-        desc="Deep-teal ink, coral accent, yellow highlight, sage support, warm paper surfaces."
-      >
-        <Grid>
-          {BRAND.map(([name, hex, bg]) => (
-            <Swatch key={name} name={name} hex={hex} bg={bg} />
-          ))}
-        </Grid>
-      </Section>
-
-      <Section
-        title="Semantics — fixed meaning"
-        desc="success / warning / danger / info. Never reskin with a theme."
-      >
-        <Grid>
-          {SEMANTICS.map(([name, hex]) => (
-            <Swatch key={name} name={name} hex={hex} bg={`var(--${name})`} />
-          ))}
-        </Grid>
-      </Section>
-
-      <Section
-        title="Contract — the shared language"
-        desc="Every brand aliases its palette into --ds-*; @thijulio/primitives skins from these."
-      >
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {[
-            ['--ds-surface', 'var(--paper)'],
-            ['--ds-brand', 'var(--ink)'],
-            ['--ds-accent', 'var(--coral)'],
-            ['--ds-highlight', 'var(--yellow)'],
-          ].map(([name, bg]) => (
-            <span
-              key={name}
-              style={{
-                ...body,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '5px 12px',
-                borderRadius: 'var(--radius-full)',
-                border: '1px solid var(--line)',
-                background: 'var(--cream)',
-                fontSize: 12,
-                fontWeight: 600,
-                color: 'var(--ink)',
-              }}
-            >
-              <span
-                style={{
-                  width: 14,
-                  height: 14,
-                  borderRadius: '50%',
-                  background: bg,
-                  border: '1px solid var(--line)',
-                }}
-              />
-              {name}
-            </span>
-          ))}
-        </div>
-      </Section>
-    </div>
+    <ColorCatalog brand="faune" manifest={manifest} sections={SECTIONS} />
   ),
 };
 

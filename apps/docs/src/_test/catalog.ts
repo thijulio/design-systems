@@ -32,6 +32,21 @@ function effectiveBackground(element: HTMLElement): string {
 }
 
 /**
+ * The color a possibly translucent foreground actually paints over an opaque
+ * background (source-over compositing), as axe measures it, e.g. Faune's
+ * `--ink-muted: rgba(24, 61, 60, 0.74)`.
+ */
+function paintedColor(foreground: string, background: string): string {
+  const [r = 0, g = 0, b = 0, a = 1] =
+    foreground.match(/[\d.]+/g)?.map(Number) ?? [];
+  const [br = 255, bg = 255, bb = 255] =
+    background.match(/[\d.]+/g)?.map(Number) ?? [];
+  const mix = (front: number, back: number) =>
+    Math.round(front * a + back * (1 - a));
+  return `rgb(${mix(r, br)}, ${mix(g, bg)}, ${mix(b, bb)})`;
+}
+
+/**
  * Every color token in the manifest renders exactly once, every note names a
  * real token, and every piece of text in the catalog meets WCAG AA (4.5:1)
  * against its effective background.
@@ -61,10 +76,16 @@ export async function expectCompleteColorCatalog(
         (n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim(),
       ),
     )
-    .map((el) => ({
-      text: el.textContent?.trim().slice(0, 40),
-      ratio: contrastRatio(getComputedStyle(el).color, effectiveBackground(el)),
-    }))
+    .map((el) => {
+      const background = effectiveBackground(el);
+      return {
+        text: el.textContent?.trim().slice(0, 40),
+        ratio: contrastRatio(
+          paintedColor(getComputedStyle(el).color, background),
+          background,
+        ),
+      };
+    })
     .filter(({ ratio }) => ratio < 4.5);
   await expect(illegible).toEqual([]);
 }
