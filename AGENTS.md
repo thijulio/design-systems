@@ -320,6 +320,15 @@ chromium` once. The addon also lights up the Storybook **Interactions** panel.
   axis, so out-of-contract weights snap to the nearest one as they did on Google.
 - **latin-ext is emitted before latin** in the generated CSS: the subsets'
   unicode-ranges overlap (U+0304/0308/0329) and the last-declared face wins.
+- **`dist/` belongs to `vite build` alone.** In vite-built packages (primitives,
+  biome/exodus react) `tsconfig.lib.json` emits to `out-tsc/lib`, never `dist`:
+  `build` (vite `emptyOutDir` + vite-plugin-dts, which writes to `build.outDir`)
+  and `typecheck` (`tsc --build`) run in parallel, and sharing `dist` made both
+  flake (TS6305 / TS2306 / vite `ENOTEMPTY`). Consequently cross-package types
+  resolve to the dependency's vite-built `dist`, so react `typecheck` depends on
+  `^build`, and `docs:build` depends on `^typecheck` so its `tsc -b` never
+  rebuilds a library's `out-tsc/lib` concurrently with that library's own
+  typecheck. Keep this split when adding a vite package.
 
 ## Multi-agent config
 

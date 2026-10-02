@@ -9,6 +9,12 @@
       "scope:docs"
     ],
     "targets": {
+      "build": {
+        "dependsOn": [
+          "^build",
+          "^typecheck"
+        ]
+      },
       "verify-contract": {
         "command": "node {projectRoot}/verify-contract.mjs",
         "dependsOn": [
