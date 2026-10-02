@@ -28,8 +28,15 @@ boundaries). They share `packages/core` — build tooling only, **no design
 tokens**. This is deliberate: the brands' token schemas genuinely differ, so
 there is nothing meaningful to share beyond the Style Dictionary harness.
 
-Tokens/components originate from Claude Design exports; Git is the source of
-truth (one-way flow — never sync back to Claude Design).
+Git is the source of truth. The repo's built packages are pushed **up** to the matching
+Claude Design projects via the `/design-sync` skill (repo → Claude Design), so the design
+agent builds with the real components. Never pull the other way — Claude Design is a render
+target, not a source; nothing in it is authored back into this repo.
+
+> Historical note: this rule used to read "never sync back to Claude Design," describing the
+> original import direction (Claude Design exports → Git). The flow was deliberately reversed
+> to repo → Claude Design via `/design-sync`; see `.design-sync/{biome,exodus}.NOTES.md` for
+> per-brand sync config, target project IDs, and the two-brand (now N-brand) setup.
 
 ## Golden rules (read before doing anything)
 
