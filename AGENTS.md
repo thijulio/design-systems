@@ -234,10 +234,13 @@ with nothing releasable is a no-op, and re-running a run that pushed but failed
 to publish recovers it. The version commit is pushed with `GITHUB_TOKEN`, which
 does not trigger workflows, so it can't loop. Merge-triggered runs check out the
 tip of `main`, not the triggering SHA.
-Two hard-won gotchas are baked in: **`HUSKY=0`** (the pre-commit hook otherwise
-blocks nx release's automated version commit) and an explicit
-**`git push --follow-tags`** (nx release commits & tags locally but does **not**
-push). Use `dry_run=true` to preview versions without publishing. Versions are
+Three hard-won gotchas are baked in: **`HUSKY=0`** (the dev pre-commit hook
+otherwise blocks nx release's automated version commit), a **release-only
+pre-commit hook** (`.github/release-hooks/pre-commit`, wired via
+`git config core.hooksPath`) that prettier-formats what nx release staged —
+nx writes CHANGELOG.md without a final newline, which failed the next CI
+`nx format:check` on main — and an explicit **`git push --follow-tags`** (nx
+release commits & tags locally but does **not** push). Use `dry_run=true` to preview versions without publishing. Versions are
 resolved from the `<pkg>@<version>` git tags, so never delete them. The three
 new Faune/primitives projects have a scoped disk fallback for their initial
 release; existing projects still require their tags. Biome and Exodus React allow Nx
@@ -324,6 +327,15 @@ chromium` once. The addon also lights up the Storybook **Interactions** panel.
   axis, so out-of-contract weights snap to the nearest one as they did on Google.
 - **latin-ext is emitted before latin** in the generated CSS: the subsets'
   unicode-ranges overlap (U+0304/0308/0329) and the last-declared face wins.
+- **`dist/` belongs to `vite build` alone.** In vite-built packages (primitives,
+  biome/exodus react) `tsconfig.lib.json` emits to `out-tsc/lib`, never `dist`:
+  `build` (vite `emptyOutDir` + vite-plugin-dts, which writes to `build.outDir`)
+  and `typecheck` (`tsc --build`) run in parallel, and sharing `dist` made both
+  flake (TS6305 / TS2306 / vite `ENOTEMPTY`). Consequently cross-package types
+  resolve to the dependency's vite-built `dist`, so react `typecheck` depends on
+  `^build`, and `docs:build` depends on `^typecheck` so its `tsc -b` never
+  rebuilds a library's `out-tsc/lib` concurrently with that library's own
+  typecheck. Keep this split when adding a vite package.
 - **Release bumps follow `nx affected`, not "files in the package".** For each
   `feat`/`fix` since a package's last tag, `nx release` bumps every package the
   commit _affects_: files under its root, anything it depends on (`core` →
