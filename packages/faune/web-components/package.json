@@ -1,0 +1,54 @@
+{
+  "name": "@thijulio/faune-web-components",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "nx": {
+    "name": "faune-web-components",
+    "tags": [
+      "scope:faune"
+    ],
+    "targets": {
+      "typecheck": {
+        "inputs": [
+          "default",
+          "{workspaceRoot}/tsconfig.base.json",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "dependsOn": [
+          "^typecheck",
+          "^build"
+        ]
+      }
+    }
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/faune/web-components"
+  },
+  "peerDependencies": {
+    "@thijulio/primitives-web-components": "*"
+  }
+}

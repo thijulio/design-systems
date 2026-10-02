@@ -23,6 +23,12 @@
     },
     {
       "path": "./packages/fonts"
+    },
+    {
+      "path": "./packages/faune/web-components"
+    },
+    {
+      "path": "./packages/primitives-web-components"
     }
   ]
 }

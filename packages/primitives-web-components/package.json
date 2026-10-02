@@ -1,0 +1,55 @@
+{
+  "name": "@thijulio/primitives-web-components",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": true,
+  "main": "./dist/components/index.js",
+  "module": "./dist/components/index.js",
+  "types": "./dist/components/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js",
+      "default": "./dist/components/index.js"
+    }
+  },
+  "nx": {
+    "name": "primitives-web-components",
+    "tags": [
+      "scope:shared"
+    ],
+    "targets": {
+      "build": {
+        "command": "stencil build",
+        "options": {
+          "cwd": "{projectRoot}"
+        },
+        "inputs": [
+          "default",
+          "{workspaceRoot}/packages/primitives/src/**/*.module.css",
+          {
+            "externalDependencies": [
+              "@stencil/core"
+            ]
+          }
+        ],
+        "outputs": [
+          "{projectRoot}/dist",
+          "{projectRoot}/src/components.d.ts"
+        ],
+        "cache": true
+      }
+    }
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/primitives-web-components"
+  }
+}
