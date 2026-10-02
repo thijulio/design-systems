@@ -12,6 +12,7 @@
       "default": "./dist/tokens.js"
     },
     "./tokens.css": "./dist/tokens.css",
+    "./tokens.manifest.json": "./dist/tokens.manifest.json",
     "./native": {
       "types": "./dist/native/index.d.ts",
       "import": "./dist/native/index.js",

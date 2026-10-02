@@ -38,6 +38,13 @@ const withSlash = (p: string): string => (p.endsWith('/') ? p : `${p}/`);
 /** Temp filename an overlay is built to before being concatenated into tokens.css. */
 export const themeTempFile = (index: number): string => `__theme-${index}.css`;
 
+/** Machine-readable token index written next to tokens.css. */
+export const MANIFEST_FILE = 'tokens.manifest.json';
+
+/** Temp file an overlay's manifest entries are built to before being merged in. */
+export const themeManifestTempFile = (index: number): string =>
+  `__theme-${index}.manifest.json`;
+
 /**
  * Base build config: the `:root` block plus the typed JS/TS objects.
  * Pure — returns config only — so it can be unit-tested without importing
@@ -65,6 +72,16 @@ export function createBaseConfig(
             format: 'css/variables',
             options: { selector: ':root', outputReferences: true },
           },
+        ],
+      },
+      // Same transforms + prefix as `css`, so manifest names are the exact
+      // custom properties tokens.css declares.
+      manifest: {
+        transformGroup: 'css',
+        prefix,
+        buildPath: out,
+        files: [
+          { destination: MANIFEST_FILE, format: 'thijulio/manifest-json' },
         ],
       },
       ts: {
@@ -132,6 +149,18 @@ export function createThemeConfig(
             destination: themeTempFile(index),
             format: 'css/variables',
             options: { selector: theme.selector, outputReferences: true },
+            filter,
+          },
+        ],
+      },
+      manifest: {
+        transformGroup: 'css',
+        prefix,
+        buildPath: out,
+        files: [
+          {
+            destination: themeManifestTempFile(index),
+            format: 'thijulio/manifest-theme-json',
             filter,
           },
         ],

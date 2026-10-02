@@ -1,6 +1,8 @@
 import {
   createBaseConfig,
   createThemeConfig,
+  MANIFEST_FILE,
+  themeManifestTempFile,
   themeTempFile,
 } from './token-config.js';
 
@@ -76,5 +78,44 @@ describe('createThemeConfig', () => {
     expect(typeof filter).toBe('function');
     expect(filter({ filePath: '/brand/themes/dark/colors.json' })).toBe(true);
     expect(filter({ filePath: '/brand/tokens/colors.json' })).toBe(false);
+  });
+});
+
+describe('manifest platform', () => {
+  it('names tokens with the css transforms and prefix, next to tokens.css', () => {
+    const platforms =
+      createBaseConfig({ source: '/s', buildPath: '/out', prefix: 'bm' })
+        .platforms ?? {};
+
+    expect(platforms['manifest']).toMatchObject({
+      transformGroup: platforms['css']?.transformGroup,
+      prefix: 'bm',
+      buildPath: '/out/',
+    });
+    expect(platforms['manifest']?.files).toEqual([
+      { destination: MANIFEST_FILE, format: 'thijulio/manifest-json' },
+    ]);
+  });
+
+  it('builds each overlay to an indexed temp file with the overlay filter', () => {
+    const platforms =
+      createThemeConfig(
+        { source: '/s', buildPath: '/out', prefix: 'bm' },
+        { selector: '[data-mode="dark"]', source: '/s/themes/dark' },
+        2,
+      ).platforms ?? {};
+    const file = platforms['manifest']?.files?.[0];
+
+    expect(themeManifestTempFile(2)).toBe('__theme-2.manifest.json');
+    expect(platforms['manifest']).toMatchObject({
+      transformGroup: 'css',
+      prefix: 'bm',
+    });
+    expect(file).toMatchObject({
+      destination: themeManifestTempFile(2),
+      format: 'thijulio/manifest-theme-json',
+    });
+    // Same predicate as the CSS overlay, so names/sets can't diverge.
+    expect(file?.filter).toBe(platforms['css']?.files?.[0]?.filter);
   });
 });

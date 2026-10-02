@@ -7,6 +7,7 @@
 import StyleDictionary from 'style-dictionary';
 import { nativeFormats } from './formats/native.js';
 import { dartFormats } from './formats/dart.js';
+import { manifestFormats } from './formats/manifest.js';
 
 let registered = false;
 
@@ -14,7 +15,7 @@ export function registerPlatforms(): void {
   if (registered) {
     return;
   }
-  for (const format of [...nativeFormats, ...dartFormats]) {
+  for (const format of [...nativeFormats, ...dartFormats, ...manifestFormats]) {
     StyleDictionary.registerFormat(format);
   }
   registered = true;

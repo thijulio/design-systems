@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 
 const dist = join(import.meta.dirname, 'dist');
@@ -73,5 +74,82 @@ assert.match(
   /<String, Map<String, Color>>\{\}/,
   'empty dart themes barrel invalid',
 );
+
+// --- Token manifest (feeds the Storybook color catalog) ---
+const manifest = JSON.parse(
+  await readFile(join(dist, 'tokens.manifest.json'), 'utf-8'),
+);
+const entry = (name, tokens = manifest.tokens) =>
+  tokens.find((t) => t.name === name);
+assert.equal(manifest.version, 1, 'manifest version changed');
+
+// Manifest names are exactly the custom properties each tokens.css block declares.
+const declared = (selector) => {
+  const start = css.indexOf(`${selector} {`);
+  assert.notEqual(start, -1, `tokens.css has no ${selector} block`);
+  return [
+    ...css.slice(start, css.indexOf('}', start)).matchAll(/^\s*(--[\w-]+):/gm),
+  ]
+    .map((m) => m[1])
+    .sort();
+};
+const listed = (tokens) => tokens.map((t) => t.name).sort();
+assert.deepEqual(
+  listed(manifest.tokens),
+  declared(':root'),
+  'manifest ≠ :root custom properties',
+);
+for (const theme of manifest.themes) {
+  assert.deepEqual(
+    listed(theme.tokens),
+    declared(theme.selector),
+    `manifest ${theme.name} ≠ ${theme.selector} custom properties`,
+  );
+}
+
+// Every RN accessor, evaluated as written, reaches a leaf of native/tokens.js;
+// colors resolve to the same color as the web value.
+const { tokens: nativeTree } = await import(
+  pathToFileURL(join(dist, 'native/tokens.js')).href
+);
+const canonicalColor = (value) => {
+  const v = String(value).replace(/\s+/g, '').toLowerCase();
+  const short = /^#([0-9a-f])([0-9a-f])([0-9a-f])$/.exec(v);
+  return short
+    ? `#${short[1]}${short[1]}${short[2]}${short[2]}${short[3]}${short[3]}`
+    : v;
+};
+for (const token of manifest.tokens) {
+  const leaf = new Function('tokens', `return ${token.native.accessor};`)(
+    nativeTree,
+  );
+  assert.notEqual(
+    leaf,
+    undefined,
+    `${token.native.accessor} is not in native/tokens.js`,
+  );
+  if (token.kind === 'color') {
+    assert.equal(
+      canonicalColor(leaf),
+      canonicalColor(token.value),
+      `${token.native.accessor} ≠ ${token.name}`,
+    );
+  }
+}
+
+assert.deepEqual(
+  entry('--ds-brand'),
+  {
+    name: '--ds-brand',
+    path: ['ds', 'brand'],
+    source: 'contract.json',
+    value: '#183d3c',
+    references: ['--ink'],
+    kind: 'color',
+    native: { accessor: 'tokens.ds.brand' },
+  },
+  'ds-brand manifest entry altered',
+);
+assert.deepEqual(manifest.themes, [], 'faune has no theme overlays');
 
 console.log('✓ @thijulio/faune-tokens output verified');
