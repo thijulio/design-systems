@@ -38,6 +38,7 @@
           "exodus-css:build",
           "exodus-react:build",
           "faune-css:build",
+          "faune-react:build",
           "primitives:build"
         ],
         "inputs": [
@@ -62,6 +63,7 @@
           "exodus-css:build",
           "exodus-react:build",
           "faune-css:build",
+          "faune-react:build",
           "primitives:build"
         ],
         "inputs": [
