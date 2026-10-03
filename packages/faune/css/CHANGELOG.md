@@ -1,3 +1,9 @@
+## 0.0.6 (2026-10-03)
+
+### 🧱 Updated Dependencies
+
+- Updated faune-tokens to 0.0.6
+
 ## 0.0.5 (2026-10-02)
 
 ### 🧱 Updated Dependencies

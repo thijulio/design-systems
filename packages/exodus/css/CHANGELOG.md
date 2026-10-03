@@ -1,3 +1,9 @@
+## 0.0.7 (2026-10-03)
+
+### 🧱 Updated Dependencies
+
+- Updated exodus-tokens to 0.0.7
+
 ## 0.0.6 (2026-10-02)
 
 ### 🧱 Updated Dependencies

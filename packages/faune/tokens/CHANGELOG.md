@@ -1,3 +1,14 @@
+## 0.0.6 (2026-10-03)
+
+### 🚀 Features
+
+- generated color catalog with web + React Native token names ([#18](https://github.com/thijulio/design-systems/pull/18), [#12](https://github.com/thijulio/design-systems/issues/12))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Thiago Valença @thijulio
+
 ## 0.0.5 (2026-10-02)
 
 This was a version bump only for faune-tokens to align it with other projects, there were no code changes.
