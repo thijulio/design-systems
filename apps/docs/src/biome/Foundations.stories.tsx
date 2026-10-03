@@ -1,5 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactNode } from 'react';
+import biomeTokens from '@thijulio/biome-tokens/tokens.manifest.json';
+import { ColorCatalog } from '../_foundations/ColorCatalog';
+import type {
+  ColorSection,
+  TokenManifest,
+} from '../_foundations/token-manifest';
+import {
+  colorCatalogParameters,
+  expectCompleteColorCatalog,
+  expectCopyInteraction,
+} from '../_test/catalog';
+
+const manifest: TokenManifest = biomeTokens;
 
 const meta: Meta = { title: 'Biome/Foundations' };
 export default meta;
@@ -45,170 +58,84 @@ function Section({
   );
 }
 
-function Swatch({
-  name,
-  cssVar,
-  hex,
-  usage,
-}: {
-  name: string;
-  cssVar: string;
-  hex: string;
-  usage: string;
-}) {
-  return (
-    <div
-      style={{
-        borderRadius: 'var(--radius-ui-lg)',
-        overflow: 'hidden',
-        border: '1px solid var(--border)',
-        background: 'var(--surface-raised)',
-      }}
-    >
-      <div style={{ height: 92, background: `var(${cssVar})` }} />
-      <div style={{ padding: '10px 12px' }}>
-        <div
-          style={{
-            fontFamily: 'var(--font-ui)',
-            fontWeight: 700,
-            color: 'var(--text-strong)',
-            fontSize: 14,
-          }}
-        >
-          {name}
-        </div>
-        <div style={{ ...mono, fontSize: 12, color: 'var(--text-body)' }}>
-          {hex} · {usage}
-        </div>
-      </div>
-    </div>
-  );
-}
+const SECTIONS: ColorSection[] = [
+  {
+    title: 'Palette — bm',
+    description:
+      'Raw Biome palette. Components reach for the semantic layer, not these.',
+    match: (t) => t.source === 'palette.json',
+  },
+  {
+    title: 'Semantic',
+    description:
+      'Role aliases components use. Dark mode reassigns them; toggle Mode in the toolbar.',
+    match: (t) => t.source === 'semantic.json',
+  },
+  {
+    title: 'Components',
+    description: 'Component-scoped tokens (TerminalHero, nav).',
+    match: (t) => t.source === 'components.json',
+  },
+  {
+    title: 'Contract — --ds-*',
+    description:
+      'What @thijulio/primitives reads. Each aliases a semantic token above.',
+    match: (t) => t.source === 'contract.json',
+  },
+];
 
-function Grid({ children }: { children: ReactNode }) {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-        gap: 12,
-        maxWidth: 720,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+// Editorial names from the previous hand-made swatches, kept by CSS name.
+const NOTES: Record<string, string> = {
+  '--bm-bone': 'Bone · ground',
+  '--bm-bone-raised': 'Bone Raised · surface',
+  '--bm-mata': 'Mata · primary',
+  '--bm-mata-deep': 'Mata Deep · hover',
+  '--bm-cerrado': 'Cerrado · secondary',
+  '--bm-ink': 'Pine Ink · text',
+  '--bm-ink-soft': 'Soft Ink · body',
+  '--bm-stone': 'Stone · muted',
+  '--bm-terracotta': 'Terracotta · accent',
+  '--bm-ipe': 'Ipê · highlight',
+  '--bm-canopy': 'Canopy · dark ground',
+  '--bm-understory': 'Understory · dark surface',
+  '--bm-sage': 'Sage · dark primary',
+  '--bm-terracotta-dk': 'Terracotta · dark accent',
+};
 
 export const Colors: Story = {
+  parameters: colorCatalogParameters,
+  play: async ({ canvasElement }) => {
+    await expectCompleteColorCatalog(canvasElement, manifest, {
+      sections: SECTIONS,
+      notes: NOTES,
+    });
+    await expectCopyInteraction(canvasElement, 'var(--brand)');
+    await expectCopyInteraction(canvasElement, 'tokens.brand');
+  },
   render: () => (
-    <div>
-      <Section
-        title="Greens — primary"
-        desc="Mata leads, cerrado supports; bone is the warm ground."
-      >
-        <Grid>
-          <Swatch name="Bone" cssVar="--bm-bone" hex="#F2EEE2" usage="ground" />
-          <Swatch
-            name="Mata"
-            cssVar="--bm-mata"
-            hex="#3F5237"
-            usage="primary"
-          />
-          <Swatch
-            name="Cerrado"
-            cssVar="--bm-cerrado"
-            hex="#6E7A48"
-            usage="secondary"
-          />
-          <Swatch
-            name="Mata Deep"
-            cssVar="--bm-mata-deep"
-            hex="#2E3D28"
-            usage="hover"
-          />
-        </Grid>
-      </Section>
-
-      <Section title="Neutrals — warm stone">
-        <Grid>
-          <Swatch
-            name="Pine Ink"
-            cssVar="--bm-ink"
-            hex="#232A20"
-            usage="text"
-          />
-          <Swatch
-            name="Soft Ink"
-            cssVar="--bm-ink-soft"
-            hex="#4A4A3E"
-            usage="body"
-          />
-          <Swatch
-            name="Stone"
-            cssVar="--bm-stone"
-            hex="#8C8275"
-            usage="muted"
-          />
-          <Swatch
-            name="Bone Raised"
-            cssVar="--bm-bone-raised"
-            hex="#F8F5EC"
-            usage="surface"
-          />
-        </Grid>
-      </Section>
-
-      <Section title="Warm — accents">
-        <Grid>
-          <Swatch
-            name="Terracotta"
-            cssVar="--bm-terracotta"
-            hex="#B5532A"
-            usage="accent"
-          />
-          <Swatch
-            name="Ipê"
-            cssVar="--bm-ipe"
-            hex="#E8A627"
-            usage="highlight"
-          />
-        </Grid>
-      </Section>
-
-      <Section
-        title="Dark mode"
-        desc="Designed alternate — warm & green, not inverted."
-      >
-        <Grid>
-          <Swatch
-            name="Canopy"
-            cssVar="--bm-canopy"
-            hex="#161D16"
-            usage="ground"
-          />
-          <Swatch
-            name="Understory"
-            cssVar="--bm-understory"
-            hex="#1E261E"
-            usage="surface"
-          />
-          <Swatch
-            name="Sage"
-            cssVar="--bm-sage"
-            hex="#8FB089"
-            usage="primary"
-          />
-          <Swatch
-            name="Terracotta"
-            cssVar="--bm-terracotta-dk"
-            hex="#C8693B"
-            usage="accent"
-          />
-        </Grid>
-      </Section>
-    </div>
+    <ColorCatalog
+      brand="biome"
+      manifest={manifest}
+      sections={SECTIONS}
+      notes={NOTES}
+    />
   ),
+};
+
+// Test-only: the same catalog under dark mode, so the dark chrome and
+// overrides get the completeness + contrast checks too. Hidden from the
+// sidebar; use the toolbar Mode toggle to view it.
+export const ColorsDark: Story = {
+  ...Colors,
+  name: 'Colors (dark)',
+  globals: { mode: 'dark' },
+  tags: ['!dev', '!autodocs'],
+  play: async ({ canvasElement }) => {
+    await expectCompleteColorCatalog(canvasElement, manifest, {
+      sections: SECTIONS,
+      notes: NOTES,
+    });
+  },
 };
 
 export const Typography: Story = {

@@ -17,6 +17,15 @@ export default defineConfig({
   test: {
     projects: [
       {
+        // Pure catalog/model logic: plain node, no browser.
+        test: {
+          name: 'unit',
+          root: dirname,
+          include: ['src/**/*.spec.ts'],
+          environment: 'node',
+        },
+      },
+      {
         extends: true,
         plugins: [
           storybookTest({ configDir: path.join(dirname, '.storybook') }),

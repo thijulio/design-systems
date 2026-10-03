@@ -9,6 +9,12 @@
       "scope:docs"
     ],
     "targets": {
+      "typecheck": {
+        "dependsOn": [
+          "^typecheck",
+          "^build"
+        ]
+      },
       "storybook": {
         "command": "storybook dev -p 6007",
         "options": {

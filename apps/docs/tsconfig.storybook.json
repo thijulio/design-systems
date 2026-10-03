@@ -5,7 +5,8 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "jsx": "preserve",
-    "lib": ["es2022", "dom"]
+    "lib": ["es2022", "dom"],
+    "resolveJsonModule": true
   },
   "exclude": [
     "src/**/*.spec.ts",
@@ -23,6 +24,7 @@
     "src/**/*.stories.jsx",
     "src/**/*.stories.tsx",
     "src/**/*.stories.mdx",
+    "src/_foundations/**/*.tsx",
     ".storybook/*.js",
     ".storybook/*.ts"
   ],

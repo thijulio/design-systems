@@ -1,10 +1,13 @@
 import { appendFile, readFile, rm, writeFile } from 'node:fs/promises';
 import { basename, join, resolve } from 'node:path';
 import StyleDictionary from 'style-dictionary';
+import type { ManifestToken, TokenManifest } from './formats/manifest.js';
 import { registerPlatforms } from './platforms.js';
 import {
   createBaseConfig,
   createThemeConfig,
+  MANIFEST_FILE,
+  themeManifestTempFile,
   themeTempFile,
   type BuildBrandTokensOptions,
 } from './token-config.js';
@@ -127,6 +130,8 @@ abstract final class ${brand}Themes {
  * Build a brand's tokens to disk using the shared config:
  *  - `tokens.css`  the `:root` base block, followed by one block per theme overlay
  *  - `tokens.js` / `tokens.d.ts`  typed objects (base values)
+ *  - `tokens.manifest.json`  machine-readable index (CSS names, values, aliases,
+ *    RN accessors, per-theme entries)
  *  - `native/`     normalized React Native tokens (JS/DTS + per-theme overlays)
  *  - `dart/`       normalized Flutter tokens (constants + per-theme color maps)
  */
@@ -137,21 +142,44 @@ export async function buildBrandTokens(
   const { buildPath, themes = [], displayName } = options;
   const names = themeNames(themes);
 
-  // 1. Base: writes tokens.css (:root) + tokens.js/d.ts (web) + native + dart.
+  // 1. Base: writes tokens.css (:root) + tokens.js/d.ts (web) + manifest + native + dart.
   await new StyleDictionary(createBaseConfig(options)).buildAllPlatforms();
 
-  // 2. Each theme overlay → its own CSS temp (appended) + native/dart theme files.
+  // 2. Each theme overlay → its own CSS temp (appended), manifest temp (merged)
+  //    and native/dart theme files.
   const tokensCss = join(buildPath, 'tokens.css');
+  const manifestPath = join(buildPath, MANIFEST_FILE);
+  const manifest = JSON.parse(
+    await readFile(manifestPath, 'utf-8'),
+  ) as TokenManifest;
   for (let i = 0; i < themes.length; i++) {
-    await new StyleDictionary(
-      createThemeConfig(options, themes[i], i),
-    ).buildAllPlatforms();
-
     const tempPath = join(buildPath, themeTempFile(i));
-    const overlay = stripHeader(await readFile(tempPath, 'utf-8'));
-    await appendFile(tokensCss, `\n${overlay}`);
-    await rm(tempPath);
+    const manifestTemp = join(buildPath, themeManifestTempFile(i));
+    try {
+      await new StyleDictionary(
+        createThemeConfig(options, themes[i], i),
+      ).buildAllPlatforms();
+
+      const overlay = stripHeader(await readFile(tempPath, 'utf-8'));
+      await appendFile(tokensCss, `\n${overlay}`);
+
+      manifest.themes.push({
+        name: names[i],
+        selector: themes[i].selector,
+        tokens: JSON.parse(
+          await readFile(manifestTemp, 'utf-8'),
+        ) as ManifestToken[],
+      });
+    } finally {
+      // dist ships as-is (`files: ["dist"]`): never leave temps behind, even
+      // when a theme build throws.
+      await Promise.all([
+        rm(tempPath, { force: true }),
+        rm(manifestTemp, { force: true }),
+      ]);
+    }
   }
+  await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
   // 3. Aggregator barrels over the per-theme artifacts.
   await writeNativeBarrels(buildPath, names);
