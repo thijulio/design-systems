@@ -220,7 +220,7 @@ on the built output). `package.json`: `type: module`, exports `.`→`dist/tokens
 `dependsOn: ["^build"]`, `outputs: ["{projectRoot}/dist"]`) and `test`
 (`node {projectRoot}/verify.mjs`, `dependsOn: ["build"]`).
 
-**css package** — CSS-only. `src/{fonts,reset,base,motion}.css`; `build.mjs`
+**css package** — CSS-only. `src/{reset,base,motion}.css`; `build.mjs`
 concatenates them with the sibling tokens CSS (read via
 `import.meta.resolve('@thijulio/<brand>-tokens/tokens.css')`) into
 `dist/<brand>.css`. Exports `./<brand>.css` and `./fonts/*`. **All three brands
@@ -232,11 +232,24 @@ family's SIL OFL licence from the exact-pinned `@fontsource(-variable)/*`
 devDependencies into `dist/fonts/` and returns generated `@font-face` rules
 (relative `url('./fonts/…')`, `font-display: swap`, unicode-ranges read from
 fontsource's `unicode.json`) that lead the bundle. `verify.mjs` calls
-`verifyFonts()`, which re-derives the contract independently and fails on any
-`http(s)://` in a served file, any `url()`/`@import` not resolving inside
-`dist`, any family × style × weight without both a latin and a latin-ext face,
-shipped-but-unused fonts, or a missing licence. Bundlers rewrite the relative
-urls (Angular → hashed `media/`, Vite → hashed `assets/`).
+`verifyFonts()` with every stylesheet in `dist` and the `font-display` its
+faces must use (`null` = declares none). It re-derives the contract
+independently and fails on any `http(s)://` in a served file, any
+`url()`/`@import` not resolving inside `dist`, an unlisted stylesheet, a face
+with another `font-display`, any family × style × weight without both a latin
+and a latin-ext face, shipped-but-unused fonts, or a missing licence. Bundlers
+rewrite the relative urls (Angular → hashed `media/`, Vite → hashed `assets/`).
+
+**`font-display` is the consumer's call, and `<brand>.css` stays `swap`.** It
+can't be overridden from outside the `@font-face` rule, so a brand whose
+consumers need both ships both. Biome also exports `./biome-core.css`
+(`biome.css` without its faces) and `./fonts-optional.css` (the same faces,
+`font-display: optional`, from `fontFacesCss()`; same files). `swap` suits apps
+and pages without preloads: an SPA under `optional` would keep the fallback for
+the whole session on a first visit. `optional` suits pages that preload their
+first-screen faces and need zero layout shift. Preload from
+`@thijulio/biome-css/fonts/<file>.woff2` so the bundler emits the same URL the
+CSS uses. Biome's `verify.mjs` asserts the split is the bundle cut in two.
 
 **react package** — `@nx/react:library --bundler=vite`. Component per folder:
 `Name/{Name.tsx, Name.module.css, Name.spec.tsx}`. CSS Modules reference token
