@@ -249,7 +249,14 @@ and pages without preloads: an SPA under `optional` would keep the fallback for
 the whole session on a first visit. `optional` suits pages that preload their
 first-screen faces and need zero layout shift. Preload from
 `@thijulio/biome-css/fonts/<file>.woff2` so the bundler emits the same URL the
-CSS uses. Biome's `verify.mjs` asserts the split is the bundle cut in two.
+CSS uses. Biome's `verify.mjs` asserts the split is the bundle cut in two, and
+that every preload file `packages/biome/css/README.md` names is a face
+`fonts-optional.css` uses. That README is the consumer guide (entry points,
+preload list, measured CLS). Under `swap`, a late face re-wraps text even from
+HTTP cache; metric-matched fallbacks (`size-adjust`, `*-override`) were measured
+and only reduce the shift, so `optional` + preloads is the zero-shift path. The
+declared family names are `fonts.config.mjs`'s `family` (`'Newsreader'`, not
+fontsource's `'Newsreader Variable'`); consumers use the `--font-*` tokens.
 
 **react package** — `@nx/react:library --bundler=vite`. Component per folder:
 `Name/{Name.tsx, Name.module.css, Name.spec.tsx}`. CSS Modules reference token
