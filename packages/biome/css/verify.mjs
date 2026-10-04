@@ -32,7 +32,7 @@ assert.equal(
   'biome.css has rules other than @font-face ahead of biome-core.css',
 );
 const facesWithoutDisplay = (stylesheet) =>
-  parseFontFaces(stylesheet).map(({ display, ...face }) => face);
+  parseFontFaces(stylesheet).map((face) => ({ ...face, display: undefined }));
 assert.deepEqual(
   facesWithoutDisplay(optionalFonts),
   facesWithoutDisplay(css),
