@@ -2,9 +2,9 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { buildFonts } from './build-fonts.js';
+import { buildFonts, fontFacesCss } from './build-fonts.js';
 import type { BrandFonts } from './font-faces.js';
-import { verifyFonts } from './verify-fonts.js';
+import { verifyFonts, type FontStylesheet } from './verify-fonts.js';
 
 const UNICODE = {
   latin: 'U+0000-00FF,U+0131',
@@ -65,8 +65,31 @@ describe('buildFonts + verifyFonts', () => {
     });
     await writeFile(join(dist, 'brand.css'), `${css}\n\n${rest}\n`);
   }
-  const verify = () =>
-    verifyFonts({ packageRoot: root, dist, bundle: 'brand.css', fonts: FONTS });
+  const verify = (
+    stylesheets: FontStylesheet[] = [{ file: 'brand.css', display: 'swap' }],
+  ) => verifyFonts({ packageRoot: root, dist, stylesheets, fonts: FONTS });
+
+  /**
+   * The brand.css bundle plus the split a consumer can opt into: brand-core.css
+   * (no faces) and fonts-optional.css (the same faces, font-display: optional).
+   */
+  async function buildSplit() {
+    await build();
+    await writeFile(join(dist, 'brand-core.css'), ':root { --x: 1; }\n');
+    await writeFile(
+      join(dist, 'fonts-optional.css'),
+      await fontFacesCss({
+        packageRoot: root,
+        fonts: FONTS,
+        display: 'optional',
+      }),
+    );
+  }
+  const SPLIT: FontStylesheet[] = [
+    { file: 'brand.css', display: 'swap' },
+    { file: 'brand-core.css', display: null },
+    { file: 'fonts-optional.css', display: 'optional' },
+  ];
 
   beforeEach(async () => {
     root = mkdtempSync(join(tmpdir(), 'fonts-'));
@@ -149,7 +172,7 @@ describe('buildFonts + verifyFonts', () => {
       verifyFonts({
         packageRoot: root,
         dist,
-        bundle: 'brand.css',
+        stylesheets: [{ file: 'brand.css', display: 'swap' }],
         fonts: narrowed,
       }),
     ).rejects.toThrow(
@@ -168,5 +191,64 @@ describe('buildFonts + verifyFonts', () => {
     await expect(verify()).rejects.toThrow(
       'the first rule must be an @font-face',
     );
+  });
+
+  it('verifies a faces-free stylesheet and an optional face set next to the bundle', async () => {
+    await buildSplit();
+
+    await expect(verify(SPLIT)).resolves.toBeUndefined();
+  });
+
+  it('fails when a face set uses another font-display than listed', async () => {
+    await buildSplit();
+
+    await expect(
+      verify([
+        { file: 'brand.css', display: 'optional' },
+        { file: 'brand-core.css', display: null },
+        { file: 'fonts-optional.css', display: 'optional' },
+      ]),
+    ).rejects.toThrow(
+      /brand\.css: Sans normal 400–700: font-display must be optional/,
+    );
+  });
+
+  it('fails when a faces-free stylesheet declares a face', async () => {
+    await buildSplit();
+
+    await expect(
+      verify([
+        { file: 'brand.css', display: null },
+        { file: 'brand-core.css', display: null },
+        { file: 'fonts-optional.css', display: 'optional' },
+      ]),
+    ).rejects.toThrow('brand.css: must declare no @font-face (found 4)');
+  });
+
+  it('fails on a stylesheet in dist that is not listed', async () => {
+    await buildSplit();
+
+    await expect(verify()).rejects.toThrow(
+      /brand-core\.css is not a listed stylesheet[\s\S]*fonts-optional\.css is not a listed stylesheet/,
+    );
+  });
+
+  it('fails on a listed stylesheet that was not built', async () => {
+    await build();
+
+    await expect(
+      verify([
+        { file: 'brand.css', display: 'swap' },
+        { file: 'fonts-optional.css', display: 'optional' },
+      ]),
+    ).rejects.toThrow('fonts-optional.css is listed but was not built');
+  });
+
+  it('fails when no stylesheet declares the faces', async () => {
+    await build();
+
+    await expect(
+      verify([{ file: 'brand.css', display: null }]),
+    ).rejects.toThrow('no listed stylesheet declares the faces');
   });
 });

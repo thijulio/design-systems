@@ -17,6 +17,11 @@ assert.match(css, /:focus-visible/, 'focus ring missing');
 // Self-hosted fonts: no http(s) URL in any served file; every url()/@import
 // resolves inside dist; every family × style × weight has a latin and a
 // latin-ext face (font-display: swap) leading the bundle; OFL licences ship.
-await verifyFonts({ packageRoot: here, dist, bundle: 'exodus.css', fonts });
+await verifyFonts({
+  packageRoot: here,
+  dist,
+  stylesheets: [{ file: 'exodus.css', display: 'swap' }],
+  fonts,
+});
 
 console.log('✓ @thijulio/exodus-css output verified');

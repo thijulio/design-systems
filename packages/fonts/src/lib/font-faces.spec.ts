@@ -123,6 +123,27 @@ describe('renderFontFaces → parseFontFaces', () => {
     ]);
   });
 
+  it('renders the requested font-display', () => {
+    const css = renderFontFaces(
+      planFontFaces(
+        [
+          {
+            family: 'Mono',
+            source: { kind: 'static', package: '@fontsource/mono' },
+            styles: { normal: [400] },
+          },
+        ],
+        range,
+      ),
+      { display: 'optional' },
+    );
+
+    expect(parseFontFaces(css).map((f) => f.display)).toEqual([
+      'optional',
+      'optional',
+    ]);
+  });
+
   it('parses single weights and ignores faces inside comments', () => {
     const faces = parseFontFaces(`
       /* @font-face { font-family: 'Ghost'; } */
