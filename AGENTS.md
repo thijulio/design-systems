@@ -342,6 +342,7 @@ nx run-many -t build test lint --projects=<name>  # one project (+ its deps)
 nx build-storybook docs                            # static Storybook → apps/docs/storybook-static
 nx verify-contract docs                           # check shared CSS variables for all three brands
 nx storybook docs --port 6006                      # dev (needs react packages built first)
+nx storybook docs-web-components                   # Web Components Storybook (6007), composed into docs
 nx test-storybook docs                             # story interaction tests (headless chromium)
 nx format:write   /   nx format:check              # prettier (ignores *.swcrc, Dockerfile)
 gh workflow run release.yml -f dry_run=true        # preview a release (no publish)
@@ -398,6 +399,14 @@ cross-brand consumer).
   searches the visible tree). The pick is remembered in `localStorage`. The
   per-brand `.storybook-<brand>/` design-sync configs keep the old per-brand
   toolbar on purpose: they are single-brand builds.
+- **Composition (`refs`) is decided at boot.** Storybook probes each ref once
+  when `docs` starts (server-side `GET <url>/iframe.html`). Reachable → the
+  browser fetches the ref's `index.json` without credentials; unreachable →
+  `credentials: 'include'`, which the ref's `Access-Control-Allow-Origin: *`
+  rejects ("Loading of ref failed … CORS error") until a restart. So `main.ts`
+  waits up to 90s for 6007 before composing it, and leaves it out (with a
+  warning) if it never answers. Start order doesn't matter; if 6007 came up
+  later than that, restart `docs`.
 - **Docs & a11y:** `preview.tsx` sets `tags: ['autodocs']` globally, so every
   meta with a `component` gets a Docs page. Docgen does NOT run on the built
   packages, so props tables/descriptions come from **`argTypes` you define in
