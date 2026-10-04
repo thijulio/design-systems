@@ -21,7 +21,7 @@ export default defineConfig({
         test: {
           name: 'unit',
           root: dirname,
-          include: ['src/**/*.spec.ts'],
+          include: ['src/**/*.spec.ts', '.storybook/**/*.spec.ts'],
           environment: 'node',
         },
       },

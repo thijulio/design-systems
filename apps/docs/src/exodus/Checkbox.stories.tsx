@@ -4,7 +4,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Checkbox } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Checkbox> = {
-  title: 'Exodus/Forms/Checkbox',
+  title: 'Exodus/Components/Checkbox',
   component: Checkbox,
   argTypes: {
     label: { description: 'Label rendered beside the box.' },

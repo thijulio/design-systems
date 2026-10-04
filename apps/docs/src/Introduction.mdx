@@ -76,12 +76,17 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ## Using this catalog
 
-- **Foundations** — each brand's colors, typography, spacing & motion tokens.
+- **Design system** — the toolbar picker shows one design system's tree at a
+  time; switching keeps you on the same page when the other one has it. Pick
+  **All** to see every tree at once (e.g. to search across them).
+- **Foundations** — each design system's colors, typography, spacing & motion tokens.
 - **Components** — live examples with source; every component has a **Docs**
   tab (autodocs) and an **Accessibility** panel (a11y addon).
-- **Theme toolbar** — the top-right control switches the active brand's theme:
-  Biome light/dark on Biome stories, Exodus accent on Exodus stories. Faune is
-  light-only, so the toolbar has no effect there.
+- **Migration** — Biome and Exodus only: checks that their legacy wrappers and
+  the shared primitives render correctly under the brand skin. Faune uses the
+  primitives directly, so it has none.
+- **Theme** — next to the picker: Biome light/dark, Exodus accent. Faune is
+  light-only, so it has no theme control.
 
 ## Consuming in an app
 

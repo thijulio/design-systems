@@ -4,7 +4,7 @@ import { expect, within } from 'storybook/test';
 import { withLegacyTokens } from '../_test/legacy-styles';
 
 const meta: Meta = {
-  title: 'Exodus/Shared/Compatibility',
+  title: 'Exodus/Migration/Compatibility',
   render: () => (
     <div style={{ display: 'grid', gap: 24 }}>
       <style>{'.consumer-compact { padding: 4px; }'}</style>

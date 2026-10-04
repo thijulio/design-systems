@@ -3,7 +3,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import { Button } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Button> = {
-  title: 'Exodus/Core/Button',
+  title: 'Exodus/Components/Button',
   component: Button,
   args: { children: 'Save changes' },
   argTypes: {

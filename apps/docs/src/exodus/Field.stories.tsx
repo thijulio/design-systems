@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Field, Input } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Field> = {
-  title: 'Exodus/Forms/Field',
+  title: 'Exodus/Components/Field',
   component: Field,
   argTypes: {
     label: { description: 'Field label, associated via `htmlFor`.' },

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EmptyState, Button, NavIcon } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof EmptyState> = {
-  title: 'Exodus/Feedback/EmptyState',
+  title: 'Exodus/Components/EmptyState',
   component: EmptyState,
   argTypes: {
     icon: { description: 'Icon rendered in the accent tile.' },

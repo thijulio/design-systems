@@ -11,15 +11,17 @@ import biomeCss from '@thijulio/biome-css/biome.css?inline';
 import exodusCss from '@thijulio/exodus-css/exodus.css?inline';
 import fauneCss from '@thijulio/faune-css/faune.css?inline';
 
-const BRAND_CSS: Record<string, string> = {
+import { type DesignSystem, designSystemOf } from './design-system';
+
+const BRAND_CSS: Record<DesignSystem, string> = {
   Biome: biomeCss,
   Exodus: exodusCss,
   Faune: fauneCss,
 };
 
 const withBrandTokens: Decorator = (Story, context) => {
-  const brand = (context.title ?? '').split('/')[0];
-  const css = BRAND_CSS[brand] ?? '';
+  const brand = designSystemOf(context.title);
+  const css = brand ? BRAND_CSS[brand] : '';
   const mode = context.globals.mode as string;
   const accent = context.globals.accent as string;
 
@@ -50,15 +52,18 @@ const preview: Preview = {
   parameters: {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: {
+      // One tree per design system, all the same shape (design-system.ts
+      // SECTIONS — repeated as literals because Storybook reads storySort
+      // statically). The manager's picker shows one design system at a time.
       storySort: {
         order: [
           'Introduction',
           'Biome',
-          ['Foundations', 'Components'],
+          ['Foundations', 'Components', 'Migration'],
           'Exodus',
-          ['Foundations', 'Shared', 'Core', 'Forms', 'Feedback', 'Identity'],
+          ['Foundations', 'Components', 'Migration'],
           'Faune',
-          ['Foundations', 'Components'],
+          ['Foundations', 'Components', 'Migration'],
         ],
       },
     },
@@ -66,9 +71,9 @@ const preview: Preview = {
     // known accessibility violations into a release.
     a11y: { test: 'error' },
   },
-  // Globals only (no `toolbar`): the toolbar UI is rendered per-brand by the
-  // manager addon (.storybook/manager.tsx), which shows the Biome mode control
-  // only on Biome stories and the Exodus theme control only on Exodus stories.
+  // Globals only (no `toolbar`): the toolbar UI is the manager addon
+  // (.storybook/manager.tsx) — a design-system picker plus the active design
+  // system's theme control (Biome mode, Exodus accent).
   globalTypes: {
     mode: { description: 'Biome light / dark', defaultValue: 'light' },
     accent: { description: 'Exodus accent theme', defaultValue: 'sage' },

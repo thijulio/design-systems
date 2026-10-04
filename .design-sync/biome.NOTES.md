@@ -67,8 +67,8 @@ identically` warn is the same cause (both stories render the initial state) — 
 - `[TOKENS_MISSING] --badge-bg, --badge-fg, --av-size, --av-font, --av-bg, --av-fg` —
   set inline at runtime by the primitives `Badge`/`Avatar` (bundled transitively; not
   biome components). Expected.
-- `[TITLE_UNMAPPED] Foundations, Compatibility, Sharedprimitives` — doc stories, not
-  components.
+- `[TITLE_UNMAPPED] Foundations, Compatibility, Primitives` (`Sharedprimitives` before the
+  2026-10 `Biome/Migration/*` titles) — doc stories, not components.
 
 ## Re-sync risks (watch-list)
 

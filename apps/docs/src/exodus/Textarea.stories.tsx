@@ -3,7 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Textarea } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Textarea> = {
-  title: 'Exodus/Forms/Textarea',
+  title: 'Exodus/Components/Textarea',
   component: Textarea,
   args: { placeholder: 'Notes about this animal…', rows: 4 },
   argTypes: {

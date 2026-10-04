@@ -3,7 +3,7 @@ import { expect, waitFor, within } from 'storybook/test';
 import { Card } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Card> = {
-  title: 'Exodus/Core/Card',
+  title: 'Exodus/Components/Card',
   component: Card,
   args: {
     pad: true,

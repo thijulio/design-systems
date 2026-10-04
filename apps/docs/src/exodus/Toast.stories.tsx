@@ -3,7 +3,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import { Toast } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Toast> = {
-  title: 'Exodus/Feedback/Toast',
+  title: 'Exodus/Components/Toast',
   component: Toast,
   args: {
     title: 'Changes saved',

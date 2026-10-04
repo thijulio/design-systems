@@ -43,7 +43,7 @@ assumes one `.design-sync/config.json` per repo. State is **brand-namespaced**:
 - Scoped storybook `apps/docs/.storybook-exodus`: glob
   `../src/exodus/**/!(Shared*).@(mdx|stories.…)`. The `Shared*` exclusion matters:
   `SharedButton`/`SharedCard.stories.tsx` document `@thijulio/primitives` under
-  `Exodus/Shared/Button|Card` titles, and `titleMap` matches a single title segment, so
+  `Exodus/Migration/Primitives/Button|Card` titles, and `titleMap` matches a single title segment, so
   they'd merge into the exodus-react Button/Card cards (duplicate `Default`/`Interactive`
   grade keys).
 
@@ -84,6 +84,8 @@ same cause.
   `_ds/nocturne-…/` are design-system copies Claude Design binds into the project; and
   `_vendor/preview-decorators.{js,css}` are unreferenced orphans from the first sync. The
   anchor doesn't track any of them, so diffs never delete them — leave `_ds/` alone.
-- **Group layout**: components live under title-derived groups
-  (core/feedback/forms/identity); no group-remap knob exists.
+- **Group layout**: components live under title-derived groups; no group-remap knob
+  exists. Titles were `Exodus/{Core,Forms,Feedback,Identity}/<Name>` until the shared
+  sidebar taxonomy (2026-10) flattened them to `Exodus/Components/<Name>`, so the next
+  sync regroups the cards (expected, cosmetic).
 - The `close` interaction grades carry forward — re-verify only if those stories change.

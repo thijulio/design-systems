@@ -3,7 +3,7 @@ import { Avatar, Badge, Button, Card, Input, Tag } from '@thijulio/primitives';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
 const meta: Meta<typeof Button> = {
-  title: 'Biome/Components/Shared primitives',
+  title: 'Biome/Migration/Primitives',
   component: Button,
   args: { onClick: fn() },
   parameters: {

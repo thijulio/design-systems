@@ -290,7 +290,9 @@ a `theme('<name>')` entry in the brand's `build.mjs` with the right selector.
 
 **Add a brand that uses shared components:** create its `tokens`, `css`, and
 `react` packages (copy `packages/faune/*` — `react` starts as a re-export of the
-primitives), map its source tokens to `--ds-*` in `src/tokens/contract.json`, add its CSS bundle to Storybook's brand registry,
+primitives), map its source tokens to `--ds-*` in `src/tokens/contract.json`, add it to
+`DESIGN_SYSTEMS` in `apps/docs/.storybook/design-system.ts` and its CSS bundle to
+`BRAND_CSS` in `preview.tsx` (typed against `DESIGN_SYSTEMS`) plus its `storySort` entry,
 and add it to `apps/docs/verify-contract.mjs`. See
 `docs/architecture/multi-brand-primitives.md`. `nx verify-contract docs` checks
 the variables consumed by primitives; Storybook tests check actual themed
@@ -379,11 +381,23 @@ cross-brand consumer).
   prefix (`Biome/…` / `Exodus/…` / `Faune/…`) and injects only that brand's token
   CSS (the brands share some `:root` var names), then sets `data-mode`/`data-theme` from the
   toolbar. Story titles MUST start with the brand — the first `/`-segment is the
-  brand key used by both `preview.tsx` and the per-brand toolbar in `manager.tsx`.
-- **Sidebar taxonomy:** titles are `Brand/Group/Component` — Biome uses
-  `Foundations` + `Components`; Exodus uses `Foundations`/`Shared`/`Core`/`Forms`/
-  `Feedback`/`Identity`; Faune uses `Foundations` + `Components`. Order is fixed in `preview.tsx` `options.storySort`
-  (`Introduction` first). Adding a component = pick the right group in its title.
+  brand key used by `preview.tsx` and `manager.tsx` (via `.storybook/design-system.ts`).
+- **Sidebar taxonomy:** every brand has the same tree —
+  `<Brand>/Foundations`, `<Brand>/Components/<Name>` (flat, alphabetical; no
+  category groups), and `<Brand>/Migration/<Name>` for wrapper-bridge stories
+  (Compatibility, primitives under the brand skin) that disappear with the wrappers.
+  Only `Introduction` is unbranded. `.storybook/design-system.spec.ts` parses every
+  story title (here and in `docs-web-components`) and fails on anything else.
+  Order is fixed in `preview.tsx` `options.storySort` (a literal — Storybook reads it
+  statically). Adding a component = `<Brand>/Components/<Name>`.
+- **Design-system picker:** the toolbar's **Design system** dropdown
+  (`manager.tsx`) filters the sidebar to one brand's tree (plus unbranded pages)
+  via `api.experimental_setFilter`, and switching lands on the same page in the
+  target brand when it exists (else its Foundations). The URL's story always wins,
+  so deep links select their brand; **All** shows every tree (sidebar search only
+  searches the visible tree). The pick is remembered in `localStorage`. The
+  per-brand `.storybook-<brand>/` design-sync configs keep the old per-brand
+  toolbar on purpose: they are single-brand builds.
 - **Docs & a11y:** `preview.tsx` sets `tags: ['autodocs']` globally, so every
   meta with a `component` gets a Docs page. Docgen does NOT run on the built
   packages, so props tables/descriptions come from **`argTypes` you define in
