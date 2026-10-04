@@ -7,7 +7,8 @@
   "text": {
     "strong": { "value": "{bm.bone-light}" },
     "body": { "value": "rgba(236, 239, 227, 0.82)" },
-    "muted": { "value": "#7E8C7A" }
+    "muted": { "value": "#7E8C7A" },
+    "accent": { "value": "#CE784F" }
   },
   "brand": { "value": "{bm.sage}" },
   "brand-hover": { "value": "#A6C29F" },

@@ -1,0 +1,18 @@
+{
+  "illustration": {
+    "leaf": {
+      "1": { "value": "#2A362A" },
+      "2": { "value": "#405A44" },
+      "3": { "value": "{bm.sage-soft}" },
+      "4": { "value": "{bm.sage}" },
+      "5": { "value": "#D3E2C9" }
+    },
+    "petal": {
+      "terracotta": { "value": "{bm.terracotta-dk}" },
+      "bone": { "value": "{bm.bone-light}" }
+    },
+    "coat": {
+      "black": { "value": "#0B0F0B" }
+    }
+  }
+}

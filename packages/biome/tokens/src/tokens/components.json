@@ -28,5 +28,25 @@
       "terracotta": { "value": "{bm.terracotta-dk}" },
       "muted": { "value": "#6E8C7A" }
     }
+  },
+  "illustration": {
+    "leaf": {
+      "1": { "value": "#E3E2CF" },
+      "2": { "value": "#BFC6A0" },
+      "3": { "value": "#8E9C6A" },
+      "4": { "value": "#5E7247" },
+      "5": { "value": "{bm.mata-deep}" }
+    },
+    "petal": {
+      "ipe": { "value": "{bm.ipe}" },
+      "terracotta": { "value": "{bm.terracotta}" },
+      "bone": { "value": "{bm.bone-raised}" }
+    },
+    "coat": {
+      "brown": { "value": "#8A6440" },
+      "gray": { "value": "#9C9B94" },
+      "cream": { "value": "#EADBBE" },
+      "black": { "value": "{bm.ink}" }
+    }
   }
 }

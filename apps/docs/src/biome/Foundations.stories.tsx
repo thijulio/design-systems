@@ -72,6 +72,12 @@ const SECTIONS: ColorSection[] = [
     match: (t) => t.source === 'semantic.json',
   },
   {
+    title: 'Illustration',
+    description:
+      'Fills for drawings (garden leaves, petals, cat coats). Dark mode reassigns some.',
+    match: (t) => t.path[0] === 'illustration',
+  },
+  {
     title: 'Components',
     description: 'Component-scoped tokens (TerminalHero, nav).',
     match: (t) => t.source === 'components.json',
@@ -102,6 +108,7 @@ const NOTES: Record<string, string> = {
   '--bm-terracotta-dk': 'Terracotta · dark accent',
   // Not from the old swatches: says what kind of value it is.
   '--shadow-cast': 'Cast shadow · a paint, not a box-shadow',
+  '--text-accent': 'Accent text · AA at small sizes, unlike accent-warm',
 };
 
 export const Colors: Story = {
