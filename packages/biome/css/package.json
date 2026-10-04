@@ -5,6 +5,8 @@
   "type": "module",
   "exports": {
     "./biome.css": "./dist/biome.css",
+    "./biome-core.css": "./dist/biome-core.css",
+    "./fonts-optional.css": "./dist/fonts-optional.css",
     "./fonts/*": "./dist/fonts/*",
     "./package.json": "./package.json"
   },

@@ -9,16 +9,29 @@ import {
   parseFontFaces,
   stripCssComments,
   type BrandFonts,
+  type FontDisplay,
   type FontStyle,
 } from './font-faces.js';
+
+/** A stylesheet the package ships, and the faces it must declare. */
+export interface FontStylesheet {
+  /** Path relative to `dist`. */
+  file: string;
+  /**
+   * The `font-display` of its faces: the file must lead with the brand's full
+   * face set. `null`: it must declare no `@font-face` (a sibling stylesheet
+   * brings the faces).
+   */
+  display: FontDisplay | null;
+}
 
 export interface VerifyFontsOptions {
   /** The brand css package root (resolves its fontsource devDependencies). */
   packageRoot: string;
   /** The package's build output — everything a consumer can load. */
   dist: string;
-  /** The bundle that must declare the faces, relative to `dist`. */
-  bundle: string;
+  /** Every stylesheet in `dist`; an unlisted one fails verification. */
+  stylesheets: readonly FontStylesheet[];
   fonts: BrandFonts;
 }
 
@@ -36,7 +49,7 @@ const isLicense = (file: string) =>
 export async function verifyFonts({
   packageRoot,
   dist,
-  bundle,
+  stylesheets,
   fonts,
 }: VerifyFontsOptions): Promise<void> {
   const problems: string[] = [];
@@ -82,46 +95,71 @@ export async function verifyFonts({
   for (const font of files.filter(isFont))
     if (!referenced.has(font)) fail(`${rel(font)} is shipped but unused`);
 
-  const bundleCss = await readFile(join(dist, bundle), 'utf-8');
+  // Every stylesheet is listed, so none escapes the face checks below.
+  const listed = new Set(stylesheets.map(({ file }) => join(dist, file)));
+  for (const file of files.filter((f) => f.endsWith('.css')))
+    if (!listed.has(file)) fail(`${rel(file)} is not a listed stylesheet`);
+  if (!stylesheets.some(({ display }) => display !== null))
+    fail('no listed stylesheet declares the faces');
 
-  // The faces lead the bundle, ahead of the tokens that name the families.
-  if (!/^\s*@font-face\b/.test(stripCssComments(bundleCss)))
-    fail(`${bundle}: the first rule must be an @font-face`);
-
-  const faces = parseFontFaces(bundleCss);
-  for (const face of faces) {
-    const id = `${face.family} ${face.style} ${face.weight.join('–')}`;
-    if (face.display !== 'swap') fail(`${id}: font-display must be swap`);
-    if (face.srcUrls.length === 0 || !face.srcUrls.every(isFont))
-      fail(`${id}: src must be woff2 only (${face.srcUrls.join(', ')})`);
-  }
-
-  // (c) Every contracted family × style × weight has a latin and a latin-ext
-  // face, with fontsource's unicode-range for that subset.
   const resolver = await createFontsourceResolver(packageRoot, fonts);
-  for (const { family, source, styles } of fonts) {
-    for (const [style, weights] of Object.entries(styles) as [
-      FontStyle,
-      readonly number[],
-    ][]) {
-      for (const subset of FONT_SUBSETS) {
-        const range = normalizeUnicodeRange(
-          resolver.unicodeRange(source.package, subset),
-        );
-        for (const weight of weights) {
-          const covered = faces.some(
-            (f) =>
-              f.family === family &&
-              f.style === style &&
-              f.weight[0] <= weight &&
-              weight <= f.weight[1] &&
-              normalizeUnicodeRange(f.unicodeRange ?? '') === range,
+  for (const { file, display } of stylesheets) {
+    if (!existsSync(join(dist, file))) {
+      fail(`${file} is listed but was not built`);
+      continue;
+    }
+    const css = await readFile(join(dist, file), 'utf-8');
+    const faces = parseFontFaces(css);
+
+    if (display === null) {
+      if (faces.length > 0)
+        fail(`${file}: must declare no @font-face (found ${faces.length})`);
+      continue;
+    }
+
+    // The faces lead the stylesheet, ahead of the tokens that name the families.
+    if (!/^\s*@font-face\b/.test(stripCssComments(css)))
+      fail(`${file}: the first rule must be an @font-face`);
+
+    for (const face of faces) {
+      const id = `${file}: ${face.family} ${face.style} ${face.weight.join('–')}`;
+      if (face.display !== display)
+        fail(`${id}: font-display must be ${display}`);
+      if (face.srcUrls.length === 0 || !face.srcUrls.every(isFont))
+        fail(`${id}: src must be woff2 only (${face.srcUrls.join(', ')})`);
+    }
+
+    // (c) Every contracted family × style × weight has a latin and a latin-ext
+    // face, with fontsource's unicode-range for that subset.
+    for (const { family, source, styles } of fonts) {
+      for (const [style, weights] of Object.entries(styles) as [
+        FontStyle,
+        readonly number[],
+      ][]) {
+        for (const subset of FONT_SUBSETS) {
+          const range = normalizeUnicodeRange(
+            resolver.unicodeRange(source.package, subset),
           );
-          if (!covered)
-            fail(`${family} ${style} ${weight}: no ${subset} @font-face`);
+          for (const weight of weights) {
+            const covered = faces.some(
+              (f) =>
+                f.family === family &&
+                f.style === style &&
+                f.weight[0] <= weight &&
+                weight <= f.weight[1] &&
+                normalizeUnicodeRange(f.unicodeRange ?? '') === range,
+            );
+            if (!covered)
+              fail(
+                `${file}: ${family} ${style} ${weight}: no ${subset} @font-face`,
+              );
+          }
         }
       }
     }
+  }
+
+  for (const { family, source } of fonts) {
     if (!existsSync(join(dist, 'fonts', licenseFileName(source.package))))
       fail(
         `${family}: OFL licence not shipped (${licenseFileName(source.package)})`,

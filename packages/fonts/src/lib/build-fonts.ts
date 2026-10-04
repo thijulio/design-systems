@@ -6,6 +6,7 @@ import {
   planFontFaces,
   renderFontFaces,
   type BrandFonts,
+  type FontDisplay,
   type FontSubset,
 } from './font-faces.js';
 
@@ -45,6 +46,11 @@ export async function createFontsourceResolver(
   };
 }
 
+async function planBrandFonts(packageRoot: string, fonts: BrandFonts) {
+  const resolver = await createFontsourceResolver(packageRoot, fonts);
+  return { resolver, faces: planFontFaces(fonts, resolver.unicodeRange) };
+}
+
 export interface BuildFontsOptions {
   /** The brand css package root (resolves its fontsource devDependencies). */
   packageRoot: string;
@@ -56,16 +62,15 @@ export interface BuildFontsOptions {
 /**
  * Copy the brand's woff2 files (latin + latin-ext) and each package's SIL OFL
  * licence into `<outDir>/fonts/`, and return the `@font-face` CSS that
- * references them by relative url — to be placed first in the bundle, which
- * must live in `outDir`.
+ * references them by relative url (`font-display: swap`) — to be placed first
+ * in the bundle, which must live in `outDir`.
  */
 export async function buildFonts({
   packageRoot,
   outDir,
   fonts,
 }: BuildFontsOptions): Promise<string> {
-  const resolver = await createFontsourceResolver(packageRoot, fonts);
-  const faces = planFontFaces(fonts, resolver.unicodeRange);
+  const { resolver, faces } = await planBrandFonts(packageRoot, fonts);
 
   const fontsDir = join(outDir, 'fonts');
   await rm(fontsDir, { recursive: true, force: true });
@@ -83,4 +88,25 @@ export async function buildFonts({
   );
 
   return renderFontFaces(faces);
+}
+
+export interface FontFacesCssOptions {
+  /** The brand css package root (resolves its fontsource devDependencies). */
+  packageRoot: string;
+  fonts: BrandFonts;
+  display: FontDisplay;
+}
+
+/**
+ * The same `@font-face` rules `buildFonts` returns, with another
+ * `font-display` — for a second stylesheet next to the bundle, in `outDir`.
+ * Copies nothing: the files are the ones `buildFonts` shipped.
+ */
+export async function fontFacesCss({
+  packageRoot,
+  fonts,
+  display,
+}: FontFacesCssOptions): Promise<string> {
+  const { faces } = await planBrandFonts(packageRoot, fonts);
+  return renderFontFaces(faces, { display });
 }
