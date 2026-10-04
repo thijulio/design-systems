@@ -1,3 +1,9 @@
+## 0.0.10 (2026-10-04)
+
+### 🧱 Updated Dependencies
+
+- Updated biome-tokens to 0.0.9
+
 ## 0.0.9 (2026-10-04)
 
 ### 🧱 Updated Dependencies

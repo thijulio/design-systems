@@ -1,3 +1,14 @@
+## 0.0.9 (2026-10-04)
+
+### 🚀 Features
+
+- **biome-tokens:** add text-accent and an illustration palette ([#21](https://github.com/thijulio/design-systems/pull/21), [#9](https://github.com/thijulio/design-systems/issues/9))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Thiago Valença @thijulio
+
 ## 0.0.8 (2026-10-04)
 
 ### 🚀 Features
