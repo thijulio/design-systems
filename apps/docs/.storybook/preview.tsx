@@ -13,6 +13,8 @@ import fauneCss from '@thijulio/faune-css/faune.css?inline';
 
 import { type DesignSystem, designSystemOf } from './design-system';
 
+const IN_VITEST_BROWSER = '__vitest_browser__' in globalThis;
+
 const BRAND_CSS: Record<DesignSystem, string> = {
   Biome: biomeCss,
   Exodus: exodusCss,
@@ -69,7 +71,17 @@ const preview: Preview = {
     },
     // A component catalog is a quality gate: supported stories must not carry
     // known accessibility violations into a release.
-    a11y: { test: 'error' },
+    a11y: {
+      test: 'error',
+      // Under Vitest, addon-vitest streams each story's whole axe result to the
+      // Node orchestrator on every task update. Every node of every passing
+      // rule made that ~50 MB per run, parsed on the thread that also drives
+      // Playwright, so hover actions starved into timeouts. The gate reads only
+      // violations; the interactive panel keeps the full result.
+      ...(IN_VITEST_BROWSER && {
+        options: { resultTypes: ['violations', 'incomplete'] },
+      }),
+    },
   },
   // Globals only (no `toolbar`): the toolbar UI is the manager addon
   // (.storybook/manager.tsx) — a design-system picker plus the active design
