@@ -3,7 +3,7 @@ import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from '@thijulio/primitives';
 
 const meta: Meta<typeof Button> = {
-  title: 'Exodus/Shared/Button',
+  title: 'Exodus/Migration/Primitives/Button',
   component: Button,
   args: { children: 'Save changes' },
   parameters: {

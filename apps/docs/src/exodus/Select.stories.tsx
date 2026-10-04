@@ -3,7 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Select } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Select> = {
-  title: 'Exodus/Forms/Select',
+  title: 'Exodus/Components/Select',
   component: Select,
   argTypes: {
     invalid: {

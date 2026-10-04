@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card } from '@thijulio/primitives';
 
 const meta: Meta<typeof Card> = {
-  title: 'Exodus/Shared/Card',
+  title: 'Exodus/Migration/Primitives/Card',
   component: Card,
   args: { pad: true, children: 'A shared card with the Exodus surface.' },
   parameters: {

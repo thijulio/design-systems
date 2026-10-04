@@ -48,9 +48,11 @@ const preview: Preview = {
         order: [
           'Introduction',
           'Biome',
-          ['Foundations', 'Components'],
+          ['Foundations', 'Components', 'Migration'],
           'Exodus',
-          ['Foundations', 'Core', 'Forms', 'Feedback', 'Identity'],
+          ['Foundations', 'Components', 'Migration'],
+          'Faune',
+          ['Foundations', 'Components', 'Migration'],
         ],
       },
     },

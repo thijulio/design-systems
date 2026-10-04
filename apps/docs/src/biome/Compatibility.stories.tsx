@@ -5,7 +5,7 @@ import { withLegacyTokens } from '../_test/legacy-styles';
 import { hoverInBrowserTest } from '../_test/hover';
 
 const meta: Meta = {
-  title: 'Biome/Components/Compatibility',
+  title: 'Biome/Migration/Compatibility',
   render: () => (
     <div style={{ display: 'grid', gap: 24 }}>
       <style>{'.consumer-compact { padding: 4px; }'}</style>

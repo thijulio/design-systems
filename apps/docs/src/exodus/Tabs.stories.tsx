@@ -11,7 +11,7 @@ const TABS = [
 ];
 
 const meta: Meta<typeof Tabs> = {
-  title: 'Exodus/Core/Tabs',
+  title: 'Exodus/Components/Tabs',
   component: Tabs,
   argTypes: {
     tabs: { description: 'The tab items (value + label) to render.' },

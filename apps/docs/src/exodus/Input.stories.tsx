@@ -3,7 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Input } from '@thijulio/exodus-react';
 
 const meta: Meta<typeof Input> = {
-  title: 'Exodus/Forms/Input',
+  title: 'Exodus/Components/Input',
   component: Input,
   args: { id: 'animal-search', placeholder: 'Search animals…' },
   argTypes: {

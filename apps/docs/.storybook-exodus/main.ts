@@ -11,8 +11,9 @@ const config: StorybookConfig = {
   // for the PMP Design System project (biome has its own sync run). Keeps biome
   // stories out of the index so shared component names (Button, Card) can't
   // cross-pair against the exodus bundle. `Shared*` stories are excluded too:
-  // they document @thijulio/primitives under titles (`Exodus/Shared/Button`)
-  // that would merge into the exodus-react Button/Card cards.
+  // they document @thijulio/primitives under titles
+  // (`Exodus/Migration/Primitives/Button`) whose leaf name would merge into the
+  // exodus-react Button/Card cards.
   stories: ['../src/exodus/**/!(Shared*).@(mdx|stories.@(js|jsx|ts|tsx))'],
   addons: [
     '@storybook/addon-docs',
