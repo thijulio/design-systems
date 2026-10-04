@@ -54,4 +54,22 @@ await verifyFonts({
   fonts,
 });
 
+// The README tells consumers which files to preload for the optional split.
+// Each one must be a face fonts-optional.css uses (verifyFonts above already
+// proved every such url resolves in dist), or a fontsource rename would leave
+// consumers preloading a 404 and skipping the face.
+const readme = await readFile(join(here, 'README.md'), 'utf-8');
+const documentedPreloads = new Set(
+  [...readme.matchAll(/fonts\/([\w.-]+\.woff2)/g)].map(([, file]) => file),
+);
+assert.ok(documentedPreloads.size > 0, 'README.md documents no preload files');
+const optionalSrcs = new Set(
+  parseFontFaces(optionalFonts).flatMap((face) => face.srcUrls),
+);
+for (const file of documentedPreloads)
+  assert.ok(
+    optionalSrcs.has(`./fonts/${file}`),
+    `README.md preloads ${file}, which fonts-optional.css does not use`,
+  );
+
 console.log('✓ @thijulio/biome-css output verified');
