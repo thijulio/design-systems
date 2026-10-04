@@ -1,3 +1,14 @@
+## 0.0.8 (2026-10-04)
+
+### 🚀 Features
+
+- **biome-tokens:** add shadow-cast colour token ([#20](https://github.com/thijulio/design-systems/pull/20))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Thiago Valença @thijulio
+
 ## 0.0.7 (2026-10-03)
 
 ### 🚀 Features
