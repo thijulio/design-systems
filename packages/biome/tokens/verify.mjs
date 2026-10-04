@@ -293,4 +293,86 @@ for (const theme of [undefined, ...manifest.themes]) {
   }
 }
 
+// --- Small accent text: terracotta that passes AA where accent-warm doesn't ---
+assert.match(css, /--text-accent: #9E4421;/, 'light --text-accent altered');
+assert.match(css, /--text-accent: #CE784F;/, 'dark --text-accent altered');
+const contrast = (a, b) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+for (const theme of [undefined, ...manifest.themes]) {
+  const mode = theme?.name ?? 'light';
+  const fg = rgba(valueIn('--text-accent', theme));
+  assert.equal(fg[3], 1, `${mode} --text-accent is not opaque`);
+  for (const surface of ['--surface-page', '--surface-raised']) {
+    const ratio = contrast(fg, rgba(valueIn(surface, theme)));
+    assert.ok(
+      ratio >= 4.5,
+      `${mode} --text-accent is ${ratio.toFixed(2)}:1 on ${surface} (AA needs 4.5)`,
+    );
+  }
+}
+
+// --- Illustration palette (garden leaves, petals, cat coats) ---
+// [name, light, dark | undefined when unchanged]; a value that is a palette
+// color references it, so the illustration follows the palette.
+const ILLUSTRATION = [
+  ['--illustration-leaf-1', '#E3E2CF', '#2A362A'],
+  ['--illustration-leaf-2', '#BFC6A0', '#405A44'],
+  ['--illustration-leaf-3', '#8E9C6A', ['#6E9B7E', '--bm-sage-soft']],
+  ['--illustration-leaf-4', '#5E7247', ['#8FB089', '--bm-sage']],
+  ['--illustration-leaf-5', ['#2E3D28', '--bm-mata-deep'], '#D3E2C9'],
+  ['--illustration-petal-ipe', ['#E8A627', '--bm-ipe']],
+  [
+    '--illustration-petal-terracotta',
+    ['#B5532A', '--bm-terracotta'],
+    ['#C8693B', '--bm-terracotta-dk'],
+  ],
+  [
+    '--illustration-petal-bone',
+    ['#F8F5EC', '--bm-bone-raised'],
+    ['#ECEFE3', '--bm-bone-light'],
+  ],
+  ['--illustration-coat-brown', '#8A6440'],
+  ['--illustration-coat-gray', '#9C9B94'],
+  ['--illustration-coat-cream', '#EADBBE'],
+  ['--illustration-coat-black', ['#232A20', '--bm-ink'], '#0B0F0B'],
+];
+const expectToken = (name, expected, tokens, mode) => {
+  const [value, ref] = Array.isArray(expected) ? expected : [expected];
+  const token = entry(name, tokens);
+  assert.equal(token?.value, value, `${mode} ${name} altered`);
+  assert.deepEqual(
+    token.references,
+    ref ? [ref] : [],
+    `${mode} ${name} references altered`,
+  );
+};
+for (const [name, light, dark] of ILLUSTRATION) {
+  expectToken(name, light, manifest.tokens, 'light');
+  if (dark) expectToken(name, dark, darkTheme.tokens, 'dark');
+}
+assert.deepEqual(
+  listed(darkTheme.tokens.filter((t) => t.name.startsWith('--illustration-'))),
+  ILLUSTRATION.filter(([, , dark]) => dark)
+    .map(([name]) => name)
+    .sort(),
+  'dark overrides exactly the illustration colors that change',
+);
+assert.match(
+  nativeTokens,
+  /"illustration": \{\s*"leaf": \{\s*"1": "#E3E2CF"/,
+  'native illustration palette missing',
+);
+assert.match(
+  dartTokens,
+  /static const Color illustrationCoatCream = Color\(0xFFEADBBE\);/,
+  'dart illustration color missing',
+);
+assert.match(
+  dartDark,
+  /'illustrationCoatBlack': Color\(0xFF0B0F0B\)/,
+  'dart dark illustration override missing',
+);
+
 console.log('✓ @thijulio/biome-tokens output verified');
