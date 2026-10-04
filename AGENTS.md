@@ -410,6 +410,16 @@ cross-brand consumer).
   `@vitest/browser-playwright`). Every story is also a smoke test (mount without
   error); `play` functions add assertions. Needs `npx playwright install
 chromium` once. The addon also lights up the Storybook **Interactions** panel.
+- **Test-run load lives on one Node thread.** Vitest, the Vite dev server and
+  the Playwright client share the orchestrator's event loop. When it saturates,
+  real pointer actions (`userEvent.hover`: locator → actionability → mouse, all
+  round-trips) stall for seconds and time out at random. Under Vitest,
+  `preview.tsx` passes axe `resultTypes: ['violations', 'incomplete']`.
+  addon-vitest streams each story's axe result in its task meta. With full
+  passes that was ~50 MB of RPC per run (2 MB per catalog update), and it
+  halved the heaviest stories once removed. Keep that guard, and keep
+  per-story payloads (reports, logs) small. Don't raise `testTimeout` to hide
+  a stall.
 - **prettier** has no parser for `.swcrc` or `Dockerfile` → `**/*.swcrc` and
   `Dockerfile`/`.dockerignore` are in `.prettierignore`.
 - **Webfonts are self-hosted — never add a font CDN `@import`/`<link>`.**
