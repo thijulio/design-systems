@@ -17,5 +17,6 @@
   "border": { "value": "{bm.hairline-dk}" },
   "focus": { "value": "{bm.sage}" },
   "on-brand": { "value": "{bm.canopy}" },
-  "nav-bg": { "value": "rgba(22, 29, 22, 0.82)" }
+  "nav-bg": { "value": "rgba(22, 29, 22, 0.82)" },
+  "shadow-cast": { "value": "rgba(0, 0, 0, 0.55)" }
 }

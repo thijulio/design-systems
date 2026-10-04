@@ -17,5 +17,6 @@
   "border": { "value": "{bm.hairline}" },
   "focus": { "value": "{bm.cerrado}" },
   "on-brand": { "value": "{bm.bone}" },
-  "nav-bg": { "value": "rgba(242, 238, 226, 0.86)" }
+  "nav-bg": { "value": "rgba(242, 238, 226, 0.86)" },
+  "shadow-cast": { "value": "rgba(35, 42, 32, 0.11)" }
 }

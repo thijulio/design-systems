@@ -212,4 +212,85 @@ assert.deepEqual(
   'dark brand alias not resolved against the base palette',
 );
 
+// --- Cast shadow: one paint (color + alpha) per mode ---
+// Light keeps the reference garden's ink at 0.11. Dark is near-black: the dark
+// page is the darkest palette color, so any lighter paint reads as a glow.
+assert.match(
+  css,
+  /--shadow-cast: rgba\(35, 42, 32, 0\.11\);/,
+  'light --shadow-cast missing/altered',
+);
+assert.match(
+  css,
+  /--shadow-cast: rgba\(0, 0, 0, 0\.55\);/,
+  'dark --shadow-cast missing/altered',
+);
+const darkTheme = manifest.themes.find((t) => t.name === 'dark');
+assert.equal(
+  entry('--shadow-cast', darkTheme.tokens)?.value,
+  'rgba(0, 0, 0, 0.55)',
+  'dark --shadow-cast is not a [data-mode="dark"] override',
+);
+assert.match(
+  nativeTokens,
+  /"shadow-cast": "rgba\(35, 42, 32, 0\.11\)"/,
+  'native --shadow-cast missing/altered',
+);
+assert.match(
+  nativeDark,
+  /"shadow-cast": "rgba\(0, 0, 0, 0\.55\)"/,
+  'native dark --shadow-cast missing/altered',
+);
+assert.match(
+  dartTokens,
+  /static const Color shadowCast = Color\.fromRGBO\(35, 42, 32, 0\.11\);/,
+  'dart shadowCast missing/altered',
+);
+assert.match(
+  dartDark,
+  /'shadowCast': Color\.fromRGBO\(0, 0, 0, 0\.55\)/,
+  'dart theme shadowCast missing/altered',
+);
+
+// No glow: in every mode the shadow, composited over each surface it falls on,
+// is darker than that surface.
+const valueIn = (name, theme) => {
+  const token =
+    (theme && entry(name, theme.tokens)) ?? entry(name, manifest.tokens);
+  assert.ok(token, `${name} missing from the manifest`);
+  return token.value;
+};
+const rgba = (value) => {
+  const hex = /^#([0-9a-f]{6})$/i.exec(value);
+  if (hex) {
+    return [0, 2, 4].map((i) => parseInt(hex[1].slice(i, i + 2), 16)).concat(1);
+  }
+  const fn =
+    /^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+)\s*)?\)$/.exec(
+      value,
+    );
+  assert.ok(fn, `unparseable color ${value}`);
+  return [+fn[1], +fn[2], +fn[3], fn[4] === undefined ? 1 : +fn[4]];
+};
+const luminance = (rgb) => {
+  const [r, g, b] = rgb.map((c) => {
+    const s = c / 255;
+    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+for (const theme of [undefined, ...manifest.themes]) {
+  const mode = theme?.name ?? 'light';
+  const [r, g, b, a] = rgba(valueIn('--shadow-cast', theme));
+  for (const surface of ['--surface-page', '--surface-raised']) {
+    const bg = rgba(valueIn(surface, theme));
+    assert.equal(bg[3], 1, `${mode} ${surface} is not opaque`);
+    const shaded = [r, g, b].map((c, i) => c * a + bg[i] * (1 - a));
+    assert.ok(
+      luminance(shaded) < luminance(bg),
+      `${mode} --shadow-cast lightens ${surface} (reads as a glow)`,
+    );
+  }
+}
+
 console.log('✓ @thijulio/biome-tokens output verified');
