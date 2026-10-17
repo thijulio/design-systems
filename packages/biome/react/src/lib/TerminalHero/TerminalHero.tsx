@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import styles from './TerminalHero.module.css';
 
@@ -129,177 +129,185 @@ export interface TerminalHeroProps extends Omit<
  * TerminalHero — the signature Biome Modernism hero: an editorial identity
  * column beside a self-typing terminal, over breathing topographic contours.
  */
-export function TerminalHero({
-  eyebrow = 'Software Engineer · São Paulo',
-  title = DEFAULT_TITLE,
-  lede = 'Resilient front-end architecture, real-time data, and the occasional living interface. Currently open to senior roles.',
-  primaryLabel = 'Explore projects →',
-  primaryHref = '#',
-  secondaryLabel = 'Recruiter view ›',
-  secondaryHref = '#',
-  terminalTitle = '~/biome — node',
-  lines = DEFAULT_LINES,
-  command = DEFAULT_COMMAND,
-  output = DEFAULT_OUTPUT,
-  loop = true,
-  cycleMs = 9500,
-  showContours = true,
-  className,
-  ...rest
-}: TerminalHeroProps) {
-  const termRef = useRef<HTMLDivElement>(null);
+export const TerminalHero = forwardRef<HTMLElement, TerminalHeroProps>(
+  function TerminalHero(
+    {
+      eyebrow = 'Software Engineer · São Paulo',
+      title = DEFAULT_TITLE,
+      lede = 'Resilient front-end architecture, real-time data, and the occasional living interface. Currently open to senior roles.',
+      primaryLabel = 'Explore projects →',
+      primaryHref = '#',
+      secondaryLabel = 'Recruiter view ›',
+      secondaryHref = '#',
+      terminalTitle = '~/biome — node',
+      lines = DEFAULT_LINES,
+      command = DEFAULT_COMMAND,
+      output = DEFAULT_OUTPUT,
+      loop = true,
+      cycleMs = 9500,
+      showContours = true,
+      className,
+      ...rest
+    },
+    ref,
+  ) {
+    const termRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!loop) return undefined;
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)');
-    if (reduce?.matches) return undefined;
-    const container = termRef.current;
-    if (!container) return undefined;
-    const id = window.setInterval(() => {
-      const els = container.querySelectorAll<HTMLElement>('[data-th-anim]');
-      els.forEach((el) => {
-        el.style.animation = 'none';
-      });
-      void container.offsetWidth; // reflow → restart animations
-      els.forEach((el) => {
-        el.style.animation = '';
-      });
-    }, cycleMs);
-    return () => window.clearInterval(id);
-  }, [loop, cycleMs]);
+    useEffect(() => {
+      if (!loop) return undefined;
+      const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+      if (reduce?.matches) return undefined;
+      const container = termRef.current;
+      if (!container) return undefined;
+      const id = window.setInterval(() => {
+        const els = container.querySelectorAll<HTMLElement>('[data-th-anim]');
+        els.forEach((el) => {
+          el.style.animation = 'none';
+        });
+        void container.offsetWidth; // reflow → restart animations
+        els.forEach((el) => {
+          el.style.animation = '';
+        });
+      }, cycleMs);
+      return () => window.clearInterval(id);
+    }, [loop, cycleMs]);
 
-  const base = 0.25;
-  const step = 0.7;
-  const outDelay = base + lines.length * step + 0.4;
+    const base = 0.25;
+    const step = 0.7;
+    const outDelay = base + lines.length * step + 0.4;
 
-  return (
-    <section
-      className={[styles.hero, className].filter(Boolean).join(' ')}
-      {...rest}
-    >
-      {showContours && (
-        <div className={styles.contours}>
-          <svg viewBox="0 0 1000 1000" width="100%" height="100%">
-            <g className={styles.rings}>
-              <circle
-                cx="560"
-                cy="500"
-                r="96"
-                fill="none"
-                stroke="var(--terminal-contour-sage)"
-                strokeWidth="1.3"
-                opacity=".55"
-              />
-              <circle
-                cx="560"
-                cy="500"
-                r="176"
-                fill="none"
-                stroke="var(--terminal-contour-soft)"
-                strokeWidth="1.1"
-                opacity=".42"
-              />
-              <circle
-                cx="560"
-                cy="500"
-                r="258"
-                fill="none"
-                stroke="var(--terminal-contour-soft)"
-                strokeWidth="1"
-                opacity=".32"
-              />
-            </g>
-            <g className={styles.ringsSlow}>
-              <circle
-                cx="560"
-                cy="500"
-                r="352"
-                fill="none"
-                stroke="var(--terminal-contour-terracotta)"
-                strokeWidth="1"
-                opacity=".26"
-              />
-              <circle
-                cx="560"
-                cy="500"
-                r="452"
-                fill="none"
-                stroke="var(--terminal-contour-sage)"
-                strokeWidth=".8"
-                opacity=".16"
-              />
-              <circle
-                cx="560"
-                cy="500"
-                r="560"
-                fill="none"
-                stroke="var(--terminal-contour-muted)"
-                strokeWidth=".7"
-                opacity=".12"
-              />
-            </g>
-            <circle cx="560" cy="500" r="4" fill="var(--terminal-eyebrow)" />
-          </svg>
-        </div>
-      )}
-
-      <div className={styles.inner}>
-        <div>
-          <div className={styles.eyebrow}>{eyebrow}</div>
-          <h1 className={styles.title}>{title}</h1>
-          <p className={styles.lede}>{lede}</p>
-          <div className={styles.actions}>
-            <a
-              href={primaryHref}
-              className={`${styles.action} ${styles.actionPrimary}`}
-            >
-              {primaryLabel}
-            </a>
-            <a
-              href={secondaryHref}
-              className={`${styles.action} ${styles.actionSecondary}`}
-            >
-              {secondaryLabel}
-            </a>
+    return (
+      <section
+        ref={ref}
+        className={[styles.hero, className].filter(Boolean).join(' ')}
+        {...rest}
+      >
+        {showContours && (
+          <div className={styles.contours}>
+            <svg viewBox="0 0 1000 1000" width="100%" height="100%">
+              <g className={styles.rings}>
+                <circle
+                  cx="560"
+                  cy="500"
+                  r="96"
+                  fill="none"
+                  stroke="var(--terminal-contour-sage)"
+                  strokeWidth="1.3"
+                  opacity=".55"
+                />
+                <circle
+                  cx="560"
+                  cy="500"
+                  r="176"
+                  fill="none"
+                  stroke="var(--terminal-contour-soft)"
+                  strokeWidth="1.1"
+                  opacity=".42"
+                />
+                <circle
+                  cx="560"
+                  cy="500"
+                  r="258"
+                  fill="none"
+                  stroke="var(--terminal-contour-soft)"
+                  strokeWidth="1"
+                  opacity=".32"
+                />
+              </g>
+              <g className={styles.ringsSlow}>
+                <circle
+                  cx="560"
+                  cy="500"
+                  r="352"
+                  fill="none"
+                  stroke="var(--terminal-contour-terracotta)"
+                  strokeWidth="1"
+                  opacity=".26"
+                />
+                <circle
+                  cx="560"
+                  cy="500"
+                  r="452"
+                  fill="none"
+                  stroke="var(--terminal-contour-sage)"
+                  strokeWidth=".8"
+                  opacity=".16"
+                />
+                <circle
+                  cx="560"
+                  cy="500"
+                  r="560"
+                  fill="none"
+                  stroke="var(--terminal-contour-muted)"
+                  strokeWidth=".7"
+                  opacity=".12"
+                />
+              </g>
+              <circle cx="560" cy="500" r="4" fill="var(--terminal-eyebrow)" />
+            </svg>
           </div>
-        </div>
+        )}
 
-        <div className={styles.card}>
-          <div className={styles.terminal}>
-            <div className={styles.titlebar}>
-              <span className={`${styles.dot} ${styles.dotRed}`} />
-              <span className={`${styles.dot} ${styles.dotAmber}`} />
-              <span className={`${styles.dot} ${styles.dotGreen}`} />
-              <span className={styles.termTitle}>{terminalTitle}</span>
+        <div className={styles.inner}>
+          <div>
+            <div className={styles.eyebrow}>{eyebrow}</div>
+            <h1 className={styles.title}>{title}</h1>
+            <p className={styles.lede}>{lede}</p>
+            <div className={styles.actions}>
+              <a
+                href={primaryHref}
+                className={`${styles.action} ${styles.actionPrimary}`}
+              >
+                {primaryLabel}
+              </a>
+              <a
+                href={secondaryHref}
+                className={`${styles.action} ${styles.actionSecondary}`}
+              >
+                {secondaryLabel}
+              </a>
             </div>
-            <div ref={termRef} className={styles.termBody}>
-              {lines.map((line, i) => (
-                <div
-                  key={i}
-                  className={styles.line}
-                  data-th-anim
-                  style={{ animationDelay: `${base + i * step}s` }}
-                >
-                  {line}
-                </div>
-              ))}
-              <div className={styles.commandLine}>
-                {command}
-                <span className={styles.caret} />
+          </div>
+
+          <div className={styles.card}>
+            <div className={styles.terminal}>
+              <div className={styles.titlebar}>
+                <span className={`${styles.dot} ${styles.dotRed}`} />
+                <span className={`${styles.dot} ${styles.dotAmber}`} />
+                <span className={`${styles.dot} ${styles.dotGreen}`} />
+                <span className={styles.termTitle}>{terminalTitle}</span>
               </div>
-              {output && (
-                <div
-                  className={styles.out}
-                  data-th-anim
-                  style={{ animationDelay: `${outDelay}s` }}
-                >
-                  {output}
+              <div ref={termRef} className={styles.termBody}>
+                {lines.map((line, i) => (
+                  <div
+                    key={i}
+                    className={styles.line}
+                    data-th-anim
+                    style={{ animationDelay: `${base + i * step}s` }}
+                  >
+                    {line}
+                  </div>
+                ))}
+                <div className={styles.commandLine}>
+                  {command}
+                  <span className={styles.caret} />
                 </div>
-              )}
+                {output && (
+                  <div
+                    className={styles.out}
+                    data-th-anim
+                    style={{ animationDelay: `${outDelay}s` }}
+                  >
+                    {output}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
+    );
+  },
+);
+
+TerminalHero.displayName = 'TerminalHero';

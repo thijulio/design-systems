@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties, ReactNode } from 'react';
+import { expect, within } from 'storybook/test';
+import { contrastRatio } from '../_test/contrast';
 import exodusTokens from '@thijulio/exodus-tokens/tokens.manifest.json';
 import { ColorCatalog } from '../_foundations/ColorCatalog';
 import {
@@ -256,6 +258,24 @@ export const Typography: Story = {
         </Section>
       </div>
     );
+  },
+};
+
+/** exodus.css styles bare `<small>`; its colour must pass AA on the page. */
+export const SmallText: Story = {
+  render: () => (
+    <p>
+      Spring 2026 litter <small>Updated 4 days ago · Coimbra</small>
+    </p>
+  ),
+  play: async ({ canvasElement }) => {
+    const small = within(canvasElement).getByText(/Updated 4 days ago/);
+    await expect(
+      contrastRatio(
+        getComputedStyle(small).color,
+        getComputedStyle(document.body).backgroundColor,
+      ),
+    ).toBeGreaterThanOrEqual(4.5);
   },
 };
 
