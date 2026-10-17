@@ -13,6 +13,10 @@
 
 ## 0.0.7 (2026-10-17)
 
+### ⚠️ Breaking Changes
+
+- **Card:** `title` is now the card's header title (a `ReactNode` rendered as a heading at `headingLevel`), no longer the native HTML `title` attribute, which `CardProps` now omits. A string passed as a tooltip renders as a visible heading and turns the card sectioned (unpadded root, padded header and body). Put tooltip text on a wrapping or child element instead. ([#32](https://github.com/thijulio/design-systems/pull/32))
+
 ### 🚀 Features
 
 - generic primitives, contract tokens and shared stories for exodus adoption ([#32](https://github.com/thijulio/design-systems/pull/32))
