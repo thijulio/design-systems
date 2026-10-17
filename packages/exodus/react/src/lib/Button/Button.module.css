@@ -5,12 +5,14 @@
   --ds-size-body-sm: var(--text-body-sm);
   --ds-size-body: var(--text-body);
   --ds-radius-control: var(--radius-md);
-  --ds-focus: var(--accent-ring);
+  /* accent, not accent-ring: the ring must reach 3:1 against surfaces. */
+  --ds-focus: var(--accent);
   --ds-brand: var(--accent);
   --ds-brand-hover: var(--accent-strong);
   --ds-on-brand: var(--accent-on);
   --ds-accent-soft: var(--accent-soft);
   --ds-accent-fg: var(--accent-fg);
+  --ds-accent-fg-hover: var(--accent-800);
   --ds-danger: var(--danger);
   --ds-danger-soft: var(--danger-soft);
   --ds-text-inverse: var(--accent-on);

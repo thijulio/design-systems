@@ -26,7 +26,7 @@ Prefer the semantic `--ds-*` tokens — they are what the components themselves 
 - Status: `--ds-success`, `--ds-warning`, `--ds-danger`, `--ds-info`, each with
   `-soft` and `-fg` companions (e.g. `--ds-danger-soft`, `--ds-success-fg`).
 - Type: `--ds-font-display` (serif headlines), `--ds-font-body`, `--ds-font-ui`
-  (sans); sizes `--ds-size-display`, `--ds-size-h1`, `--ds-size-h2`, `--ds-size-h3`,
+  (sans), `--ds-font-mono` (code, keys); sizes `--ds-size-display`, `--ds-size-h1`, `--ds-size-h2`, `--ds-size-h3`,
   `--ds-size-body`, `--ds-size-body-sm`, `--ds-size-caption`; weights
   `--ds-weight-regular … --ds-weight-extra`; `--ds-leading-*`, `--ds-tracking-*`.
 - Space & shape: `--ds-space-1 … --ds-space-12`; radii `--ds-radius-sm|md|lg|full`,

@@ -76,12 +76,16 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ## Using this catalog
 
-- **Design system** — the toolbar picker shows one design system's tree at a
-  time; switching keeps you on the same page when the other one has it. Pick
-  **All** to see every tree at once (e.g. to search across them).
+- **Design system** — the toolbar picker restyles the shared **Components**
+  in the chosen design system and shows that design system's own tree next to
+  them; switching keeps you on the same page. Pick **All** to see every tree at
+  once (e.g. to search across them).
+- **Components** — one set of live examples per shared component
+  (`@thijulio/primitives`), restyled by the picker. Every component has a
+  **Docs** tab (autodocs) and an **Accessibility** panel (a11y addon).
 - **Foundations** — each design system's colors, typography, spacing & motion tokens.
-- **Components** — live examples with source; every component has a **Docs**
-  tab (autodocs) and an **Accessibility** panel (a11y addon).
+- **Biome / Exodus → Components** — what only that design system has: Biome's
+  own components, and Exodus's own components and re-skinned wrappers.
 - **Migration** — Biome and Exodus only: checks that their legacy wrappers and
   the shared primitives render correctly under the brand skin. Faune uses the
   primitives directly, so it has none.

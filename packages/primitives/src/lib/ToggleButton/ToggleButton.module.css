@@ -1,0 +1,10 @@
+/* The pressed state is also drawn from the ARIA attribute, so a caller-chosen
+   variant still shows which toggles are on. */
+.toggle[aria-pressed='true'] {
+  border-color: var(--ds-accent);
+}
+
+/* Two classes outrank the Button's own radius whatever the stylesheet order. */
+.toggle.pill {
+  border-radius: var(--ds-radius-full);
+}

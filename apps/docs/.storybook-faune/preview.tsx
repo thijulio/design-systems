@@ -7,13 +7,10 @@ import '@thijulio/faune-react/styles.css';
 // Token + base CSS as a string, injected per story.
 import fauneCss from '@thijulio/faune-css/faune.css?inline';
 
-const BRAND_CSS: Record<string, string> = {
-  Faune: fauneCss,
-};
-
+// Single-brand build: its own stories and the shared `Components/…` ones all
+// render in Faune, whatever the `designSystem` global says.
 const withBrandTokens: Decorator = (Story, context) => {
-  const brand = (context.title ?? '').split('/')[0];
-  const css = BRAND_CSS[brand] ?? '';
+  const css = fauneCss;
   const mode = context.globals.mode as string;
   const accent = context.globals.accent as string;
 
@@ -47,6 +44,7 @@ const preview: Preview = {
       storySort: {
         order: [
           'Introduction',
+          'Components',
           'Biome',
           ['Foundations', 'Components', 'Migration'],
           'Exodus',

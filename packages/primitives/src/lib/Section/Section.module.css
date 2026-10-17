@@ -1,0 +1,71 @@
+.section {
+  min-width: 0;
+}
+
+.plain {
+  background: transparent;
+}
+
+.raised {
+  background: var(--ds-surface-raised);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--ds-radius-2xl);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.sunken {
+  background: var(--ds-surface-sunken);
+  border-radius: var(--ds-radius-2xl);
+}
+
+/* A page band: no frame, so it can run edge to edge behind a Container. */
+.wash {
+  background: linear-gradient(
+    to bottom,
+    var(--ds-surface),
+    var(--ds-surface-raised)
+  );
+}
+
+/* A lead panel (hero): the raised frame, outlined in the soft accent. */
+.accent {
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-accent-soft);
+  border-radius: var(--ds-radius-2xl);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.padSm {
+  padding: var(--ds-space-4);
+}
+.padMd {
+  padding: var(--ds-space-5);
+}
+.padLg {
+  padding: var(--ds-space-6);
+}
+.padXl {
+  padding: var(--ds-space-8);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  min-width: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-3);
+}

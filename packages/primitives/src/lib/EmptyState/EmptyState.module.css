@@ -1,0 +1,84 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  font-family: var(--ds-font-body);
+  color: var(--ds-text-muted);
+}
+
+/* Sizes. A surface of `none` drops the padding (below). */
+.md {
+  padding: var(--ds-space-10);
+}
+.sm {
+  padding: var(--ds-space-4) var(--ds-space-5);
+}
+
+/* Surfaces. */
+.dashed {
+  background: var(--ds-surface-raised);
+  border: 1px dashed var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+}
+.plain {
+  padding: 0;
+}
+
+.center {
+  align-items: center;
+  text-align: center;
+}
+.start {
+  align-items: flex-start;
+  text-align: start;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-space-12);
+  block-size: var(--ds-space-12);
+  margin-block-end: var(--ds-space-2);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-accent-soft);
+  color: var(--ds-accent-fg);
+}
+.sm .icon {
+  inline-size: var(--ds-space-8);
+  block-size: var(--ds-space-8);
+  margin-block-end: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--ds-size-h3);
+  font-weight: var(--ds-weight-bold);
+  line-height: var(--ds-leading-snug);
+  color: var(--ds-text);
+}
+.sm .title {
+  font-size: var(--ds-size-body);
+  font-weight: var(--ds-weight-semibold);
+}
+
+.body {
+  font-size: var(--ds-size-body-sm);
+  line-height: var(--ds-leading-normal);
+}
+/* Centred copy keeps a reading measure; start-aligned copy follows the flow. */
+.center .body {
+  max-inline-size: 60ch;
+}
+.body > p {
+  margin: 0;
+}
+/* Two classes, so the step wins over a text primitive's own `margin: 0`. */
+.root .body > * + * {
+  margin-block-start: var(--ds-space-2);
+}
+
+.action {
+  display: flex;
+  margin-block-start: var(--ds-space-2);
+}

@@ -23,25 +23,27 @@ const meta: Meta<typeof StatusBadge> = {
   component: StatusBadge,
   argTypes: {
     state: {
-      description:
-        'Lifecycle state — resolves to a fixed tone + default label.',
+      description: 'Lifecycle state — resolves to a fixed tone.',
     },
     tone: { description: 'Override the tone directly.' },
-    label: { description: 'Override the label text.' },
+    label: {
+      description:
+        'Visible label (required; no English default — pass translated text).',
+    },
   },
 };
 export default meta;
 
 type Story = StoryObj<typeof StatusBadge>;
 
-export const Single: Story = { args: { state: 'active' } };
+export const Single: Story = { args: { state: 'active', label: 'Active' } };
 
 /** The 13 lifecycle states, each mapped to its fixed tone. */
 export const AllStates: Story = {
   render: () => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, maxWidth: 520 }}>
       {ALL_STATES.map((state) => (
-        <StatusBadge key={state} state={state} />
+        <StatusBadge key={state} state={state} label={state} />
       ))}
     </div>
   ),

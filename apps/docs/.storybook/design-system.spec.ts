@@ -6,10 +6,12 @@ import { loadCsf } from 'storybook/internal/csf-tools';
 import { describe, expect, it } from 'vitest';
 
 import {
+  activeDesignSystem,
   type CatalogEntry,
   counterpartEntry,
   designSystemOf,
   isSelection,
+  isShared,
   isVisible,
   taxonomyViolation,
 } from './design-system.js';
@@ -31,11 +33,44 @@ describe('designSystemOf', () => {
     expect(designSystemOf('Faune/Foundations')).toBe('Faune');
   });
 
-  it('returns undefined for unbranded or unknown titles', () => {
+  it('returns undefined for unbranded, shared or unknown titles', () => {
     expect(designSystemOf('Introduction')).toBeUndefined();
+    expect(designSystemOf('Components/Button')).toBeUndefined();
     expect(designSystemOf('Nocturne/Components/Button')).toBeUndefined();
     expect(designSystemOf('Biomes/Components/Button')).toBeUndefined();
     expect(designSystemOf(undefined)).toBeUndefined();
+  });
+});
+
+describe('isShared', () => {
+  it('matches only the shared Components tree', () => {
+    expect(isShared('Components/Button')).toBe(true);
+    expect(isShared('Exodus/Components/Button')).toBe(false);
+    expect(isShared('Introduction')).toBe(false);
+    expect(isShared(undefined)).toBe(false);
+  });
+});
+
+describe('activeDesignSystem', () => {
+  it('uses the brand in the title, whatever the global says', () => {
+    expect(activeDesignSystem('Biome/Components/Button', 'Faune')).toBe(
+      'Biome',
+    );
+  });
+
+  it('takes the global for shared stories', () => {
+    expect(activeDesignSystem('Components/Button', 'Faune')).toBe('Faune');
+    expect(activeDesignSystem('Components/Button', 'Biome')).toBe('Biome');
+  });
+
+  it('defaults shared stories to Exodus when the global is unset or invalid', () => {
+    expect(activeDesignSystem('Components/Button', undefined)).toBe('Exodus');
+    expect(activeDesignSystem('Components/Button', 'All')).toBe('Exodus');
+    expect(activeDesignSystem('Components/Button', 'faune')).toBe('Exodus');
+  });
+
+  it('leaves unbranded pages without a design system', () => {
+    expect(activeDesignSystem('Introduction', 'Faune')).toBeUndefined();
   });
 });
 
@@ -63,6 +98,12 @@ describe('isVisible', () => {
     expect(isVisible('Introduction', 'Faune')).toBe(true);
   });
 
+  it('shows the shared Components tree under every selection', () => {
+    for (const selection of ['Biome', 'Exodus', 'Faune', 'All'] as const) {
+      expect(isVisible('Components/Button', selection)).toBe(true);
+    }
+  });
+
   it('shows everything for All', () => {
     expect(isVisible('Biome/Foundations', 'All')).toBe(true);
     expect(isVisible('Faune/Components/Tag', 'All')).toBe(true);
@@ -72,6 +113,9 @@ describe('isVisible', () => {
 describe('counterpartEntry', () => {
   const entries = [
     entry('Introduction', 'Docs', 'docs'),
+    entry('Components/Button', 'Docs', 'docs'),
+    entry('Components/Button', 'Primary'),
+    entry('Components/Dialog', 'Default'),
     entry('Biome/Foundations', 'Colors'),
     entry('Biome/Components/Button', 'Docs', 'docs'),
     entry('Biome/Components/Button', 'Primary'),
@@ -122,6 +166,23 @@ describe('counterpartEntry', () => {
     ).toMatchObject({ title: 'Faune/Foundations', name: 'Colors' });
   });
 
+  it('stays on the same shared story (it restyles instead)', () => {
+    for (const target of ['Biome', 'Exodus', 'Faune'] as const) {
+      expect(
+        counterpartEntry('Components/Button', 'Primary', target, entries),
+      ).toMatchObject({ title: 'Components/Button', name: 'Primary' });
+    }
+  });
+
+  it('stays on a shared Docs page and on a story without a Docs entry', () => {
+    expect(
+      counterpartEntry('Components/Button', 'Docs', 'Faune', entries),
+    ).toMatchObject({ title: 'Components/Button', type: 'docs' });
+    expect(
+      counterpartEntry('Components/Dialog', 'Default', 'Biome', entries),
+    ).toMatchObject({ title: 'Components/Dialog', name: 'Default' });
+  });
+
   it('lands on Foundations when coming from an unbranded page', () => {
     expect(
       counterpartEntry('Introduction', 'Docs', 'Exodus', entries),
@@ -153,6 +214,8 @@ describe('counterpartEntry', () => {
 describe('taxonomyViolation', () => {
   it.each([
     'Introduction',
+    'Components/Button',
+    'Components/tj-button',
     'Biome/Foundations',
     'Exodus/Foundations/Colors',
     'Faune/Components/Button',
@@ -174,6 +237,10 @@ describe('taxonomyViolation', () => {
     ['Biome/Migration', /Migration/],
     ['Biome/Components/ Button', /segment/],
     ['Biome//Button', /segment/],
+    ['Components', /component name/],
+    ['Components/Forms/Input', /flat/],
+    ['Components/ Button', /segment/],
+    ['Shared/Button', /design system/],
   ])('rejects %s', (title, message) => {
     expect(taxonomyViolation(title)).toMatch(message);
   });

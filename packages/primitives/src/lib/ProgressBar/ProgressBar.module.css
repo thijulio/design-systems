@@ -1,0 +1,74 @@
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  inline-size: 100%;
+  min-inline-size: 0;
+  font-family: var(--ds-font-body);
+}
+
+.track {
+  position: relative;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  block-size: var(--ds-space-2);
+  overflow: hidden;
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-surface-sunken);
+}
+
+.fill {
+  display: block;
+  /* The root sets the share from `value / max`. */
+  inline-size: var(--ds-progress-value, 0%);
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--ds-accent);
+  transition: inline-size 0.2s ease-out;
+}
+
+/* The value text is presentational: the root's aria-valuetext carries it. */
+.value {
+  flex: none;
+  font-size: var(--ds-size-body-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-text-soft);
+}
+
+/* Indeterminate: a segment sweeps across the track. */
+.indeterminate .fill {
+  inline-size: 40%;
+  animation: ds-progress-sweep 1.4s ease-in-out infinite;
+}
+
+@keyframes ds-progress-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+/* Movement is the only cue that indeterminate work is under way, so it slows
+   down rather than stopping, as the Spinner does. */
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+  .indeterminate .fill {
+    animation-duration: 4s;
+  }
+}
+
+/* Backgrounds are dropped in forced colours: outline the track and paint the
+   fill with a system colour so the bar stays visible. */
+@media (forced-colors: active) {
+  .track {
+    outline: 1px solid CanvasText;
+  }
+  .fill {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+}

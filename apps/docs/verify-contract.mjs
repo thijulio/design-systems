@@ -9,12 +9,21 @@ const primitivesJs = await readFile(
   new URL(import.meta.resolve('@thijulio/primitives')),
   'utf8',
 );
+// Component-local properties the primitives declare themselves (e.g.
+// `--ds-nav-gap`, `--ds-timeline-dot`) are not the brands' to provide.
+const declared = new Set(
+  [...primitivesCss.matchAll(/(--ds-[a-z0-9-]+)\s*:/g)].map(
+    (match) => match[1],
+  ),
+);
 const required = new Set(
   [
     ...`${primitivesCss}\n${primitivesJs}`.matchAll(
       /var\((--ds-[a-z0-9-]+)\)/g,
     ),
-  ].map((match) => match[1]),
+  ]
+    .map((match) => match[1])
+    .filter((name) => !declared.has(name)),
 );
 
 assert.ok(required.size > 0, 'primitives output has no contract references');

@@ -23,18 +23,30 @@
   );
   -webkit-font-smoothing: antialiased;
 }
+/* An outline, not a box-shadow ring: it survives forced-colors mode and
+   --ds-focus is contracted at >= 3:1 against surfaces. */
 .btn:focus-visible {
-  outline: var(--ds-button-focus-outline, none);
-  outline-offset: var(--ds-button-focus-offset, 0);
-  box-shadow: var(--ds-button-focus-shadow, 0 0 0 4px var(--ds-focus));
+  outline: var(--ds-button-focus-outline, 2px solid var(--ds-focus));
+  outline-offset: var(--ds-button-focus-offset, 2px);
 }
-.btn:active {
+.btn:active:where(:not(:disabled, [aria-disabled='true'])) {
   transform: var(--ds-button-active-transform, translateY(0.5px));
 }
-.btn:disabled {
+.btn:disabled,
+.btn[aria-disabled='true'] {
   opacity: var(--ds-button-disabled-opacity, 0.5);
   cursor: not-allowed;
+}
+/* aria-disabled stays clickable so the component can refuse the press itself
+   (and keep focus); only native disabled drops pointer events. */
+.btn:disabled {
   pointer-events: var(--ds-button-disabled-pointer-events, none);
+}
+.btn[aria-busy='true'] {
+  cursor: progress;
+}
+.fullWidth {
+  width: 100%;
 }
 .sm {
   height: var(--ds-button-height, 34px);
@@ -56,7 +68,7 @@
   color: var(--ds-on-brand);
   box-shadow: var(--ds-button-shadow, var(--ds-shadow-sm));
 }
-.primary:where(:not(:disabled)):hover {
+.primary:where(:not(:disabled, [aria-disabled='true'])):hover {
   background: var(--ds-brand-hover);
 }
 .accent {
@@ -64,7 +76,7 @@
   color: var(--ds-on-accent);
   box-shadow: var(--ds-button-shadow, var(--ds-shadow-sm));
 }
-.accent:where(:not(:disabled)):hover {
+.accent:where(:not(:disabled, [aria-disabled='true'])):hover {
   background: var(--ds-accent-hover);
   color: var(--ds-on-accent-hover, var(--ds-on-accent));
 }
@@ -73,7 +85,7 @@
   color: var(--ds-button-secondary-foreground, var(--ds-brand));
   border-color: var(--ds-button-secondary-border, var(--ds-border));
 }
-.secondary:where(:not(:disabled)):hover {
+.secondary:where(:not(:disabled, [aria-disabled='true'])):hover {
   border-color: var(--ds-button-secondary-hover-border, var(--ds-accent));
   background: var(
     --ds-button-secondary-hover-background,
@@ -88,7 +100,7 @@
   background: var(--ds-accent-soft);
   color: var(--ds-accent-fg);
 }
-.soft:where(:not(:disabled)):hover {
+.soft:where(:not(:disabled, [aria-disabled='true'])):hover {
   background: var(--ds-button-soft-hover-background, var(--ds-accent));
   color: var(--ds-button-soft-hover-foreground, var(--ds-on-accent));
 }
@@ -96,7 +108,7 @@
   background: transparent;
   color: var(--ds-button-ghost-foreground, var(--ds-brand));
 }
-.ghost:where(:not(:disabled)):hover {
+.ghost:where(:not(:disabled, [aria-disabled='true'])):hover {
   background: var(--ds-button-ghost-hover-background, var(--ds-accent-soft));
 }
 .danger {
@@ -104,7 +116,7 @@
   color: var(--ds-text-inverse);
   box-shadow: var(--ds-button-shadow, var(--ds-shadow-sm));
 }
-.danger:where(:not(:disabled)):hover {
+.danger:where(:not(:disabled, [aria-disabled='true'])):hover {
   filter: brightness(0.94);
 }
 .dangerOutline {
@@ -112,6 +124,50 @@
   color: var(--ds-danger);
   border-color: var(--ds-danger);
 }
-.dangerOutline:where(:not(:disabled)):hover {
+.dangerOutline:where(:not(:disabled, [aria-disabled='true'])):hover {
   background: var(--ds-danger-soft);
+}
+
+.link {
+  background: transparent;
+  color: var(--ds-button-link-foreground, var(--ds-accent-fg));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link:where(:not(:disabled, [aria-disabled='true'])):hover {
+  color: var(--ds-accent-fg-hover, var(--ds-accent-fg));
+}
+
+/* Spinner draws in the control's own colour on every variant. */
+.spinner {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: ds-button-spin 0.7s linear infinite;
+}
+@keyframes ds-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }

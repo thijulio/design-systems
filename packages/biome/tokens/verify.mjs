@@ -55,7 +55,7 @@ assert.match(nativeTokens, /"mata": "#3F5237"/, 'native palette color missing');
 assert.match(nativeDark, /"brand": "#8FB089"/, 'native dark brand missing');
 assert.match(
   nativeThemes,
-  /themes = \{ dark \}/,
+  /themes = \{ "dark": theme0 \}/,
   'native themes barrel missing dark',
 );
 assert.match(

@@ -1,12 +1,24 @@
-// The catalog's single sidebar model. Every story title is
-// `<DesignSystem>/<Section>/…`; the manager's "Design system" picker shows one
-// design system's tree at a time, and preview.tsx injects that design
-// system's tokens. Pure logic only, so it is unit-tested in node
-// (design-system.spec.ts). preview.tsx `storySort` mirrors SECTIONS as a
-// literal: Storybook reads it statically and cannot follow imports.
+// The catalog's single sidebar model. Shared components (one story set over
+// @thijulio/primitives) live under `Components/<Name>` and restyle to the
+// design system picked in the toolbar (the `designSystem` global). Everything
+// brand-specific is `<DesignSystem>/<Section>/…`; the manager's "Design
+// system" picker shows one design system's tree (plus the shared tree) at a
+// time, and preview.tsx injects the active design system's tokens. Pure logic
+// only, so it is unit-tested in node (design-system.spec.ts). preview.tsx
+// `storySort` mirrors SHARED_ROOT and SECTIONS as a literal: Storybook reads
+// it statically and cannot follow imports.
 
 export const DESIGN_SYSTEMS = ['Biome', 'Exodus', 'Faune'] as const;
 export type DesignSystem = (typeof DESIGN_SYSTEMS)[number];
+
+/** Brand that shared stories render in until the picker sets another. */
+export const DEFAULT_DESIGN_SYSTEM: DesignSystem = 'Exodus';
+
+/** Global (toolbar) key holding the design system shared stories render in. */
+export const DESIGN_SYSTEM_GLOBAL = 'designSystem';
+
+/** Root of the shared tree: `Components/<Name>`, one story set for all brands. */
+export const SHARED_ROOT = 'Components';
 
 /** Picker value that shows every design system's tree. */
 export const ALL = 'All';
@@ -33,22 +45,50 @@ export function designSystemOf(
   return DESIGN_SYSTEMS.find((ds) => ds === first);
 }
 
+export function isDesignSystem(value: unknown): value is DesignSystem {
+  return DESIGN_SYSTEMS.some((ds) => ds === value);
+}
+
+/** Is `title` in the shared, brand-agnostic `Components/…` tree? */
+export function isShared(title: string | undefined): boolean {
+  return title?.split('/')[0] === SHARED_ROOT;
+}
+
+/**
+ * The design system a story renders in: its title's brand, else (shared
+ * stories) the `designSystem` global, else the default. Undefined for
+ * unbranded pages such as Introduction.
+ */
+export function activeDesignSystem(
+  title: string | undefined,
+  globalValue: unknown,
+): DesignSystem | undefined {
+  const own = designSystemOf(title);
+  if (own) return own;
+  if (!isShared(title)) return undefined;
+  return isDesignSystem(globalValue) ? globalValue : DEFAULT_DESIGN_SYSTEM;
+}
+
 export function isSelection(value: unknown): value is Selection {
   return value === ALL || DESIGN_SYSTEMS.some((ds) => ds === value);
 }
 
-/** Sidebar filter: does `title` belong in the tree for `selection`? */
+/**
+ * Sidebar filter: does `title` belong in the tree for `selection`? The shared
+ * tree and unbranded pages show under every selection.
+ */
 export function isVisible(title: string, selection: Selection): boolean {
-  if (selection === ALL) return true;
+  if (selection === ALL || isShared(title)) return true;
   const ds = designSystemOf(title);
   return ds === undefined || ds === selection;
 }
 
 /**
  * Where to land when switching to `target` from the page `currentTitle`
- * (story `currentName`): the same page and story if the target has them, else
- * that page's Docs entry or first story, else the target's Foundations, else
- * its first entry. `entries` must be in sidebar order.
+ * (story `currentName`): a shared story stays put (it restyles instead);
+ * otherwise the same page and story if the target has them, else that page's
+ * Docs entry or first story, else the target's Foundations, else its first
+ * entry. `entries` must be in sidebar order.
  */
 export function counterpartEntry(
   currentTitle: string | undefined,
@@ -65,6 +105,11 @@ export function counterpartEntry(
     );
   };
 
+  if (isShared(currentTitle) && currentTitle) {
+    const here = pageOf(currentTitle);
+    if (here) return here;
+  }
+
   const current = designSystemOf(currentTitle);
   const samePage =
     current && currentTitle
@@ -80,8 +125,9 @@ export function counterpartEntry(
 
 /**
  * Why `title` breaks the shared sidebar taxonomy, or undefined if it follows
- * it: `<DesignSystem>/Foundations[/<Page>]`, `<DesignSystem>/Components/<Name>`
- * (flat), or `<DesignSystem>/Migration/<Name>[/…]`.
+ * it: `Components/<Name>` (shared, flat), `<DesignSystem>/Foundations[/<Page>]`,
+ * `<DesignSystem>/Components/<Name>` (brand-only or a brand skin, flat), or
+ * `<DesignSystem>/Migration/<Name>[/…]`.
  */
 export function taxonomyViolation(title: string): string | undefined {
   if (UNBRANDED_TITLES.includes(title)) return undefined;
@@ -92,8 +138,14 @@ export function taxonomyViolation(title: string): string | undefined {
   }
 
   const [ds, section, ...rest] = segments;
+  if (ds === SHARED_ROOT) {
+    if (section === undefined) return `"${title}" needs a component name`;
+    return rest.length === 0
+      ? undefined
+      : `"${title}": Components is flat — use ${SHARED_ROOT}/<Name>`;
+  }
   if (!designSystemOf(ds)) {
-    return `"${title}" must start with a design system (${DESIGN_SYSTEMS.join(', ')}) or be one of: ${UNBRANDED_TITLES.join(', ')}`;
+    return `"${title}" must start with a design system (${DESIGN_SYSTEMS.join(', ')}) or ${SHARED_ROOT}/, or be one of: ${UNBRANDED_TITLES.join(', ')}`;
   }
 
   switch (section) {

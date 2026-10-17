@@ -1,0 +1,83 @@
+/* The controls float over the track's padded sides, half outside the root. */
+.carousel {
+  position: relative;
+}
+
+.control {
+  position: absolute;
+  inset-block-start: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.previous {
+  inset-inline-start: calc(-1 * var(--ds-space-3));
+}
+
+.next {
+  inset-inline-end: calc(-1 * var(--ds-space-3));
+}
+
+/* Chevrons point the reading direction. */
+.carousel:dir(rtl) .control svg {
+  transform: scaleX(-1);
+}
+
+.track {
+  padding-inline: var(--ds-space-6);
+}
+
+/* Scroll mode: one row of slides, snapping to their start. */
+.scroll {
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--ds-space-6);
+  scrollbar-width: thin;
+}
+
+.scroll:focus-visible {
+  outline: 2px solid var(--ds-focus);
+  outline-offset: 2px;
+}
+
+.scroll > * {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.g0 {
+  gap: 0;
+}
+.g1 {
+  gap: var(--ds-space-1);
+}
+.g2 {
+  gap: var(--ds-space-2);
+}
+.g3 {
+  gap: var(--ds-space-3);
+}
+.g4 {
+  gap: var(--ds-space-4);
+}
+.g5 {
+  gap: var(--ds-space-5);
+}
+.g6 {
+  gap: var(--ds-space-6);
+}
+.g8 {
+  gap: var(--ds-space-8);
+}
+.g10 {
+  gap: var(--ds-space-10);
+}
+.g12 {
+  gap: var(--ds-space-12);
+}
+.g16 {
+  gap: var(--ds-space-16);
+}

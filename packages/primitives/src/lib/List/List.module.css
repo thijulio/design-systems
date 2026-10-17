@@ -1,0 +1,187 @@
+/* Zero-specificity resets: a caller's own class sets the margin or the
+   padding whatever order the stylesheets load in. */
+:where(.list) {
+  margin: 0;
+  padding: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-list-gap);
+  list-style: none;
+}
+
+/* Two classes, so a brand reset such as `ul[role='list']` (which strips the
+   marker and the padding) cannot win. */
+.list.markerDisc,
+.list.markerDecimal {
+  padding-inline-start: var(--ds-space-5);
+}
+.list.markerDisc {
+  list-style-type: disc;
+}
+.list.markerDecimal {
+  list-style-type: decimal;
+}
+
+/* `columns`: equal grid tracks, the same steps and breakpoints as Grid. Two
+   classes, so the grid wins over the column flex of `.list`. */
+.list.grid {
+  display: grid;
+}
+.cols1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.cols2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.cols3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.cols4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.cols5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.cols6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+/* sm */
+@media (min-width: 40rem) {
+  .smCols1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .smCols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .smCols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .smCols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .smCols5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .smCols6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* md */
+@media (min-width: 48rem) {
+  .mdCols1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .mdCols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mdCols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .mdCols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .mdCols5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .mdCols6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* lg */
+@media (min-width: 64rem) {
+  .lgCols1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .lgCols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lgCols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .lgCols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .lgCols5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .lgCols6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* xl */
+@media (min-width: 80rem) {
+  .xlCols1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .xlCols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .xlCols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .xlCols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .xlCols5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .xlCols6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* A rule between items; the gap becomes the space on each side of it. The
+   padding has no specificity, so an item's own padding wins. */
+.divided {
+  gap: 0;
+}
+.divided > * + * {
+  border-block-start: 1px solid var(--ds-border-subtle);
+}
+:where(.divided > * + *) {
+  padding-block-start: var(--ds-list-gap);
+}
+:where(.divided > :not(:last-child)) {
+  padding-block-end: var(--ds-list-gap);
+}
+
+.g0 {
+  --ds-list-gap: 0px;
+}
+.g1 {
+  --ds-list-gap: var(--ds-space-1);
+}
+.g2 {
+  --ds-list-gap: var(--ds-space-2);
+}
+.g3 {
+  --ds-list-gap: var(--ds-space-3);
+}
+.g4 {
+  --ds-list-gap: var(--ds-space-4);
+}
+.g5 {
+  --ds-list-gap: var(--ds-space-5);
+}
+.g6 {
+  --ds-list-gap: var(--ds-space-6);
+}
+.g8 {
+  --ds-list-gap: var(--ds-space-8);
+}
+.g10 {
+  --ds-list-gap: var(--ds-space-10);
+}
+.g12 {
+  --ds-list-gap: var(--ds-space-12);
+}
+.g16 {
+  --ds-list-gap: var(--ds-space-16);
+}

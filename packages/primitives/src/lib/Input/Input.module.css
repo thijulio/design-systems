@@ -21,7 +21,12 @@
 }
 .input:focus {
   border-color: var(--ds-input-focus-border, var(--ds-accent));
-  box-shadow: var(--ds-input-focus-shadow, 0 0 0 3px var(--ds-focus));
+  box-shadow: var(--ds-input-focus-shadow, none);
+}
+/* Same focus indicator as Button: a 2px --ds-focus outline, offset. */
+.input:focus-visible {
+  outline: var(--ds-input-focus-outline, 2px solid var(--ds-focus));
+  outline-offset: var(--ds-input-focus-offset, 2px);
 }
 .input:disabled {
   background: var(--ds-input-disabled-background, var(--ds-surface-raised));
@@ -38,12 +43,22 @@
     0 0 0 3px var(--ds-danger-soft)
   );
 }
+.input[aria-busy='true'] {
+  cursor: progress;
+  opacity: var(--ds-input-busy-opacity, 0.6);
+}
+.intrinsic {
+  width: auto;
+}
 .textarea {
   resize: vertical;
   min-height: var(--ds-input-min-height, 96px);
 }
 .selectWrap {
   position: relative;
+}
+.inlineWrap {
+  display: inline-block;
 }
 .select {
   appearance: none;

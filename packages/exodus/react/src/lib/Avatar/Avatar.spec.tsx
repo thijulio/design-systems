@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import { Avatar } from './Avatar';
 
@@ -14,5 +15,11 @@ describe('Avatar', () => {
     expect(screen.getByText('AB').style.getPropertyValue('--av-bg')).toBe(
       'var(--tone-teal-soft)',
     );
+  });
+
+  it('forwards a ref to its root span', () => {
+    const ref = createRef<HTMLSpanElement>();
+    render(<Avatar initials="KT" ref={ref} />);
+    expect(ref.current).toBe(screen.getByText('KT'));
   });
 });

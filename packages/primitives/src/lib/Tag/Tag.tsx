@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cx } from '../_util/style';
 import styles from './Tag.module.css';
 
@@ -11,17 +11,20 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /** Tag — pill label for categories, skills and status. */
-export function Tag({
-  variant = 'outline',
-  status = false,
-  className,
-  children,
-  ...props
-}: TagProps) {
+export const Tag = forwardRef<HTMLSpanElement, TagProps>(function Tag(
+  { variant = 'outline', status = false, className, children, ...props },
+  ref,
+) {
   return (
-    <span className={cx(styles.tag, styles[variant], className)} {...props}>
+    <span
+      {...props}
+      ref={ref}
+      className={cx(styles.tag, styles[variant], className)}
+    >
       {status && <span className={styles.dot} aria-hidden="true" />}
       {children}
     </span>
   );
-}
+});
+
+Tag.displayName = 'Tag';

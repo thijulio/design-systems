@@ -45,7 +45,10 @@ assumes one `.design-sync/config.json` per repo. State is **brand-namespaced**:
   `SharedButton`/`SharedCard.stories.tsx` document `@thijulio/primitives` under
   `Exodus/Migration/Primitives/Button|Card` titles, and `titleMap` matches a single title segment, so
   they'd merge into the exodus-react Button/Card cards (duplicate `Default`/`Interactive`
-  grade keys).
+  grade keys). Since 2026-10 the config also loads the shared `../src/components/**`
+  (`Components/<Name>`, rendered in Exodus) minus the names exodus-react skins
+  (Avatar, Badge, Button, Card, EmptyState, ErrorState, Input, LoadMore, Select,
+  Textarea) and Tag, for the same reason; expect those cards to regroup.
 
 ## [GENERAL] Stories must not depend on storybook globals
 

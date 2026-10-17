@@ -3,12 +3,16 @@
     "sans": {
       "value": "'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif"
     },
-    "wordmark": { "value": "'Baloo 2', {font.sans}" }
+    "wordmark": { "value": "'Baloo 2', {font.sans}" },
+    "mono": {
+      "value": "ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace"
+    }
   },
   "text": {
     "caption": { "value": "0.75rem" },
     "body-sm": { "value": "0.8438rem" },
     "body": { "value": "0.9375rem" },
+    "lead": { "value": "1.125rem" },
     "h3": { "value": "1rem" },
     "h2": { "value": "1.3125rem" },
     "h1": { "value": "1.6875rem" },

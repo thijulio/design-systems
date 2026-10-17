@@ -14,7 +14,14 @@ const config: StorybookConfig = {
   // they document @thijulio/primitives under titles
   // (`Exodus/Migration/Primitives/Button`) whose leaf name would merge into the
   // exodus-react Button/Card cards.
-  stories: ['../src/exodus/**/!(Shared*).@(mdx|stories.@(js|jsx|ts|tsx))'],
+  // The shared Components stories render here in Exodus (preview.tsx forces the
+  // brand). Names that collide with an exodus-react skin are left out, for the
+  // same reason (titleMap matches the leaf name, so they would merge into those
+  // cards).
+  stories: [
+    '../src/exodus/**/!(Shared*).@(mdx|stories.@(js|jsx|ts|tsx))',
+    '../src/components/**/!(Avatar|Badge|Button|Card|EmptyState|ErrorState|Input|LoadMore|Select|Textarea).stories.@(js|jsx|ts|tsx)',
+  ],
   addons: [
     '@storybook/addon-docs',
     '@storybook/addon-a11y',

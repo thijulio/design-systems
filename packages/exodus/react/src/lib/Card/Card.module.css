@@ -10,4 +10,20 @@
   /* Fallbacks preserve the old public spacing until the newer tokens load. */
   --ds-card-padding-y: var(--card-padding-y, 18px);
   --ds-card-padding-x: var(--card-padding-x, 20px);
+  /* padding / surface / tone steps, same values as contract.json. */
+  --ds-space-4: var(--space-4);
+  --ds-space-5: var(--space-5);
+  --ds-space-6: var(--space-6);
+  --ds-space-8: var(--space-8);
+  --ds-border: var(--n-300);
+  --ds-surface-sunken: var(--n-100);
+  --ds-surface-inverse: var(--n-900);
+  --ds-border-inverse: var(--n-700);
+  --ds-text-inverse: var(--accent-on);
+  --ds-accent: var(--accent);
+  --ds-accent-soft: var(--accent-soft);
+  --ds-info-soft: var(--info-soft);
+  --ds-success-soft: var(--success-soft);
+  --ds-warning-soft: var(--warning-soft);
+  --ds-danger-soft: var(--danger-soft);
 }

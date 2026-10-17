@@ -1,0 +1,49 @@
+.root {
+  font-family: var(--ds-font-body);
+}
+
+/* Centred content also centres its wrapped lines and its actions. */
+.center {
+  text-align: center;
+}
+.center .actions {
+  justify-content: center;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-space-12);
+  block-size: var(--ds-space-12);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* Tile tones, on the Alert scale. */
+.neutral {
+  background: var(--ds-surface-sunken);
+  color: var(--ds-text-secondary);
+}
+.info {
+  background: var(--ds-info-soft);
+  color: var(--ds-info-fg);
+}
+.success {
+  background: var(--ds-success-soft);
+  color: var(--ds-success-fg);
+}
+.warning {
+  background: var(--ds-warning-soft);
+  color: var(--ds-warning-fg);
+}
+.danger {
+  background: var(--ds-danger-soft);
+  color: var(--ds-danger-fg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-3);
+}

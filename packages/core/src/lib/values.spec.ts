@@ -51,6 +51,17 @@ describe('normalize', () => {
     });
   });
 
+  it('converts a rem clamp() min bound to px (16px root)', () => {
+    expect(normalize('clamp(2.75rem, 4.5vw, 4.55rem)')).toEqual({
+      kind: 'dimension',
+      value: 44,
+    });
+    expect(normalize('clamp(3rem, 5.3vw, 5.5rem)')).toEqual({
+      kind: 'dimension',
+      value: 48,
+    });
+  });
+
   it('keeps unitless integers and decimals distinct', () => {
     expect(normalize('700')).toEqual({ kind: 'integer', value: 700 });
     expect(normalize('1.5')).toEqual({ kind: 'decimal', value: 1.5 });

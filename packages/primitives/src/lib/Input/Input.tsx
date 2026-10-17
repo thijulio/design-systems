@@ -1,87 +1,119 @@
-import type {
-  InputHTMLAttributes,
-  ReactNode,
-  SelectHTMLAttributes,
-  TextareaHTMLAttributes,
+import {
+  forwardRef,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
 } from 'react';
 import { cx } from '../_util/style';
 import styles from './Input.module.css';
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  /** Flip to the danger outline. */
+interface ControlProps {
+  /** Flip to the danger outline and announce `aria-invalid`. */
   invalid?: boolean;
+  /** Fill the container width (default); `false` keeps the intrinsic width. */
+  fullWidth?: boolean;
 }
+
+export interface InputProps
+  extends InputHTMLAttributes<HTMLInputElement>,
+    ControlProps {}
 
 /** Input — text control with a contract-driven focus ring. */
-export function Input({ className, invalid, ...props }: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { className, invalid, fullWidth = true, ...props },
+  ref,
+) {
   return (
     <input
-      className={cx(styles.input, invalid && styles.invalid, className)}
       aria-invalid={invalid || undefined}
       {...props}
-    />
-  );
-}
-
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  invalid?: boolean;
-}
-
-/** Textarea — same skin as Input, auto-height with vertical resize. */
-export function Textarea({ className, invalid, ...props }: TextareaProps) {
-  return (
-    <textarea
+      ref={ref}
       className={cx(
         styles.input,
-        styles.textarea,
+        !fullWidth && styles.intrinsic,
         invalid && styles.invalid,
         className,
       )}
-      aria-invalid={invalid || undefined}
-      {...props}
     />
   );
-}
+});
 
-export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  invalid?: boolean;
-  children?: ReactNode;
-}
+Input.displayName = 'Input';
 
-/** Select — native select with the Input skin and a custom chevron. */
-export function Select({
-  className,
-  invalid,
-  children,
-  ...props
-}: SelectProps) {
-  return (
-    <div className={styles.selectWrap}>
-      <select
+export interface TextareaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement>,
+    ControlProps {}
+
+/** Textarea — same skin as Input, auto-height with vertical resize. */
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  function Textarea({ className, invalid, fullWidth = true, ...props }, ref) {
+    return (
+      <textarea
+        aria-invalid={invalid || undefined}
+        {...props}
+        ref={ref}
         className={cx(
           styles.input,
-          styles.select,
+          styles.textarea,
+          !fullWidth && styles.intrinsic,
           invalid && styles.invalid,
           className,
         )}
-        aria-invalid={invalid || undefined}
-        {...props}
-      >
-        {children}
-      </select>
-      <svg
-        className={styles.chevron}
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        aria-hidden="true"
-      >
-        <path d="M6 9l6 6 6-6" />
-      </svg>
-    </div>
-  );
+      />
+    );
+  },
+);
+
+Textarea.displayName = 'Textarea';
+
+export interface SelectProps
+  extends SelectHTMLAttributes<HTMLSelectElement>,
+    ControlProps {
+  children?: ReactNode;
 }
+
+/**
+ * Select — native select with the Input skin and a custom chevron. The ref
+ * points at the `<select>`; the wrapper only positions the chevron.
+ */
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
+  function Select(
+    { className, invalid, fullWidth = true, children, ...props },
+    ref,
+  ) {
+    return (
+      <div className={cx(styles.selectWrap, !fullWidth && styles.inlineWrap)}>
+        <select
+          aria-invalid={invalid || undefined}
+          {...props}
+          ref={ref}
+          className={cx(
+            styles.input,
+            styles.select,
+            !fullWidth && styles.intrinsic,
+            invalid && styles.invalid,
+            className,
+          )}
+        >
+          {children}
+        </select>
+        <svg
+          className={styles.chevron}
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          aria-hidden="true"
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </div>
+    );
+  },
+);
+
+Select.displayName = 'Select';
