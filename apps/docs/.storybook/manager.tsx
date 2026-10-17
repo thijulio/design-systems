@@ -22,24 +22,22 @@ import {
   DESIGN_SYSTEMS,
   type DesignSystem,
   designSystemOf,
+  initialSelection,
   isDesignSystem,
-  isSelection,
   isVisible,
   type Selection,
 } from './design-system';
 
 const ADDON_ID = 'thijulio/design-system';
 const STORAGE_KEY = `${ADDON_ID}/selection`;
-const DEFAULT_SELECTION: Selection = 'Biome';
 
 // The last pick is a per-viewer convenience only (it decides the tree shown on
 // unbranded pages like Introduction); the URL's story always wins.
 function storedSelection(): Selection {
   try {
-    const value = localStorage.getItem(STORAGE_KEY);
-    return isSelection(value) ? value : DEFAULT_SELECTION;
+    return initialSelection(localStorage.getItem(STORAGE_KEY));
   } catch {
-    return DEFAULT_SELECTION;
+    return initialSelection(undefined);
   }
 }
 

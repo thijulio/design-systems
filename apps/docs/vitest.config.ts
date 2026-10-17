@@ -5,10 +5,55 @@ import { defineConfig } from 'vitest/config';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
 
+import {
+  DEFAULT_DESIGN_SYSTEM,
+  DESIGN_SYSTEM_GLOBAL,
+  DESIGN_SYSTEMS,
+  type DesignSystem,
+} from './.storybook/design-system';
+
 const dirname =
   typeof __dirname !== 'undefined'
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url));
+
+// One browser project per design system in the picker, each pinning the
+// `designSystem` global the picker sets, so shared `Components/…` stories (and
+// their axe gate) run under every brand's tokens. Branded stories ignore that
+// global (their title names the brand), so only the default design system's
+// project runs them; the others would repeat the same render. The projects
+// run one after another (`groupOrder`): together they would triple the load on
+// the orchestrator thread and starve hover interactions (see AGENTS.md).
+const BRANDED_STORY_DIRS = DESIGN_SYSTEMS.map(
+  (ds) => `**/src/${ds.toLowerCase()}/**`,
+);
+
+function storybookProject(designSystem: DesignSystem, order: number) {
+  const isDefault = designSystem === DEFAULT_DESIGN_SYSTEM;
+  return {
+    extends: true,
+    plugins: [
+      storybookTest({
+        configDir: path.join(dirname, '.storybook'),
+        initialGlobals: { [DESIGN_SYSTEM_GLOBAL]: designSystem },
+      }),
+    ],
+    test: {
+      name: `storybook:${designSystem.toLowerCase()}`,
+      exclude: isDefault ? [] : BRANDED_STORY_DIRS,
+      sequence: { groupOrder: order },
+      // Axe audits execute in a real browser and can exceed Vitest's short
+      // unit-test default while the full catalog is running concurrently.
+      testTimeout: 30_000,
+      browser: {
+        enabled: true,
+        headless: true,
+        provider: playwright({}),
+        instances: [{ browser: 'chromium' as const }],
+      },
+    },
+  };
+}
 
 // Runs every story as a test: mounts it in a real (headless chromium) browser
 // and executes its `play` interaction test. See .storybook for the story config.
@@ -25,24 +70,7 @@ export default defineConfig({
           environment: 'node',
         },
       },
-      {
-        extends: true,
-        plugins: [
-          storybookTest({ configDir: path.join(dirname, '.storybook') }),
-        ],
-        test: {
-          name: 'storybook',
-          // Axe audits execute in a real browser and can exceed Vitest's short
-          // unit-test default while the full catalog is running concurrently.
-          testTimeout: 30_000,
-          browser: {
-            enabled: true,
-            headless: true,
-            provider: playwright({}),
-            instances: [{ browser: 'chromium' }],
-          },
-        },
-      },
+      ...DESIGN_SYSTEMS.map(storybookProject),
     ],
   },
 });

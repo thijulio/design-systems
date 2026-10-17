@@ -8,6 +8,7 @@
     "mata-deep": { "value": "#2E3D28" },
     "cerrado": { "value": "#6E7A48" },
     "terracotta": { "value": "#B5532A" },
+    "terracotta-deep": { "value": "#A44B26" },
     "ipe": { "value": "#E8A627" },
     "stone": { "value": "#8C8275" },
     "hairline": { "value": "rgba(35, 42, 32, 0.12)" },
@@ -18,6 +19,7 @@
     "sage": { "value": "#8FB089" },
     "sage-soft": { "value": "#6E9B7E" },
     "terracotta-dk": { "value": "#C8693B" },
+    "terracotta-light": { "value": "#D07E57" },
     "hairline-dk": { "value": "rgba(236, 239, 227, 0.16)" }
   }
 }

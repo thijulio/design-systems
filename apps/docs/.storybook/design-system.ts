@@ -74,6 +74,15 @@ export function isSelection(value: unknown): value is Selection {
 }
 
 /**
+ * The picker's starting selection: a stored pick if it is still valid, else
+ * the default design system, so a first visit opens on the same brand shared
+ * stories render in.
+ */
+export function initialSelection(stored: unknown): Selection {
+  return isSelection(stored) ? stored : DEFAULT_DESIGN_SYSTEM;
+}
+
+/**
  * Sidebar filter: does `title` belong in the tree for `selection`? The shared
  * tree and unbranded pages show under every selection.
  */

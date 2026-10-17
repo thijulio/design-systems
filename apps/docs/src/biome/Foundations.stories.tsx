@@ -101,11 +101,13 @@ const NOTES: Record<string, string> = {
   '--bm-ink-soft': 'Soft Ink · body',
   '--bm-stone': 'Stone · muted',
   '--bm-terracotta': 'Terracotta · accent',
+  '--bm-terracotta-deep': 'Terracotta Deep · danger text, AA on bone',
   '--bm-ipe': 'Ipê · highlight',
   '--bm-canopy': 'Canopy · dark ground',
   '--bm-understory': 'Understory · dark surface',
   '--bm-sage': 'Sage · dark primary',
   '--bm-terracotta-dk': 'Terracotta · dark accent',
+  '--bm-terracotta-light': 'Terracotta Light · dark danger text, AA on canopy',
   // Not from the old swatches: says what kind of value it is.
   '--shadow-cast': 'Cast shadow · a paint, not a box-shadow',
   '--text-accent': 'Accent text · AA at small sizes, unlike accent-warm',

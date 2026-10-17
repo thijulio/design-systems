@@ -100,9 +100,10 @@ New generic components belong in `@thijulio/primitives`, styled against the
 `--ds-*` contract; brand React packages keep their public APIs while overlapping
 components migrate. Biome `Button`, `Tag` and the `Card` root, and Exodus
 `Button`, `Card`, `Badge`, `Avatar`, `EmptyState`, `ErrorState`, `LoadMore`,
-`Input`, `Textarea` and `Select`, delegate to primitives; their local CSS skins
-keep native tokens, metrics and consumer class overrides. Only genuinely
-brand-specific components go in brand packages (e.g. Biome's `TerminalHero`).
+`Input`, `Textarea`, `Select` and `Toast`, delegate to primitives; their local
+CSS skins keep native tokens, metrics and consumer class overrides. Exodus
+`*Field`s wait on its `Field` delegating (re-exports drop its skins). Only
+genuinely brand-specific components go in brand packages (e.g. Biome's `TerminalHero`).
 
 **Every brand has the same shape: `<brand>-tokens → <brand>-css → <brand>-react`.**
 Consumers always import components from `@thijulio/<brand>-react`, never from
@@ -186,8 +187,9 @@ plus `themes: [{ name, selector, tokens }]`.
   the play test fails on notes for tokens that no longer exist.
 - **Web Components** (ADR-0001) read the same inherited `var(--ds-*)` / brand
   vars, so the Web names in the catalog apply to them unchanged.
-- **Testing:** `nx test-storybook docs` runs two Vitest projects: `unit` (node,
-  `src/**/*.spec.ts`) and `storybook` (browser). Catalog stories use
+- **Testing:** `nx test-storybook docs` runs `unit` (node,
+  `src/**/*.spec.ts`) and `storybook:<brand>` (browser; one per brand via
+  `initialGlobals`, in sequence; see `vitest.config.ts`). Catalog stories use
   `colorCatalogParameters`, which turns off **only** axe's `color-contrast`
   (~12.5s of a ~16s run on the 95-swatch Exodus catalog); their play
   (`expectCompleteColorCatalog`) instead asserts WCAG AA for every text element
@@ -479,10 +481,9 @@ cross-brand consumer).
 
 Nx's workspace skills live once in `.agents/skills/`; `.claude/skills`,
 `.cursor/skills`, `.github/skills` and `.opencode/skills` are symlinks to it
-(git mode 120000), so edit the real files, not a copy. `.codex/` and `.gemini/`
-hold only Nx's tool config (MCP server, agents, commands). This `AGENTS.md` is
-the project-level guide; `CLAUDE.md` is a separate, short file that points here
-and carries Nx's generated block.
+(git mode 120000): edit the real files. `.codex/` and `.gemini/`
+hold only Nx's tool config (MCP server, agents, commands). `CLAUDE.md` is a
+separate, short file that points here and carries Nx's generated block.
 
 <!-- nx configuration start-->
 <!-- Leave the start & end comments to automatically receive updates. -->

@@ -9,7 +9,9 @@ import {
   activeDesignSystem,
   type CatalogEntry,
   counterpartEntry,
+  DEFAULT_DESIGN_SYSTEM,
   designSystemOf,
+  initialSelection,
   isSelection,
   isShared,
   isVisible,
@@ -85,6 +87,24 @@ describe('isSelection', () => {
     for (const value of ['biome', 'Nocturne', '', null, undefined, 3]) {
       expect(isSelection(value)).toBe(false);
     }
+  });
+});
+
+describe('initialSelection', () => {
+  it('keeps a valid stored pick, All included', () => {
+    expect(initialSelection('Faune')).toBe('Faune');
+    expect(initialSelection('All')).toBe('All');
+  });
+
+  it('falls back to the brand shared stories render in', () => {
+    for (const value of [null, undefined, 'biome', 'Nocturne']) {
+      expect(initialSelection(value)).toBe(DEFAULT_DESIGN_SYSTEM);
+    }
+    // The picker and the preview must open on the same brand, or a first
+    // visit shows the Biome tree beside shared stories rendered in Exodus.
+    expect(initialSelection(null)).toBe(
+      activeDesignSystem('Components/Button', undefined),
+    );
   });
 });
 

@@ -58,6 +58,52 @@ describe('Checkbox', () => {
     expect(box).toHaveAttribute('aria-describedby', 'terms-hint');
   });
 
+  it('never takes its name from the description when there is no label', () => {
+    render(<Checkbox id="terms" description="Kept for twelve months." />);
+    const box = screen.getByRole('checkbox');
+    expect(box).toHaveAccessibleName('');
+    expect(box).toHaveAccessibleDescription('Kept for twelve months.');
+  });
+
+  it('still toggles from its box and takes labelTestId without a label', () => {
+    render(
+      <Checkbox
+        aria-label="Accept the terms"
+        description="Kept for twelve months."
+        labelTestId="root"
+      />,
+    );
+    const box = screen.getByRole('checkbox', { name: 'Accept the terms' });
+    fireEvent.click(box);
+    expect(box).toBeChecked();
+    expect(screen.getByTestId('root')).toContainElement(box);
+  });
+
+  it('takes its name from aria-label when there is a description and no label', () => {
+    render(
+      <Checkbox
+        aria-label="Accept the terms"
+        description="Kept for twelve months."
+      />,
+    );
+    const box = screen.getByRole('checkbox', { name: 'Accept the terms' });
+    expect(box).toHaveAccessibleDescription('Kept for twelve months.');
+  });
+
+  it('takes its name from aria-labelledby when there is a description and no label', () => {
+    render(
+      <>
+        <h2 id="consent-heading">Consent</h2>
+        <Checkbox
+          aria-labelledby="consent-heading"
+          description="Kept for twelve months."
+        />
+      </>,
+    );
+    const box = screen.getByRole('checkbox', { name: 'Consent' });
+    expect(box).toHaveAccessibleDescription('Kept for twelve months.');
+  });
+
   it('toggles when its description text is clicked', () => {
     render(<Checkbox label="Subscribe" description="One email a week." />);
     fireEvent.click(screen.getByText('One email a week.'));
