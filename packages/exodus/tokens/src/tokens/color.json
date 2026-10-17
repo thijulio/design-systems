@@ -41,6 +41,10 @@
   "info": { "value": "#3a6ea5" },
   "info-soft": { "value": "#e4eef8" },
   "info-fg": { "value": "#2a4f78" },
+  "success-border": { "value": "#bcdcc6" },
+  "warning-border": { "value": "#ecd3a0" },
+  "danger-border": { "value": "#f0c4b8" },
+  "info-border": { "value": "#b9d0e8" },
 
   "tone": {
     "neutral": {

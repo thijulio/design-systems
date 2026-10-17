@@ -1,0 +1,92 @@
+/* Without `align`: block flow, children spaced by a top margin on every
+   visible sibling after the first (Tailwind `space-y-*` parity). The margin
+   is resolved on the parent's class so a nested Stack keeps its own gap. */
+.flow {
+  display: block;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.alignStart {
+  align-items: flex-start;
+}
+.alignCenter {
+  align-items: center;
+}
+.alignEnd {
+  align-items: flex-end;
+}
+.alignStretch {
+  align-items: stretch;
+}
+
+.flow.g0 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: 0;
+}
+.flow.g1 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-1);
+}
+.flow.g2 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-2);
+}
+.flow.g3 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-3);
+}
+.flow.g4 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-4);
+}
+.flow.g5 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-5);
+}
+.flow.g6 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-6);
+}
+.flow.g8 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-8);
+}
+.flow.g10 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-10);
+}
+.flow.g12 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-12);
+}
+.flow.g16 > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--ds-space-16);
+}
+
+.flex.g0 {
+  gap: 0;
+}
+.flex.g1 {
+  gap: var(--ds-space-1);
+}
+.flex.g2 {
+  gap: var(--ds-space-2);
+}
+.flex.g3 {
+  gap: var(--ds-space-3);
+}
+.flex.g4 {
+  gap: var(--ds-space-4);
+}
+.flex.g5 {
+  gap: var(--ds-space-5);
+}
+.flex.g6 {
+  gap: var(--ds-space-6);
+}
+.flex.g8 {
+  gap: var(--ds-space-8);
+}
+.flex.g10 {
+  gap: var(--ds-space-10);
+}
+.flex.g12 {
+  gap: var(--ds-space-12);
+}
+.flex.g16 {
+  gap: var(--ds-space-16);
+}

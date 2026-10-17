@@ -1,0 +1,53 @@
+.spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ds-accent);
+}
+
+.ring {
+  display: inline-block;
+  border: 2px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: var(--ds-radius-full);
+  animation: ds-spinner-rotate 0.75s linear infinite;
+}
+
+.sm {
+  width: 16px;
+  height: 16px;
+}
+
+.md {
+  width: 24px;
+  height: 24px;
+}
+
+/* Visible label: the text follows its context (a text primitive around the
+   spinner sets size and tone); only the ring keeps the accent. */
+.labelled {
+  justify-content: flex-start;
+  gap: var(--ds-space-2);
+  color: inherit;
+}
+.labelled .ring {
+  flex: none;
+  color: var(--ds-accent);
+}
+.label {
+  min-inline-size: 0;
+}
+
+@keyframes ds-spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Rotation is the only cue that work is in progress, so it slows down rather
+   than stopping; the status text carries the meaning. */
+@media (prefers-reduced-motion: reduce) {
+  .ring {
+    animation-duration: 2.4s;
+  }
+}

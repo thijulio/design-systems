@@ -83,15 +83,15 @@ packages/
     react/         @thijulio/biome-react  — Button, Card, Tag, ModeToggle, TerminalHero
   exodus/
     tokens/        @thijulio/exodus-tokens
-    css/           @thijulio/exodus-css   → dist/exodus.css
+    css/           @thijulio/exodus-css   → dist/exodus.css (+ exodus-tokens.css: fonts + tokens only)
     react/         @thijulio/exodus-react — 15 universal components (no PetCard)
   faune/
     tokens/        @thijulio/faune-tokens — palette + contract → tokens.css
-    css/           @thijulio/faune-css    → dist/faune.css
+    css/           @thijulio/faune-css    → dist/faune.css (+ faune-tokens.css: fonts + tokens only)
     react/         @thijulio/faune-react  — re-exports every primitive (no wrappers)
     web-components/ @thijulio/faune-web-components — re-exports the tj-* elements (private, ADR-0001 spike)
 apps/
-  docs/            Storybook (SB 10, react-vite) — all brands, theme toolbar (scope:docs)
+  docs/            Storybook (SB 10, react-vite) — shared Components + per-brand trees, design-system picker (scope:docs)
   docs-web-components/ Storybook (web-components-vite) — tj-* elements, composed into docs via refs
 ```
 
@@ -104,7 +104,7 @@ New generic components belong in `@thijulio/primitives`, styled against the
 `--ds-*` contract. Existing brand React packages retain their public APIs while
 overlapping components migrate incrementally. Biome `Button`, `Tag`, and the
 `Card` root delegate to primitives; Card retains its editorial content and arcs.
-Exodus `Button`, `Card`, `Badge`, `Avatar`, `Input`, `Textarea`, and `Select` delegate to
+Exodus `Button`, `Card`, `Badge`, `Avatar`, `EmptyState`, `ErrorState`, `LoadMore`, `Input`, `Textarea`, and `Select` delegate to
 primitives. Local CSS-variable skins retain their native tokens, metrics, and
 consumer class overrides without requiring an immediate stylesheet upgrade.
 Only genuinely brand-specific components should be added to brand React
@@ -275,11 +275,34 @@ see **Release / publish** below.
 
 ## How to…
 
-**Add a component to a react package:** create `Name/{Name.tsx, Name.module.css,
-Name.spec.tsx}`, export from `src/index.ts`, add a story in
-`apps/docs/src/<brand>/Name.stories.tsx`. Style with CSS Modules + token vars.
-Write a Jest + RTL **behavior** spec (roles, state, callbacks — not snapshots,
-not hashed class names). Run `nx run-many -t test typecheck build lint --projects=<brand>-react`.
+**Add a primitive** (the home for anything generic):
+
+1. `packages/primitives/src/lib/Name/{Name.tsx, Name.module.css,
+Name.spec.tsx}`: `forwardRef` + `displayName`; the module CSS uses only
+   `var(--ds-*)`, never a brand variable or a fallback to one.
+2. Generic copy only: no product naming or concepts, and every user-facing
+   string (label, accessible name) is a **required** prop with no default.
+3. Export it and its props type from `packages/primitives/src/index.ts`,
+   `packages/exodus/react/src/index.ts` (the re-exported-unchanged block,
+   unless Exodus wraps it) and `packages/faune/react/src/index.ts`. Faune's
+   `index.spec.tsx` fails until Faune re-exports every primitive.
+4. One shared story, `apps/docs/src/components/Name.stories.tsx` (title
+   `Components/Name`, imports `@thijulio/primitives`): argTypes with
+   descriptions, a story per variant, and at least one `play` test on role,
+   accessible name and keyboard behaviour. The picker and theme toolbar
+   restyle it per brand, so write no per-brand copy.
+5. Only when `exodus-react` wraps it in its own component (not a re-export),
+   add `apps/docs/src/exodus/Name.stories.tsx` (`Exodus/Components/Name`)
+   showing just the Exodus skin.
+6. `nx run-many -t test typecheck lint --projects=primitives,exodus-react,faune-react`,
+   then `nx verify-contract docs` and `nx test-storybook docs`.
+
+**Add a brand-only component** (or a brand skin): create `Name/{Name.tsx,
+Name.module.css, Name.spec.tsx}` in `packages/<brand>/react/src/lib/`, export
+from its `src/index.ts`, story in `apps/docs/src/<brand>/Name.stories.tsx`
+(`<Brand>/Components/Name`). Style with CSS Modules + token vars.
+For either, write a Jest + RTL **behavior** spec (roles, state, callbacks — not
+snapshots, not hashed class names). Run `nx run-many -t test typecheck build lint --projects=<brand>-react`.
 
 **Add or change a token:** edit the JSON in `packages/<brand>/tokens/src`, run
 `nx build <brand>-tokens`, update `verify.mjs` if you added a structural
@@ -292,7 +315,8 @@ a `theme('<name>')` entry in the brand's `build.mjs` with the right selector.
 `react` packages (copy `packages/faune/*` — `react` starts as a re-export of the
 primitives), map its source tokens to `--ds-*` in `src/tokens/contract.json`, add it to
 `DESIGN_SYSTEMS` in `apps/docs/.storybook/design-system.ts` and its CSS bundle to
-`BRAND_CSS` in `preview.tsx` (typed against `DESIGN_SYSTEMS`) plus its `storySort` entry,
+`BRAND_CSS` in `preview.tsx` (typed against `DESIGN_SYSTEMS`) plus its `storySort` entry
+(the shared `Components/…` stories then render in it from the picker),
 and add it to `apps/docs/verify-contract.mjs`. See
 `docs/architecture/multi-brand-primitives.md`. `nx verify-contract docs` checks
 the variables consumed by primitives; Storybook tests check actual themed
@@ -378,27 +402,40 @@ cross-brand consumer).
   So: rebuild react packages before Storybook reflects component changes. And
   `main.ts` must keep `@vitejs/plugin-react` in `viteFinal` or JSX-in-`render`
   stories fail the export-order lexer ("Parse error @:LINE").
-- **Storybook theming:** `preview.tsx` reads the brand from the story `title`
-  prefix (`Biome/…` / `Exodus/…` / `Faune/…`) and injects only that brand's token
-  CSS (the brands share some `:root` var names), then sets `data-mode`/`data-theme` from the
-  toolbar. Story titles MUST start with the brand — the first `/`-segment is the
-  brand key used by `preview.tsx` and `manager.tsx` (via `.storybook/design-system.ts`).
-- **Sidebar taxonomy:** every brand has the same tree —
-  `<Brand>/Foundations`, `<Brand>/Components/<Name>` (flat, alphabetical; no
-  category groups), and `<Brand>/Migration/<Name>` for wrapper-bridge stories
-  (Compatibility, primitives under the brand skin) that disappear with the wrappers.
-  Only `Introduction` is unbranded. `.storybook/design-system.spec.ts` parses every
+- **Storybook theming:** brands are themes over one component library, so a
+  shared primitive has ONE story set (`Components/<Name>`), restyled per brand.
+  `preview.tsx` takes the brand from the title prefix (`Biome/…` / `Exodus/…` /
+  `Faune/…`) or, for `Components/…`, from the `designSystem` global the picker
+  sets (default Exodus), injects only that brand's token CSS (the brands share
+  some `:root` var names), then sets `data-mode`/`data-theme` from the toolbar.
+  A story that asserts one brand's colours pins it with
+  `globals: { designSystem: '<Brand>' }` and `tags: ['!autodocs']` (on a Docs
+  page it would restyle every other story). The logic lives in
+  `.storybook/design-system.ts` (`activeDesignSystem`).
+- **Sidebar taxonomy:** `Components/<Name>` (flat) holds the shared primitives,
+  one file each in `apps/docs/src/components/`. Every brand then has the same
+  tree — `<Brand>/Foundations`, `<Brand>/Components/<Name>` (flat; only
+  brand-only components and a brand's own re-skinned wrapper, e.g. Exodus's
+  `lib/` Button next to the shared `Components/Button`), and
+  `<Brand>/Migration/<Name>` for wrapper-bridge stories (Compatibility,
+  primitives under the brand skin) that disappear with the wrappers. Only
+  `Introduction` is unbranded. `.storybook/design-system.spec.ts` parses every
   story title (here and in `docs-web-components`) and fails on anything else.
   Order is fixed in `preview.tsx` `options.storySort` (a literal — Storybook reads it
-  statically). Adding a component = `<Brand>/Components/<Name>`.
+  statically). Adding a shared component = `Components/<Name>`.
 - **Design-system picker:** the toolbar's **Design system** dropdown
-  (`manager.tsx`) filters the sidebar to one brand's tree (plus unbranded pages)
-  via `api.experimental_setFilter`, and switching lands on the same page in the
-  target brand when it exists (else its Foundations). The URL's story always wins,
-  so deep links select their brand; **All** shows every tree (sidebar search only
+  (`manager.tsx`) filters the sidebar to one brand's tree plus the shared
+  `Components` tree and unbranded pages (via `api.experimental_setFilter`), and
+  sets the `designSystem` global, so a shared story restyles in place. On a
+  branded page, switching lands on the same page in the target brand when it
+  exists (else its Foundations). The URL wins: a branded story selects its
+  brand, a `globals=designSystem:<Brand>` param selects that one; **All** shows
+  every tree and leaves shared stories in the last brand (sidebar search only
   searches the visible tree). The pick is remembered in `localStorage`. The
   per-brand `.storybook-<brand>/` design-sync configs keep the old per-brand
-  toolbar on purpose: they are single-brand builds.
+  toolbar on purpose: they are single-brand builds that also load
+  `src/components/**` with their brand forced (minus names that collide with
+  the brand's own components).
 - **Composition (`refs`) is decided at boot.** Storybook probes each ref once
   when `docs` starts (server-side `GET <url>/iframe.html`). Reachable → the
   browser fetches the ref's `index.json` without credentials; unreachable →

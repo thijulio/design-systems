@@ -1,0 +1,79 @@
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  min-width: 0;
+  font-family: var(--ds-font-body);
+}
+
+.label {
+  margin: 0;
+  font-size: var(--ds-size-caption);
+  font-weight: var(--ds-weight-semibold);
+  letter-spacing: var(--ds-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ds-text-muted);
+}
+
+/* A heading label keeps the paragraph look: brand bases style h1–h6. */
+.heading {
+  font-family: inherit;
+  line-height: inherit;
+}
+
+.value {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-size-h1);
+  font-weight: var(--ds-weight-bold);
+  line-height: var(--ds-leading-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.caption {
+  margin: 0;
+  font-size: var(--ds-size-body-sm);
+  color: var(--ds-text-soft);
+}
+
+/* Label over caption at the start, the value beside them at the end. The
+   caption's margin stands in for the row gap, so a missing caption leaves no
+   empty space under the label. */
+.inline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--ds-space-3);
+  row-gap: 0;
+  align-items: start;
+}
+
+.inline .label,
+.inline .caption {
+  grid-column: 1;
+}
+
+.inline .value {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.inline .caption {
+  margin-block-start: var(--ds-space-1);
+}
+
+.neutral .value {
+  color: var(--ds-text);
+}
+.accent .value {
+  color: var(--ds-accent-fg);
+}
+.success .value {
+  color: var(--ds-success-fg);
+}
+.warning .value {
+  color: var(--ds-warning-fg);
+}
+.danger .value {
+  color: var(--ds-danger-fg);
+}

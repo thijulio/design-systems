@@ -7,7 +7,9 @@
     "5": { "value": "20px" },
     "6": { "value": "24px" },
     "8": { "value": "32px" },
-    "12": { "value": "48px" }
+    "10": { "value": "40px" },
+    "12": { "value": "48px" },
+    "16": { "value": "64px" }
   },
   "card-padding-y": { "value": "18px" },
   "card-padding-x": { "value": "20px" },
@@ -16,6 +18,7 @@
     "md": { "value": "9px" },
     "lg": { "value": "12px" },
     "xl": { "value": "16px" },
+    "2xl": { "value": "24px" },
     "full": { "value": "999px" }
   },
   "shadow": {

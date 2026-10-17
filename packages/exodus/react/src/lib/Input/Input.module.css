@@ -13,7 +13,8 @@
   --ds-input-border-width: 1.5px;
   --ds-input-placeholder: var(--n-400);
   --ds-input-focus-border: var(--accent-500);
-  --ds-input-focus-shadow: 0 0 0 4px var(--accent-ring);
+  /* Focus is the shared 2px --ds-focus outline, not the weak accent-ring halo. */
+  --ds-focus: var(--accent);
   --ds-input-disabled-background: var(--n-100);
   --ds-input-disabled-foreground: var(--n-400);
   --ds-input-disabled-cursor: not-allowed;
@@ -21,7 +22,7 @@
 }
 .invalid {
   --ds-input-invalid-shadow: 0 0 0 4px var(--danger-soft);
-  --ds-input-invalid-focus-shadow: 0 0 0 4px var(--accent-ring);
+  --ds-input-invalid-focus-shadow: 0 0 0 4px var(--danger-soft);
 }
 .textarea {
   --ds-input-height: auto;

@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./faune.css": "./dist/faune.css",
+    "./faune-tokens.css": "./dist/faune-tokens.css",
     "./fonts/*": "./dist/fonts/*",
     "./package.json": "./package.json"
   },

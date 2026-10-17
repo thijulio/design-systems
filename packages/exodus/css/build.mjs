@@ -27,14 +27,14 @@ await mkdir(dist, { recursive: true });
 const fontsCss = await buildFonts({ packageRoot: here, outDir: dist, fonts });
 
 // @font-face rules lead the bundle, ahead of the tokens that name the families.
+const tokensOnly = [fontsCss.trim(), tokensCss.trim()].join('\n\n');
 const bundle =
-  [
-    fontsCss.trim(),
-    tokensCss.trim(),
-    reset.trim(),
-    base.trim(),
-    motion.trim(),
-  ].join('\n\n') + '\n';
+  [tokensOnly, reset.trim(), base.trim(), motion.trim()].join('\n\n') + '\n';
 
 await writeFile(join(dist, 'exodus.css'), bundle);
-console.log('✓ @thijulio/exodus-css built → dist/exodus.css + dist/fonts/');
+// Fonts + tokens only (no reset/base/motion), for apps that bring their own
+// element styles but want the brand's variables and faces.
+await writeFile(join(dist, 'exodus-tokens.css'), `${tokensOnly}\n`);
+console.log(
+  '✓ @thijulio/exodus-css built → dist/{exodus.css,exodus-tokens.css} + dist/fonts/',
+);

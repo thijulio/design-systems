@@ -10,6 +10,137 @@
   padding: var(--ds-card-padding-y, var(--ds-space-5))
     var(--ds-card-padding-x, var(--ds-space-6));
 }
+.padNone {
+  padding: 0;
+}
+.padSm {
+  padding: var(--ds-space-4);
+}
+.padMd {
+  padding: var(--ds-space-5) var(--ds-space-6);
+}
+.padLg {
+  padding: var(--ds-space-6) var(--ds-space-8);
+}
+
+/* Explicit block / inline padding (`padding={{ block, inline }}`). */
+.pb0 {
+  padding-block: 0;
+}
+.pb1 {
+  padding-block: var(--ds-space-1);
+}
+.pb2 {
+  padding-block: var(--ds-space-2);
+}
+.pb3 {
+  padding-block: var(--ds-space-3);
+}
+.pb4 {
+  padding-block: var(--ds-space-4);
+}
+.pb5 {
+  padding-block: var(--ds-space-5);
+}
+.pb6 {
+  padding-block: var(--ds-space-6);
+}
+.pb8 {
+  padding-block: var(--ds-space-8);
+}
+.pb10 {
+  padding-block: var(--ds-space-10);
+}
+.pb12 {
+  padding-block: var(--ds-space-12);
+}
+.pb16 {
+  padding-block: var(--ds-space-16);
+}
+.pi0 {
+  padding-inline: 0;
+}
+.pi1 {
+  padding-inline: var(--ds-space-1);
+}
+.pi2 {
+  padding-inline: var(--ds-space-2);
+}
+.pi3 {
+  padding-inline: var(--ds-space-3);
+}
+.pi4 {
+  padding-inline: var(--ds-space-4);
+}
+.pi5 {
+  padding-inline: var(--ds-space-5);
+}
+.pi6 {
+  padding-inline: var(--ds-space-6);
+}
+.pi8 {
+  padding-inline: var(--ds-space-8);
+}
+.pi10 {
+  padding-inline: var(--ds-space-10);
+}
+.pi12 {
+  padding-inline: var(--ds-space-12);
+}
+.pi16 {
+  padding-inline: var(--ds-space-16);
+}
+
+/* Header row; the header and the body share the padding step. */
+.header {
+  border-block-end: 1px solid var(--ds-border-subtle);
+}
+.titles {
+  min-inline-size: 0;
+}
+
+/* Surfaces. raised is the base `.card`. */
+.flat {
+  box-shadow: none;
+}
+.sunken {
+  background: var(--ds-surface-sunken);
+  border-color: transparent;
+  box-shadow: none;
+}
+.dashed {
+  border-style: dashed;
+  border-color: var(--ds-border);
+  box-shadow: none;
+}
+
+/* Tones tint the panel; meaning does not theme except accent. The border
+   tokens are newer than the contract, so each falls back to a soft fill. */
+.toneAccent {
+  background: var(--ds-accent-soft);
+  border-color: var(--ds-card-hover-border, var(--ds-accent));
+}
+.toneInfo {
+  background: var(--ds-info-soft);
+  border-color: var(--ds-info-border, var(--ds-info-soft));
+}
+.toneSuccess {
+  background: var(--ds-success-soft);
+  border-color: var(--ds-success-border, var(--ds-success-soft));
+}
+.toneWarning {
+  background: var(--ds-warning-soft);
+  border-color: var(--ds-warning-border, var(--ds-warning-soft));
+}
+.toneDanger {
+  background: var(--ds-danger-soft);
+  border-color: var(--ds-danger-border, var(--ds-danger-soft));
+}
+.toneInverse {
+  background: var(--ds-surface-inverse);
+  border-color: var(--ds-border-inverse);
+  color: var(--ds-text-inverse);
+}
 
 .interactive {
   cursor: pointer;

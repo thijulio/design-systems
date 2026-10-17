@@ -133,8 +133,13 @@ export function normalize(raw: unknown): Normalized {
     return { kind: 'easing', x1: +m[1], y1: +m[2], x2: +m[3], y2: +m[4] };
   }
   if ((m = CLAMP_RE.exec(v))) {
-    // Fluid web sizes collapse to their minimum (mobile) bound for native.
-    return { kind: 'dimension', value: +m[1] };
+    // Fluid web sizes collapse to their minimum (mobile) bound for native,
+    // in the same unit policy as a bare length: rem → px (16px root).
+    const min = +m[1];
+    return {
+      kind: 'dimension',
+      value: m[2] === 'rem' ? round4(min * 16) : min,
+    };
   }
   if (HEX_RE.test(v)) {
     return parseHex(v);

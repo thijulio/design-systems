@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import { Tag } from './Tag';
 
@@ -11,5 +12,11 @@ describe('Tag', () => {
     const { container } = render(<Tag status>Actif</Tag>);
     const dot = container.querySelector('[aria-hidden="true"]');
     expect(dot).not.toBeNull();
+  });
+
+  it('forwards a ref to its root span', () => {
+    const ref = createRef<HTMLSpanElement>();
+    render(<Tag ref={ref}>Actif</Tag>);
+    expect(ref.current).toBe(screen.getByText('Actif'));
   });
 });

@@ -1,28 +1,28 @@
 .field {
   display: block;
-  font-family: var(--font-sans);
+  font-family: var(--ds-font-body, var(--font-sans));
 }
 
 .label {
   display: block;
-  font-size: var(--text-body-sm);
-  font-weight: 600;
-  color: var(--n-700);
+  font-size: var(--ds-size-body-sm, var(--text-body-sm));
+  font-weight: var(--ds-weight-semibold, 600);
+  color: var(--ds-text-soft, var(--n-700));
   margin-bottom: 7px;
 }
 .required {
-  color: var(--danger);
+  color: var(--ds-danger, var(--danger));
 }
 
 .hint {
   display: block;
-  font-size: var(--text-caption);
-  color: var(--n-600);
+  font-size: var(--ds-size-caption, var(--text-caption));
+  color: var(--ds-text-muted, var(--n-600));
   margin-top: 6px;
 }
 .error {
   display: block;
-  font-size: var(--text-caption);
-  color: var(--danger-fg);
+  font-size: var(--ds-size-caption, var(--text-caption));
+  color: var(--ds-danger-fg, var(--danger-fg));
   margin-top: 6px;
 }

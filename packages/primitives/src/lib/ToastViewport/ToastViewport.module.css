@@ -1,0 +1,28 @@
+/* Click-through outside the toasts, so the strip never blocks the page
+   under it. Each child takes pointer events back. */
+.viewport {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: var(--ds-z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-space-2);
+  margin: 0;
+  padding: var(--ds-space-4);
+  pointer-events: none;
+}
+
+/* sm: stack at the inline end instead of the centre. */
+@media (min-width: 40rem) {
+  .viewport {
+    align-items: flex-end;
+  }
+}
+
+.viewport > * {
+  inline-size: 100%;
+  max-inline-size: 24rem;
+  pointer-events: auto;
+}

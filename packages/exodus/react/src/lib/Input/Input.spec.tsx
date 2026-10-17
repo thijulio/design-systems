@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Input, Textarea } from './Input';
 
@@ -28,5 +29,18 @@ describe('Textarea', () => {
   it('renders a textarea element', () => {
     render(<Textarea placeholder="Notes" />);
     expect(screen.getByPlaceholderText('Notes').tagName).toBe('TEXTAREA');
+  });
+  it('forwards a ref to the textarea', () => {
+    const ref = createRef<HTMLTextAreaElement>();
+    render(<Textarea ref={ref} aria-label="Notes" />);
+    expect(ref.current).toBe(screen.getByRole('textbox', { name: 'Notes' }));
+  });
+});
+
+describe('Input ref', () => {
+  it('forwards a ref to the native input', () => {
+    const ref = createRef<HTMLInputElement>();
+    render(<Input ref={ref} aria-label="Email" />);
+    expect(ref.current).toBe(screen.getByRole('textbox', { name: 'Email' }));
   });
 });

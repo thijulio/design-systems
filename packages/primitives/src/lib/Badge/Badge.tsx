@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cx, type StyleWithVars } from '../_util/style';
 import styles from './Badge.module.css';
 
@@ -21,18 +21,24 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /** Badge — small count / label chip with a fixed tone. */
-export function Badge({
-  tone = 'neutral',
-  className,
-  style,
-  children,
-  ...props
-}: BadgeProps) {
+export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
+  { tone = 'neutral', className, style, children, ...props },
+  ref,
+) {
   const [bg, fg] = TONES[tone] ?? TONES.neutral;
   const vars: StyleWithVars = { '--badge-bg': bg, '--badge-fg': fg, ...style };
   return (
-    <span className={cx(styles.badge, className)} style={vars} {...props}>
+    <span
+      // The tone as data, so consumers and tests can read it without classes.
+      data-tone={tone}
+      {...props}
+      ref={ref}
+      style={vars}
+      className={cx(styles.badge, className)}
+    >
       {children}
     </span>
   );
-}
+});
+
+Badge.displayName = 'Badge';

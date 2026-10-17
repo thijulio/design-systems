@@ -1,0 +1,37 @@
+.code {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-sunken);
+  font-family: var(--ds-font-mono);
+  overflow-wrap: anywhere;
+}
+
+/* Wrapped inline code keeps its padding and radius on every line. */
+.inline {
+  padding: 0.125em 0.375em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* No horizontal scroll: a scrolling block would need to be focusable. */
+.pre {
+  margin: 0;
+  font-family: var(--ds-font-mono);
+  font-size: inherit;
+  white-space: pre-wrap;
+}
+
+.block {
+  display: block;
+  padding: var(--ds-space-2) var(--ds-space-3);
+  line-height: var(--ds-leading-normal);
+}
+
+.caption {
+  font-size: var(--ds-size-caption);
+}
+.bodySm {
+  font-size: var(--ds-size-body-sm);
+}
+.body {
+  font-size: var(--ds-size-body);
+}

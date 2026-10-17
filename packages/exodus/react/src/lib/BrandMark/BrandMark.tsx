@@ -1,4 +1,9 @@
-import type { CSSProperties, ReactNode } from 'react';
+import {
+  forwardRef,
+  type CSSProperties,
+  type ReactNode,
+  type Ref,
+} from 'react';
 import { cx, type StyleWithVars } from '../_util/style';
 import styles from './BrandMark.module.css';
 
@@ -20,14 +25,13 @@ export interface BrandMarkProps {
  * BrandMark — accent shield-check mark + wordmark. The mark reskins per theme;
  * Baloo 2 is used for the wordmark only when `wordmarkFont="baloo"` (or name "PMP").
  */
-export function BrandMark({
-  name = 'Companion',
-  size = 'md',
-  wordmarkFont,
-  onClick,
-  className,
-  style,
-}: BrandMarkProps) {
+export const BrandMark = forwardRef<
+  HTMLButtonElement | HTMLSpanElement,
+  BrandMarkProps
+>(function BrandMark(
+  { name = 'Companion', size = 'md', wordmarkFont, onClick, className, style },
+  ref,
+) {
   const dim = DIMS[size];
   const useBaloo = wordmarkFont === 'baloo' || name === 'PMP';
   const vars: StyleWithVars = {
@@ -62,6 +66,7 @@ export function BrandMark({
   if (onClick) {
     return (
       <button
+        ref={ref as Ref<HTMLButtonElement>}
         type="button"
         onClick={onClick}
         className={cx(styles.brand, styles.button, className)}
@@ -72,8 +77,14 @@ export function BrandMark({
     );
   }
   return (
-    <span className={cx(styles.brand, className)} style={vars}>
+    <span
+      ref={ref as Ref<HTMLSpanElement>}
+      className={cx(styles.brand, className)}
+      style={vars}
+    >
       {content}
     </span>
   );
-}
+});
+
+BrandMark.displayName = 'BrandMark';

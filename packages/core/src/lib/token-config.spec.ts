@@ -1,8 +1,10 @@
 import {
+  assertThemeNames,
   createBaseConfig,
   createThemeConfig,
   MANIFEST_FILE,
   themeManifestTempFile,
+  themeName,
   themeTempFile,
 } from './token-config.js';
 
@@ -117,5 +119,29 @@ describe('manifest platform', () => {
     });
     // Same predicate as the CSS overlay, so names/sets can't diverge.
     expect(file?.filter).toBe(platforms['css']?.files?.[0]?.filter);
+  });
+});
+
+describe('theme names', () => {
+  it('derives the name from the overlay directory', () => {
+    const theme = { selector: '[data-x]', source: '/s/themes/dark/' };
+    expect(themeName(theme)).toBe('dark');
+  });
+
+  it('accepts lowercase names with digits and hyphens', () => {
+    const names = ['sage', 'clay', 'high-contrast', 'v2'];
+    expect(() => assertThemeNames(names)).not.toThrow();
+  });
+
+  it('rejects names that are unsafe in generated JS, Dart or file names', () => {
+    for (const bad of ['2024', 'Dark', 'a b', "x'y", 'a/b', '']) {
+      expect(() => assertThemeNames([bad])).toThrow(/must match/);
+    }
+  });
+
+  it('rejects duplicates, including ones that collide once hyphens are dropped', () => {
+    const hyphenated = ['high-contrast', 'highcontrast'];
+    expect(() => assertThemeNames(['dark', 'dark'])).toThrow(/collide/);
+    expect(() => assertThemeNames(hyphenated)).toThrow(/collide/);
   });
 });

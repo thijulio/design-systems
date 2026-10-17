@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react';
+import { forwardRef, type HTMLAttributes } from 'react';
 import { cx, type StyleWithVars } from '../_util/style';
 import styles from './Avatar.module.css';
 
@@ -30,16 +30,19 @@ export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /** Avatar — circular (or rounded) initials chip. */
-export function Avatar({
-  initials,
-  size = 32,
-  variant = 'brand',
-  shape = 'circle',
-  tone,
-  className,
-  style,
-  ...props
-}: AvatarProps) {
+export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
+  {
+    initials,
+    size = 32,
+    variant = 'brand',
+    shape = 'circle',
+    tone,
+    className,
+    style,
+    ...props
+  },
+  ref,
+) {
   const key: AvatarTone = tone ?? variant;
   const [bg, fg] = TONE_BG[key];
   const vars: StyleWithVars = {
@@ -51,15 +54,18 @@ export function Avatar({
   };
   return (
     <span
+      {...props}
+      ref={ref}
+      style={vars}
       className={cx(
         styles.avatar,
         shape === 'circle' ? styles.circle : styles.rounded,
         className,
       )}
-      style={vars}
-      {...props}
     >
       {initials}
     </span>
   );
-}
+});
+
+Avatar.displayName = 'Avatar';

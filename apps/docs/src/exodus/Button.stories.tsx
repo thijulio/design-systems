@@ -16,15 +16,30 @@ const meta: Meta<typeof Button> = {
         'ghost',
         'danger',
         'danger-outline',
+        'link',
       ],
       description:
-        'Six intents. Accent-driven ones reskin per theme; danger stays fixed.',
+        'Seven intents. Accent-driven ones reskin per theme; danger stays fixed.',
     },
     size: {
       control: 'inline-radio',
       options: ['sm', 'md', 'lg'],
       description: 'Control size.',
     },
+    isLoading: {
+      control: 'boolean',
+      description:
+        'In flight: spinner, aria-busy + aria-disabled, press refused; never native disabled.',
+    },
+    loadingLabel: {
+      description: 'Visually hidden text announced while loading.',
+    },
+    asChild: {
+      description:
+        'Render the single child (e.g. a router link) with the Button styles.',
+    },
+    fullWidth: { control: 'boolean', description: 'Stretch to the container.' },
+    href: { description: 'Render an anchor (target/rel/download typed).' },
   },
 };
 export default meta;
@@ -47,6 +62,39 @@ export const Secondary: Story = { args: { variant: 'secondary' } };
 export const Soft: Story = { args: { variant: 'soft' } };
 export const Danger: Story = {
   args: { variant: 'danger', children: 'Delete' },
+};
+export const Link: Story = {
+  args: { variant: 'link', children: 'Forgot password?' },
+};
+export const Loading: Story = {
+  args: { isLoading: true, loadingLabel: 'Saving', onClick: fn() },
+  play: async ({ args, canvasElement }) => {
+    const button = within(canvasElement).getByRole('button', {
+      name: /save changes/i,
+    });
+    await expect(button).not.toBeDisabled();
+    await expect(button).toHaveAttribute('aria-busy', 'true');
+    await expect(button).toHaveAttribute('aria-disabled', 'true');
+    await userEvent.click(button);
+    await expect(args.onClick).not.toHaveBeenCalled();
+  },
+};
+export const AsChild: Story = {
+  args: {
+    asChild: true,
+    variant: 'secondary',
+    children: <a href="#adopt">Adopt Luna</a>,
+  },
+};
+export const FullWidth: Story = {
+  args: { fullWidth: true },
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 export const Disabled: Story = {
   args: { disabled: true, onClick: fn() },

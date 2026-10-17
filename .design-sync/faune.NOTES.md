@@ -22,7 +22,8 @@ component name) apply here.
   the bundle but uncarded until `Select.stories.tsx`/`Textarea.stories.tsx` existed).
 - `cfg.tokensPkg: "@thijulio/faune-css"`; `cfg.extraFonts: ["../css/dist/faune.css"]`
   self-hosts Inter + Newsreader (6 faces) to `fonts/`.
-- Scoped storybook `apps/docs/.storybook-faune` (glob `../src/faune/**`), same template
+- Scoped storybook `apps/docs/.storybook-faune` (globs `../src/faune/**` and, since
+  2026-10, the shared `../src/components/**` rendered in Faune), same template
   as the biome/exodus ones. Reference built to `.design-sync/sb-reference-faune`.
 
 ## Grades (2026-10-02) — 9 components

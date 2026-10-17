@@ -1,0 +1,79 @@
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+/* A bare reset at zero specificity, so a caller's class always wins. */
+:where(.trigger) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--ds-focus);
+  outline-offset: 2px;
+}
+
+.tooltip {
+  position: absolute;
+  /* Physical `left` + `translate` centres it the same way in LTR and RTL. */
+  left: 50%;
+  translate: -50% 0;
+  z-index: var(--ds-z-overlay);
+  inline-size: max-content;
+  max-inline-size: 20rem;
+  padding: var(--ds-space-1) var(--ds-space-2);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-inverse);
+  color: var(--ds-text-inverse);
+  font-size: var(--ds-size-caption);
+  line-height: var(--ds-leading-snug);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s;
+}
+
+.tooltip[data-state='open'] {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Bridges the gap to the trigger so the pointer can move onto the tooltip. */
+.tooltip::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  block-size: var(--ds-space-2);
+}
+
+.top {
+  inset-block-end: 100%;
+  margin-block-end: var(--ds-space-2);
+}
+.top::before {
+  inset-block-start: 100%;
+}
+
+.bottom {
+  inset-block-start: 100%;
+  margin-block-start: var(--ds-space-2);
+}
+.bottom::before {
+  inset-block-end: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    transition: none;
+  }
+}

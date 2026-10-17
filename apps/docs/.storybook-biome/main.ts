@@ -11,7 +11,13 @@ const config: StorybookConfig = {
   // reference storybook for the Biome Modernism project (exodus lives in its own
   // sync run). Keeps exodus stories out of the index so shared component names
   // (Button, Card) can't cross-pair against the biome bundle.
-  stories: ['../src/biome/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
+  // The shared Components stories render here in Biome (preview.tsx forces the
+  // brand). Names that collide with Biome's own Button, Card and Tag are left
+  // out: titleMap matches the leaf name, so they would merge into those cards.
+  stories: [
+    '../src/biome/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
+    '../src/components/**/!(Button|Card|Tag).stories.@(js|jsx|ts|tsx)',
+  ],
   addons: [
     '@storybook/addon-docs',
     '@storybook/addon-a11y',

@@ -44,7 +44,8 @@ assert.match(
   /--ds-font-display: var\(--font-display\);/,
   'ds font-display alias missing',
 );
-assert.match(css, /--ds-focus: var\(--coral-ring\);/, 'ds focus alias missing');
+// Solid coral-deep (4.5:1 on paper); the translucent coral-ring was 1.7:1.
+assert.match(css, /--ds-focus: var\(--coral-deep\);/, 'ds focus alias missing');
 assert.match(css, /--ds-danger: var\(--danger\);/, 'ds danger alias missing');
 
 // Typed objects (web JS/DTS drop-in path).
@@ -59,12 +60,20 @@ assert.match(
 const native = await readFile(join(dist, 'native/tokens.js'), 'utf-8');
 assert.match(native, /export const tokens = \{/, 'native tokens missing');
 assert.match(native, /"ink": "#183D3C"/, 'native ink missing');
+// rem-based clamp() collapses to its min bound in px (2.75rem → 44, 3rem → 48).
+assert.match(native, /"h1": 44\b/, 'native rem clamp not converted to px');
+assert.match(native, /"display": 48\b/, 'native rem clamp not converted to px');
 
 const dart = await readFile(join(dist, 'dart/tokens.dart'), 'utf-8');
 assert.match(
   dart,
   /abstract final class FauneTokens/,
   'dart base class missing',
+);
+assert.match(
+  dart,
+  /static const double textH1 = 44\.0;/,
+  'dart rem clamp not converted to px',
 );
 
 // Zero-theme barrel must stay valid Dart (no stray comma).

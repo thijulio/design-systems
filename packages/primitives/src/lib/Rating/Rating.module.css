@@ -1,0 +1,33 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  color: var(--ds-warning);
+}
+
+.stars {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+}
+
+.star {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.sm {
+  width: 16px;
+  height: 16px;
+}
+
+.md {
+  width: 20px;
+  height: 20px;
+}
+
+.valueText {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-caption);
+  color: var(--ds-text-muted);
+}

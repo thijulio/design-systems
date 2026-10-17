@@ -12,8 +12,20 @@
     "text": {
       "value": "{text.strong}"
     },
+    "text-secondary": {
+      "value": "{text.body}"
+    },
+    "text-soft": {
+      "value": "{text.body}"
+    },
     "text-muted": {
       "value": "{text.body}"
+    },
+    "text-placeholder": {
+      "value": "{text.muted}"
+    },
+    "text-disabled": {
+      "value": "{text.muted}"
     },
     "brand": {
       "value": "{brand}"
@@ -39,7 +51,13 @@
     "accent-fg": {
       "value": "{text.strong}"
     },
+    "accent-fg-hover": {
+      "value": "{brand-hover}"
+    },
     "border": {
+      "value": "{border}"
+    },
+    "border-subtle": {
       "value": "{border}"
     },
     "focus": {

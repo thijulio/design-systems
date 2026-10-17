@@ -9,6 +9,7 @@ const meta: Meta<typeof Toast> = {
     title: 'Changes saved',
     children: 'Your updates are live.',
     onClose: () => undefined,
+    dismissLabel: 'Dismiss',
   },
   argTypes: {
     tone: {
@@ -16,8 +17,23 @@ const meta: Meta<typeof Toast> = {
       options: ['success', 'warning', 'danger', 'info'],
       description: 'Accent stripe + icon colour for the message intent.',
     },
-    title: { description: 'Bold headline line.' },
+    title: {
+      description:
+        'Bold headline line. Omit it and the children take its place.',
+    },
+    announce: {
+      description:
+        'false renders no live role, for a toast inside a live ToastViewport.',
+    },
     onClose: { description: 'Called when the dismiss (×) button is clicked.' },
+    dismissLabel: {
+      description:
+        'Accessible name of the dismiss button (required with onClose; no English default).',
+    },
+    role: {
+      description:
+        'Defaults by tone: alert for danger/warning, status otherwise. Pass one to override.',
+    },
   },
   decorators: [
     (Story) => (
@@ -44,4 +60,19 @@ export const Interactive: Story = {
 export const Success: Story = { args: { tone: 'success' } };
 export const Danger: Story = {
   args: { tone: 'danger', title: 'Upload failed', children: 'Please retry.' },
+  // danger and warning interrupt: they render as role="alert".
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('alert')).toHaveTextContent(
+      'Upload failed',
+    );
+  },
+};
+
+// No title: the message takes the headline's place.
+export const MessageOnly: Story = {
+  args: {
+    tone: 'success',
+    title: undefined,
+    children: 'Application received.',
+  },
 };

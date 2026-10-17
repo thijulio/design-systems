@@ -42,8 +42,9 @@
   }
 }
 
-/* Coral focus ring. */
+/* Deep-coral focus ring via the contract: plain coral is 2.9:1 on paper,
+   under the 3:1 non-text minimum. */
 :focus-visible {
-  outline: 2px solid var(--coral);
+  outline: 2px solid var(--ds-focus);
   outline-offset: 2px;
 }

@@ -1,0 +1,7 @@
+/* Inline by default (resets often make svg a block) and never squeezed by a
+   flex parent. */
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+}

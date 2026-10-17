@@ -11,7 +11,12 @@ const config: StorybookConfig = {
   // for the Faune Design System project (each brand has its own sync run). Keeps
   // other brands' stories out of the index so shared component names (Button, Card)
   // can't cross-pair against the faune bundle.
-  stories: ['../src/faune/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
+  // The shared Components stories render here in Faune (preview.tsx forces the
+  // brand); Faune has no components of its own, so none collide.
+  stories: [
+    '../src/faune/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
+    '../src/components/**/*.@(mdx|stories.@(js|jsx|ts|tsx))',
+  ],
   addons: [
     '@storybook/addon-docs',
     '@storybook/addon-a11y',

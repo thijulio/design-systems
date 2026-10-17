@@ -25,7 +25,8 @@ there apply to every brand synced from this repo.
 - `apps/docs/.storybook/` documents all brands. Biome and Exodus both define
   `Button`/`Card`, so an unscoped reference would cross-pair stories against the wrong
   bundle. `cfg.storybookConfigDir` points at the biome-only `apps/docs/.storybook-biome/`
-  (stories glob narrowed to `../src/biome/**`). Reference built to
+  (stories glob narrowed to `../src/biome/**`, plus the shared `../src/components/**`
+  rendered in Biome, minus `Button`/`Card`/`Tag`, which Biome defines). Reference built to
   `.design-sync/sb-reference` (gitignored).
 
 ## [GENERAL] Tokens — biome-react declares no deps

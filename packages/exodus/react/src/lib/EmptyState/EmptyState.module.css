@@ -1,38 +1,25 @@
-.root {
-  background: #fff;
-  border: 1px dashed var(--n-300);
-  border-radius: var(--radius-lg);
-  padding: 40px;
-  text-align: center;
-  font-family: var(--font-sans);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-lg);
-  margin-bottom: 14px;
-  background: var(--accent-soft);
-  color: var(--accent-fg);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.title {
-  margin: 0 0 6px;
-  font-size: var(--text-h3);
-  font-weight: 700;
-  color: var(--n-900);
-}
-
-.body {
-  margin: 0 0 18px;
-  font-size: var(--text-body-sm);
-  color: var(--n-600);
-  max-width: 280px;
-  line-height: var(--leading-normal);
+/* Compatibility skin: the published Exodus 0.0.2 stylesheet predates --ds-*.
+   Keep shared markup while resolving its skin from the legacy Exodus tokens. */
+.compat {
+  --ds-font-body: var(--font-sans);
+  --ds-surface-raised: var(--accent-on);
+  --ds-border: var(--n-300);
+  --ds-radius-lg: var(--radius-lg);
+  --ds-accent-soft: var(--accent-soft);
+  --ds-accent-fg: var(--accent-fg);
+  --ds-text: var(--n-900);
+  --ds-text-muted: var(--n-600);
+  --ds-size-h3: var(--text-h3);
+  --ds-size-body: var(--text-body);
+  --ds-size-body-sm: var(--text-body-sm);
+  --ds-weight-bold: var(--weight-bold);
+  --ds-weight-semibold: var(--weight-semibold);
+  --ds-leading-snug: var(--leading-snug);
+  --ds-leading-normal: var(--leading-normal);
+  --ds-space-2: var(--space-2);
+  --ds-space-4: var(--space-4);
+  --ds-space-5: var(--space-5);
+  --ds-space-8: var(--space-8);
+  --ds-space-10: var(--space-10);
+  --ds-space-12: var(--space-12);
 }

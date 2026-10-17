@@ -1,0 +1,149 @@
+.text {
+  margin: 0;
+}
+
+/* Sizes. Body sizes use the body face; heading sizes the display face. */
+.caption {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-caption);
+  line-height: var(--ds-leading-normal);
+}
+.bodySm {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-body-sm);
+  line-height: var(--ds-leading-normal);
+}
+.body {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-body);
+  line-height: var(--ds-leading-normal);
+}
+.lead {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-lead);
+  line-height: var(--ds-leading-snug);
+}
+.h3 {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-size-h3);
+  line-height: var(--ds-leading-snug);
+}
+.h2 {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-size-h2);
+  line-height: var(--ds-leading-tight);
+}
+.h1 {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-size-h1);
+  line-height: var(--ds-leading-tight);
+}
+.display {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-size-display);
+  line-height: var(--ds-leading-tight);
+  letter-spacing: var(--ds-tracking-display);
+}
+
+/* Tones */
+.toneDefault {
+  color: var(--ds-text);
+}
+.toneSecondary {
+  color: var(--ds-text-secondary);
+}
+.toneSoft {
+  color: var(--ds-text-soft);
+}
+.toneMuted {
+  color: var(--ds-text-muted);
+}
+.tonePlaceholder {
+  color: var(--ds-text-placeholder);
+}
+.toneDisabled {
+  color: var(--ds-text-disabled);
+}
+.toneInverse {
+  color: var(--ds-text-inverse);
+}
+.toneInverseMuted {
+  color: var(--ds-text-inverse-muted);
+}
+.toneAccent {
+  color: var(--ds-accent-fg);
+}
+.toneDanger {
+  color: var(--ds-danger-fg);
+}
+.toneSuccess {
+  color: var(--ds-success-fg);
+}
+.toneWarning {
+  color: var(--ds-warning-fg);
+}
+.toneInfo {
+  color: var(--ds-info-fg);
+}
+.toneInherit {
+  color: inherit;
+}
+
+/* Weights */
+.regular {
+  font-weight: var(--ds-weight-regular);
+}
+.medium {
+  font-weight: var(--ds-weight-medium);
+}
+.semibold {
+  font-weight: var(--ds-weight-semibold);
+}
+.bold {
+  font-weight: var(--ds-weight-bold);
+}
+.extra {
+  font-weight: var(--ds-weight-extra);
+}
+
+.alignStart {
+  text-align: start;
+}
+.alignCenter {
+  text-align: center;
+}
+.alignEnd {
+  text-align: end;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.trackingTight {
+  letter-spacing: var(--ds-tracking-tight);
+}
+.trackingNormal {
+  letter-spacing: var(--ds-tracking-normal);
+}
+.trackingEyebrow {
+  letter-spacing: var(--ds-tracking-eyebrow);
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wrapAnywhere {
+  overflow-wrap: anywhere;
+}
+
+/* Measure: a max line length, on the Container width scale. */
+.measureProse {
+  max-inline-size: 48rem;
+}
+.measureNarrow {
+  max-inline-size: 42rem;
+}

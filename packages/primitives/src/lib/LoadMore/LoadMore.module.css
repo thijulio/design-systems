@@ -1,0 +1,19 @@
+.root {
+  display: flex;
+}
+
+.start {
+  justify-content: flex-start;
+}
+.center {
+  justify-content: center;
+}
+.end {
+  justify-content: flex-end;
+}
+
+/* Only the hidden status is left: take the root out of the flow, so a
+   finished list leaves no empty box, nor the margin a caller gave it. */
+.idle {
+  position: absolute;
+}
