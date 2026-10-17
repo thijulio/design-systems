@@ -19,6 +19,7 @@
     "sage": { "value": "#8FB089" },
     "sage-soft": { "value": "#6E9B7E" },
     "terracotta-dk": { "value": "#C8693B" },
+    "terracotta-light": { "value": "#D07E57" },
     "hairline-dk": { "value": "rgba(236, 239, 227, 0.16)" }
   }
 }

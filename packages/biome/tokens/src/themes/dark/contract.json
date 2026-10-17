@@ -62,6 +62,12 @@
     },
     "focus": {
       "value": "{focus}"
+    },
+    "danger-soft": {
+      "value": "{surface.raised}"
+    },
+    "danger-fg": {
+      "value": "{bm.terracotta-light}"
     }
   }
 }
