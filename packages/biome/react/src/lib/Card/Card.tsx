@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { Card as PrimitiveCard } from '@thijulio/primitives';
 import '@thijulio/primitives/styles.css';
@@ -20,21 +21,17 @@ export interface CardProps extends Omit<
  * Card — surface container. `editorial` is the workhorse; `expressive` is the
  * immersive brand surface with decorative contours.
  */
-export function Card({
-  variant = 'editorial',
-  kicker,
-  title,
-  children,
-  className,
-  ...rest
-}: CardProps) {
+export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
+  { variant = 'editorial', kicker, title, children, className, ...rest },
+  ref,
+) {
   const expressive = variant === 'expressive';
   const cls = [styles.card, styles[variant], className]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <PrimitiveCard className={cls} {...rest}>
+    <PrimitiveCard ref={ref} className={cls} {...rest}>
       {expressive && (
         <>
           <span className={`${styles.arc} ${styles.arc1}`} aria-hidden="true" />
@@ -56,4 +53,6 @@ export function Card({
       </div>
     </PrimitiveCard>
   );
-}
+});
+
+Card.displayName = 'Card';

@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ModeToggle } from './ModeToggle';
 
@@ -38,5 +39,15 @@ describe('ModeToggle', () => {
 
     expect(onChange).toHaveBeenCalledWith('recruiter');
     expect(recruiter).toHaveFocus();
+  });
+
+  it('forwards a ref to the tablist', () => {
+    const ref = createRef<HTMLDivElement>();
+    render(<ModeToggle ref={ref} />);
+    expect(ref.current).toBe(screen.getByRole('tablist'));
+  });
+
+  it('has a displayName for React DevTools', () => {
+    expect(ModeToggle.displayName).toBe('ModeToggle');
   });
 });

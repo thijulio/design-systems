@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import { Card } from './Card';
 
@@ -30,5 +31,15 @@ describe('Card', () => {
   it('forwards arbitrary props to the root element', () => {
     render(<Card data-testid="card" title="X" />);
     expect(screen.getByTestId('card')).toBeInTheDocument();
+  });
+
+  it('forwards a ref to the root element', () => {
+    const ref = createRef<HTMLDivElement>();
+    render(<Card ref={ref} data-testid="card" title="X" />);
+    expect(ref.current).toBe(screen.getByTestId('card'));
+  });
+
+  it('has a displayName for React DevTools', () => {
+    expect(Card.displayName).toBe('Card');
   });
 });

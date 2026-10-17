@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import { TerminalHero, Tok, TERMINAL_COLORS } from './TerminalHero';
 
@@ -56,5 +57,15 @@ describe('TerminalHero', () => {
     render(<Tok c={TERMINAL_COLORS.keyword}>const</Tok>);
     expect(screen.getByText('const')).toBeInTheDocument();
     expect(TERMINAL_COLORS.keyword).toBe('#8FB089');
+  });
+
+  it('forwards a ref to the root section', () => {
+    const ref = createRef<HTMLElement>();
+    render(<TerminalHero ref={ref} loop={false} data-testid="hero" />);
+    expect(ref.current).toBe(screen.getByTestId('hero'));
+  });
+
+  it('has a displayName for React DevTools', () => {
+    expect(TerminalHero.displayName).toBe('TerminalHero');
   });
 });

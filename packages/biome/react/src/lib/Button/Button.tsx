@@ -1,5 +1,7 @@
+import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { Button as PrimitiveButton } from '@thijulio/primitives';
+import type { ButtonElement } from '@thijulio/primitives';
 import '@thijulio/primitives/styles.css';
 import styles from './Button.module.css';
 
@@ -17,21 +19,25 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * Button — Biome Modernism's primary action control.
  * Tight geometry (radius-ui), Space Grotesk, calm hover/press feedback.
  */
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  href,
-  disabled = false,
-  className,
-  children,
-  ...rest
-}: ButtonProps) {
+export const Button = forwardRef<ButtonElement, ButtonProps>(function Button(
+  {
+    variant = 'primary',
+    size = 'md',
+    href,
+    disabled = false,
+    className,
+    children,
+    ...rest
+  },
+  ref,
+) {
   const cls = [styles.button, styles[variant], styles[size], className]
     .filter(Boolean)
     .join(' ');
 
   return (
     <PrimitiveButton
+      ref={ref}
       variant={variant}
       size={size}
       href={href}
@@ -42,4 +48,6 @@ export function Button({
       {children}
     </PrimitiveButton>
   );
-}
+});
+
+Button.displayName = 'Button';
