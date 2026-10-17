@@ -111,6 +111,43 @@ describe('MultiSelect', () => {
     expect(screen.queryByLabelText('Cats')).toBeNull();
   });
 
+  it('closes when focus moves out of the control, leaving focus where it went', () => {
+    render(
+      <>
+        <MultiSelect
+          placeholder="Pick animals"
+          doneLabel="Done"
+          options={options}
+          value={[]}
+          onChange={() => undefined}
+          formatSummary={summarise}
+        />
+        <button type="button">After</button>
+      </>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Pick animals' }));
+    const cats = screen.getByRole('checkbox', { name: 'Cats' });
+    const done = screen.getByRole('button', { name: 'Done' });
+    const after = screen.getByRole('button', { name: 'After' });
+
+    fireEvent.blur(cats, { relatedTarget: done });
+    expect(screen.getByRole('button', { name: 'Done' })).toBeInTheDocument();
+
+    after.focus();
+    fireEvent.blur(done, { relatedTarget: after });
+    expect(screen.queryByRole('button', { name: 'Done' })).toBeNull();
+    expect(after).toHaveFocus();
+  });
+
+  it('stays open when the window, not the control, loses focus', () => {
+    renderSelect();
+    fireEvent.click(screen.getByRole('button', { name: 'Pick animals' }));
+    fireEvent.blur(screen.getByRole('checkbox', { name: 'Cats' }), {
+      relatedTarget: null,
+    });
+    expect(screen.getByRole('button', { name: 'Done' })).toBeInTheDocument();
+  });
+
   it('names the control group by its label and describes the trigger by its hint', () => {
     renderSelect({ label: 'Animals', hint: 'Pick any' });
     expect(screen.getByRole('group', { name: 'Animals' })).toBeInTheDocument();

@@ -26,7 +26,8 @@ const meta: Meta<typeof InputField> = {
       description: 'Class for the field root; `className` styles the control.',
     },
     id: {
-      description: 'Control id; defaults to `name`, else a generated id.',
+      description:
+        'Control id; defaults to a generated id (never `name`, which may repeat).',
     },
   },
   decorators: [
@@ -48,7 +49,6 @@ export const Default: Story = {
     const input = within(canvasElement).getByRole('textbox', {
       name: 'Full name',
     });
-    await expect(input).toHaveAttribute('id', 'full-name');
     await expect(input).toHaveAccessibleDescription('As it appears on your ID');
     await userEvent.tab();
     await expect(input).toHaveFocus();

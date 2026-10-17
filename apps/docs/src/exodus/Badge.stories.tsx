@@ -35,4 +35,4 @@ export const Neutral: Story = {};
 export const Accent: Story = { args: { tone: 'accent', children: 'New' } };
 export const Success: Story = { args: { tone: 'success', children: 'Paid' } };
 export const Danger: Story = { args: { tone: 'danger', children: '3' } };
-export const Teal: Story = { args: { tone: 'teal', children: 'Breeder' } };
+export const Teal: Story = { args: { tone: 'teal', children: 'New' } };

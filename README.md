@@ -7,9 +7,10 @@ implemented once in `@thijulio/primitives` and skinned through semantic tokens:
 - **Exodus** — `@thijulio/exodus-{tokens,css,react}` (professional / work)
 - **Faune** — `@thijulio/faune-{tokens,css}` + shared primitives (Maison Féline)
 
-The six Biome/Exodus packages are published privately on **GitHub Packages** at
-`0.0.2`. Faune and primitives need their first package release; a source merge
-and a Storybook deployment do not publish packages.
+The nine brand/primitives packages are published privately on **GitHub
+Packages**; each one's current version is its `<pkg>@<version>` git tag.
+Neither a merge nor a Storybook deployment publishes: releases are dispatched
+by hand (see **Publishing** below).
 
 📚 **Live catalog:** https://thijulio.github.io/design-systems/
 
@@ -66,17 +67,19 @@ export function Example() {
 
 ## Publishing (maintainer)
 
-Versioning/changelog/tags are driven by Conventional Commits via `nx release`:
+Releases run through the **Release** workflow, on dispatch only. Pick the
+version and the packages explicitly, and dry-run first (`dry_run` defaults to
+`true`):
 
 ```sh
-npx nx release --dry-run      # preview version bumps + changelog
-npx nx release                # version, changelog, tag
-NODE_AUTH_TOKEN=<pat> npx nx release publish   # publish to GitHub Packages
+gh workflow run release.yml -f version=0.1.0 -f projects=primitives,exodus-react
+gh workflow run release.yml -f version=0.1.0 -f projects=primitives,exodus-react -f dry_run=false
 ```
 
-Publishing needs a token with **`write:packages`**. The nine brand/primitives
-packages are release targets; `core` and `docs` stay private. Use the normal
-release dry run for the mixed existing/new package group; see AGENTS.md.
+An empty `version` derives the bumps from Conventional Commits; an empty
+`projects` releases every package. The nine brand/primitives packages are
+release targets; `core` and `docs` stay private. See AGENTS.md for the gate
+the workflow runs and its ordering guarantees.
 
 ## Common tasks
 

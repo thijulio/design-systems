@@ -95,6 +95,19 @@ function stripButtonOnly<T extends object>(
 
 const refusePress = (event: MouseEvent) => event.preventDefault();
 
+/** A loading Button's content: decorative spinner, label, announced text. */
+function withLoading(children: ReactNode, loadingLabel: string | undefined) {
+  return (
+    <>
+      <span className={styles.spinner} aria-hidden="true" />
+      {children}
+      {loadingLabel && (
+        <span className={styles.visuallyHidden}>{loadingLabel}</span>
+      )}
+    </>
+  );
+}
+
 /**
  * Button — brand-agnostic action control. Every colour resolves through the
  * shared `--ds-*` contract, so each brand skins it by supplying those aliases.
@@ -147,6 +160,7 @@ export const Button = forwardRef<ButtonElement, ButtonProps>(function Button(
       className?: string;
       tabIndex?: number;
       onClick?: MouseEventHandler<Element>;
+      children?: ReactNode;
     };
     const child = children as ReactElement<ChildProps>;
     const childProps = child.props;
@@ -178,18 +192,18 @@ export const Button = forwardRef<ButtonElement, ButtonProps>(function Button(
       },
       ref: slotRef,
     };
-    return cloneElement(child, overrides as Partial<ChildProps>);
+    // Loading draws the same spinner and announced label as a <button>,
+    // around the child's own content; idle, its children stay untouched.
+    return loading
+      ? cloneElement(
+          child,
+          overrides as Partial<ChildProps>,
+          withLoading(childProps.children, loadingLabel),
+        )
+      : cloneElement(child, overrides as Partial<ChildProps>);
   }
 
-  const content = (
-    <>
-      {loading && <span className={styles.spinner} aria-hidden="true" />}
-      {children}
-      {loading && loadingLabel && (
-        <span className={styles.visuallyHidden}>{loadingLabel}</span>
-      )}
-    </>
-  );
+  const content = loading ? withLoading(children, loadingLabel) : children;
 
   if (href && !disabled) {
     return (

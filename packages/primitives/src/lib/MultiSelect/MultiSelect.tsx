@@ -5,6 +5,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type FocusEvent,
   type HTMLAttributes,
   type KeyboardEvent,
   type ReactNode,
@@ -44,8 +45,8 @@ export interface MultiSelectProps extends Omit<
 
 /**
  * MultiSelect — a trigger button summarising the selection, opening a popover
- * of checkboxes and a done button. A pointer press outside, or Escape, closes
- * it. The
+ * of checkboxes and a done button. A pointer press outside, Escape, or Tab
+ * moving focus out of the control closes it. The
  * label names a `group` around the control: a `<label>` cannot name the
  * popover's checkboxes, and pointing it at the trigger would replace the
  * summary the trigger is named by. Rest props and the ref land on the root.
@@ -103,6 +104,18 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       close();
     };
 
+    // Tabbing past the last checkbox leaves an open popover behind otherwise.
+    // Focus is already where the user sent it, so no refocus. A null
+    // relatedTarget (the window lost focus, or a press on nothing focusable)
+    // is left to the outside-press listener.
+    const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+      props.onBlur?.(event);
+      const next = event.relatedTarget as Node | null;
+      if (isOpen && next && !containerRef.current?.contains(next)) {
+        setIsOpen(false);
+      }
+    };
+
     const toggleValue = (optionValue: string) => {
       if (value.includes(optionValue)) {
         onChange(value.filter((item) => item !== optionValue));
@@ -130,6 +143,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
         {...props}
         ref={setRefs}
         onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
         className={cx(styles.root, className)}
       >
         {label && (
