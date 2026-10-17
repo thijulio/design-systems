@@ -202,9 +202,9 @@ plus `themes: [{ name, selector, tokens }]`.
   the play test fails on notes for tokens that no longer exist.
 - **Web Components** (ADR-0001) read the same inherited `var(--ds-*)` / brand
   vars, so the Web names in the catalog apply to them unchanged.
-- **Testing:** `nx test-storybook docs` runs two Vitest projects, `unit` (node,
-  `src/**/*.spec.ts`, e.g. `_foundations/token-manifest.spec.ts`) and
-  `storybook` (browser). The catalog stories use `colorCatalogParameters`,
+- **Testing:** `nx test-storybook docs` runs a `unit` Vitest project (node,
+  `src/**/*.spec.ts`, e.g. `_foundations/token-manifest.spec.ts`) and one
+  browser project per design system, `storybook:<brand>`. The catalog stories use `colorCatalogParameters`,
   which turns off **only** axe's `color-contrast` rule. That rule took ~12.5s
   of a ~16s run on the 95-swatch Exodus catalog. Instead, the play
   (`expectCompleteColorCatalog`) asserts WCAG AA for every text element
@@ -462,6 +462,16 @@ cross-brand consumer).
   `@vitest/browser-playwright`). Every story is also a smoke test (mount without
   error); `play` functions add assertions. Needs `npx playwright install
 chromium` once. The addon also lights up the Storybook **Interactions** panel.
+- **The a11y gate runs per brand.** `vitest.config.ts` builds one
+  `storybook:<brand>` project per entry in `DESIGN_SYSTEMS`, each pinning the
+  picker's `designSystem` global (addon-vitest `initialGlobals`), so every
+  shared `Components/…` story and its axe check runs under Biome, Exodus and
+  Faune tokens. Branded stories ignore that global, so only the
+  `DEFAULT_DESIGN_SYSTEM` project runs them (the others exclude
+  `src/<brand>/**`). The projects run one after another (`sequence.groupOrder`);
+  in parallel they stalled hover plays into timeouts. A story pinned with
+  `globals: { designSystem }` still renders in its pinned brand everywhere.
+  Biome's dark mode and Exodus's Clay/Harbor accents are not gated yet.
 - **Test-run load lives on one Node thread.** Vitest, the Vite dev server and
   the Playwright client share the orchestrator's event loop. When it saturates,
   real pointer actions (`userEvent.hover`: locator → actionability → mouse, all
