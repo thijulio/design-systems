@@ -270,8 +270,9 @@ packages). When a prop name collides with a native HTML attribute you repurpose
 The Biome, Exodus, Faune and primitives packages are published to GitHub
 Packages (`private: false`, `publishConfig`, `files: ["dist"]`); their current
 versions are the `<pkg>@<version>` git tags. `core` and `fonts` stay private
-and build-only (tokens build with `core`, css packages with `fonts`). A merge to `main` that touches `packages/` publishes automatically —
-see **Release / publish** below.
+and build-only (tokens build with `core`, css packages with `fonts`). Nothing
+publishes on merge: releases are dispatched by hand — see **Release / publish**
+below.
 
 ## How to…
 
@@ -325,25 +326,30 @@ rendering.
 **See a change in Storybook:** components are consumed as **built** packages, so
 build the changed token/CSS/React package first, then `nx storybook docs`.
 
-**Release / publish packages:** automatic. The **Release** workflow
-(`.github/workflows/release.yml`) runs on every push to `main` that touches
-`packages/**` — i.e. on merge. Every `feat`/`fix` merged there ships (while a
-package is 0.x, Nx turns both into a patch bump) to each package it
-**affects** — see the "Release bumps follow `nx affected`" gotcha. It can also
-be run manually —
-`gh workflow run release.yml -f first_release=<bool> -f dry_run=<bool>`, or the
-Actions UI — which is how you preview (dry runs may target any branch with
-`--ref`; real releases are refused unless dispatched from `main`). It runs
-`nx release --skip-publish` (conventional-commits version → changelog → commit
-→ git tag), pushes the version commit + tags to `main` with `--atomic`, and only
-then `nx release publish` (GitHub Packages via `GITHUB_TOKEN`). Order matters:
+**Release / publish packages:** manual, never on merge. A merge used to
+release whatever its commit message implied — a squash titled `feat:` bumped
+every package it touched — so the **Release** workflow
+(`.github/workflows/release.yml`) now only runs on dispatch:
+`gh workflow run release.yml -f version=<v> -f projects=<a,b> -f dry_run=<bool>`
+(or the Actions UI). `version` is an exact version (`0.1.0`) or a bump keyword
+(`minor`); empty derives bumps from conventional commits (while a package is
+0.x, Nx turns `feat`/`fix` into a patch bump) for each package they
+**affect** — see the "Release bumps follow `nx affected`" gotcha. `projects`
+is a comma-separated list of nx projects; empty means every release project.
+Both are shape-checked before anything runs. `dry_run` defaults to `true`:
+always preview first (dry runs may target any branch with `--ref`; real
+releases are refused unless dispatched from `main`). It runs the full
+format/lint/test/build/typecheck/verify-contract gate, then
+`nx release --skip-publish` (version → changelog → commit → git tag), pushes the
+version commit + tags to `main` with `--atomic`, and only then
+`nx release publish` (GitHub Packages via `GITHUB_TOKEN`). Order matters:
 registry versions are immutable, so if `main` moved during the run the push is
-rejected **before** anything is published, and the run queued by that other
-merge releases both. Publish skips versions already in the registry, so a merge
-with nothing releasable is a no-op, and re-running a run that pushed but failed
-to publish recovers it. The version commit is pushed with `GITHUB_TOKEN`, which
-does not trigger workflows, so it can't loop. Merge-triggered runs check out the
-tip of `main`, not the triggering SHA.
+rejected **before** anything is published — dispatch again from the new tip.
+Publish skips versions already in the registry, and re-running a run that
+pushed but failed to publish recovers it. The version commit is pushed with
+`GITHUB_TOKEN`, which does not trigger workflows, so it can't loop. A breaking
+change in a 0.x package needs a hand-written changelog note: Nx only records
+it as the minor bump.
 Three hard-won gotchas are baked in: **`HUSKY=0`** (the dev pre-commit hook
 otherwise blocks nx release's automated version commit), a **release-only
 pre-commit hook** (`.github/release-hooks/pre-commit`, wired via
@@ -369,8 +375,8 @@ nx storybook docs --port 6006                      # dev (needs react packages b
 nx storybook docs-web-components                   # Web Components Storybook (6007), composed into docs
 nx test-storybook docs                             # story interaction tests (headless chromium)
 nx format:write   /   nx format:check              # prettier (ignores *.swcrc, Dockerfile)
-gh workflow run release.yml -f dry_run=true        # preview a release (no publish)
-gh workflow run release.yml -f dry_run=false       # publish manually (merges to main already do)
+gh workflow run release.yml -f version=0.1.0 -f projects=primitives  # preview (dry_run defaults to true)
+gh workflow run release.yml -f version=0.1.0 -f projects=primitives -f dry_run=false  # publish
 ```
 
 ## Testing
