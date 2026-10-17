@@ -48,12 +48,13 @@ export const Default: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    // At the start edge: aria-disabled (it keeps focus), not native disabled.
     await expect(
       canvas.getByRole('button', { name: 'Previous items' }),
-    ).toBeDisabled();
+    ).toHaveAttribute('aria-disabled', 'true');
     await expect(
       canvas.getByRole('button', { name: 'Next items' }),
-    ).toBeEnabled();
+    ).not.toHaveAttribute('aria-disabled');
   },
 };
 

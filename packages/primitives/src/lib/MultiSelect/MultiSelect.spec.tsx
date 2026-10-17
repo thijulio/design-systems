@@ -101,6 +101,8 @@ describe('MultiSelect', () => {
     fireEvent.click(trigger);
     fireEvent.click(screen.getByRole('button', { name: 'Done' }));
     expect(screen.queryByLabelText('Cats')).toBeNull();
+    // The done button unmounted under focus: focus is back on the trigger.
+    expect(trigger).toHaveFocus();
 
     fireEvent.click(trigger);
     fireEvent.mouseDown(screen.getByLabelText('Cats'));

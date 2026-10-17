@@ -400,6 +400,39 @@ describe('Dialog', () => {
       expect(document.body.style.overflow).toBe('auto');
       document.body.style.overflow = '';
     });
+
+    test('keeps the page locked until the last open dialog closes, in any order', () => {
+      document.body.style.overflow = 'auto';
+      const pair = (outer: boolean, inner: boolean) => (
+        <>
+          <Dialog
+            closeLabel="Close"
+            open={outer}
+            title="Outer"
+            onClose={() => undefined}
+          >
+            Outer
+          </Dialog>
+          <Dialog
+            closeLabel="Close"
+            open={inner}
+            title="Inner"
+            onClose={() => undefined}
+          >
+            Inner
+          </Dialog>
+        </>
+      );
+      const { rerender } = render(pair(true, true));
+      expect(document.body.style.overflow).toBe('hidden');
+
+      rerender(pair(false, true));
+      expect(document.body.style.overflow).toBe('hidden');
+
+      rerender(pair(false, false));
+      expect(document.body.style.overflow).toBe('auto');
+      document.body.style.overflow = '';
+    });
   });
 
   describe('focus', () => {

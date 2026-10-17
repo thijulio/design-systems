@@ -79,6 +79,13 @@ const SIZE_CLASS: Record<DialogSize, string> = {
  */
 const openDialogs: HTMLElement[] = [];
 
+/**
+ * The body's overflow before the first open dialog locked it. Only the first
+ * dialog locks and only the last one to close restores, so dialogs closing
+ * in any order never unlock the page under one still open.
+ */
+let overflowBeforeLock = '';
+
 function useDialogBehaviour(
   active: boolean,
   dialogRef: RefObject<HTMLDivElement | null>,
@@ -113,8 +120,10 @@ function useDialogBehaviour(
     (initialFocusRef?.current ?? tabbableWithin(dialog)[0])?.focus();
 
     const { body } = doc;
-    const previousOverflow = body.style.overflow;
-    body.style.overflow = 'hidden';
+    if (openDialogs.length === 0) {
+      overflowBeforeLock = body.style.overflow;
+      body.style.overflow = 'hidden';
+    }
 
     openDialogs.push(dialog);
 
@@ -137,7 +146,7 @@ function useDialogBehaviour(
     return () => {
       doc.removeEventListener('keydown', handleKeyDown);
       openDialogs.splice(openDialogs.indexOf(dialog), 1);
-      body.style.overflow = previousOverflow;
+      if (openDialogs.length === 0) body.style.overflow = overflowBeforeLock;
       setInheritedTheme(null);
       opener?.focus();
     };

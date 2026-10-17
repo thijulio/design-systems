@@ -172,8 +172,9 @@ export const Button = forwardRef<ButtonElement, ButtonProps>(function Button(
           event.preventDefault();
           return;
         }
+        // As in mergeSlotProps: the child runs first and can veto ours.
         childProps.onClick?.(event);
-        onClick?.(event);
+        if (!event.defaultPrevented) onClick?.(event);
       },
       ref: slotRef,
     };

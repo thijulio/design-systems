@@ -84,6 +84,20 @@ describe('Carousel', () => {
       expect(onPrevious).not.toHaveBeenCalled();
       expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
     });
+
+    it('marks a control without a handler unavailable instead of leaving it dead', () => {
+      render(
+        <Carousel previousLabel="Previous" nextLabel="Next" onNext={jest.fn()}>
+          <p>Page</p>
+        </Carousel>,
+      );
+      const previous = screen.getByRole('button', { name: 'Previous' });
+      expect(previous).toBeEnabled();
+      expect(previous).toHaveAttribute('aria-disabled', 'true');
+      expect(screen.getByRole('button', { name: 'Next' })).not.toHaveAttribute(
+        'aria-disabled',
+      );
+    });
   });
 
   describe('scroll mode', () => {
@@ -103,8 +117,11 @@ describe('Carousel', () => {
 
       const previous = screen.getByRole('button', { name: 'Previous' });
       const next = screen.getByRole('button', { name: 'Next' });
-      expect(previous).toBeDisabled();
-      expect(next).toBeEnabled();
+      // An edge is reached during use: aria-disabled, never native disabled,
+      // so the control just pressed keeps focus.
+      expect(previous).toBeEnabled();
+      expect(previous).toHaveAttribute('aria-disabled', 'true');
+      expect(next).not.toHaveAttribute('aria-disabled');
 
       fireEvent.click(next);
       expect(scrollBy).toHaveBeenCalledWith(
@@ -118,8 +135,16 @@ describe('Carousel', () => {
         });
         track.dispatchEvent(new Event('scroll'));
       });
-      expect(previous).toBeEnabled();
-      expect(next).toBeDisabled();
+      expect(previous).not.toHaveAttribute('aria-disabled');
+      expect(next).toBeEnabled();
+      expect(next).toHaveAttribute('aria-disabled', 'true');
+
+      // The press at the end is refused.
+      next.focus();
+      scrollBy.mockClear();
+      fireEvent.click(next);
+      expect(scrollBy).not.toHaveBeenCalled();
+      expect(next).toHaveFocus();
 
       fireEvent.click(previous);
       expect(scrollBy).toHaveBeenLastCalledWith(
@@ -127,15 +152,19 @@ describe('Carousel', () => {
       );
     });
 
-    it('disables both controls when nothing overflows', () => {
+    it('marks both controls unavailable when nothing overflows', () => {
       stubLayout(300, 300);
       render(
         <Carousel previousLabel="Previous" nextLabel="Next">
           <p>Only</p>
         </Carousel>,
       );
-      expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
-      expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+      for (const name of ['Previous', 'Next']) {
+        expect(screen.getByRole('button', { name })).toHaveAttribute(
+          'aria-disabled',
+          'true',
+        );
+      }
     });
   });
 

@@ -77,14 +77,18 @@ export const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
     const [dismissed, setDismissed] = useState(false);
     const open = (hovered || focused) && !dismissed;
 
-    // Listen on the document so Escape also works while only hovered.
+    // Listen on the document so Escape also works while only hovered. The
+    // capture phase runs before an enclosing Dialog's document listener, and
+    // `preventDefault()` tells it this Escape only closed the tooltip.
     useEffect(() => {
       if (!open) return undefined;
       const onKeyDown = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') setDismissed(true);
+        if (event.key !== 'Escape' || event.defaultPrevented) return;
+        event.preventDefault();
+        setDismissed(true);
       };
-      document.addEventListener('keydown', onKeyDown);
-      return () => document.removeEventListener('keydown', onKeyDown);
+      document.addEventListener('keydown', onKeyDown, true);
+      return () => document.removeEventListener('keydown', onKeyDown, true);
     }, [open]);
 
     const attr = RELATION_ATTR[relation];

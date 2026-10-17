@@ -30,9 +30,14 @@ export interface CarouselProps extends Omit<
    */
   onPrevious?: () => void;
   onNext?: () => void;
-  /** Natively disables the previous control. Scroll mode also does at start. */
+  /**
+   * Natively disables the previous control. At the start of a scroll track,
+   * or in paged mode without `onPrevious`, it is `aria-disabled` instead:
+   * it stays focusable and refuses the press, so a keyboard user's focus is
+   * not dropped when the edge is reached.
+   */
   previousDisabled?: boolean;
-  /** Natively disables the next control. Scroll mode also does at the end. */
+  /** Natively disables the next control; at the end, as for previous. */
   nextDisabled?: boolean;
   /** `data-testid` for the previous control. */
   previousTestId?: string;
@@ -127,8 +132,10 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 
     const handlePrevious = paged ? onPrevious : () => scrollByView(-1);
     const handleNext = paged ? onNext : () => scrollByView(1);
-    const disablePrevious = previousDisabled || (!paged && edges.atStart);
-    const disableNext = nextDisabled || (!paged && edges.atEnd);
+    // Reached during use, so never native `disabled`: that would blur the
+    // control just pressed. Caller-set `*Disabled` stays native.
+    const previousUnavailable = !handlePrevious || (!paged && edges.atStart);
+    const nextUnavailable = !handleNext || (!paged && edges.atEnd);
 
     return (
       <div ref={ref} {...props} className={cx(styles.carousel, className)}>
@@ -138,8 +145,11 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
           variant="secondary"
           size="sm"
           className={cx(styles.control, styles.previous)}
-          onClick={handlePrevious}
-          disabled={disablePrevious}
+          onClick={previousUnavailable ? undefined : handlePrevious}
+          disabled={previousDisabled}
+          aria-disabled={
+            !previousDisabled && previousUnavailable ? true : undefined
+          }
           data-testid={previousTestId}
         />
         <IconButton
@@ -148,8 +158,9 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
           variant="secondary"
           size="sm"
           className={cx(styles.control, styles.next)}
-          onClick={handleNext}
-          disabled={disableNext}
+          onClick={nextUnavailable ? undefined : handleNext}
+          disabled={nextDisabled}
+          aria-disabled={!nextDisabled && nextUnavailable ? true : undefined}
           data-testid={nextTestId}
         />
         <div

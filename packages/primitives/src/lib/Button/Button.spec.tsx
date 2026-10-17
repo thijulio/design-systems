@@ -259,6 +259,19 @@ describe('Button', () => {
       expect(onButtonClick).toHaveBeenCalledTimes(1);
     });
 
+    it("lets the child's preventDefault veto the Button's onClick", () => {
+      const onButtonClick = jest.fn();
+      render(
+        <Button asChild onClick={onButtonClick}>
+          <a href="#checkout" onClick={(event) => event.preventDefault()}>
+            Checkout
+          </a>
+        </Button>,
+      );
+      fireEvent.click(screen.getByRole('link', { name: 'Checkout' }));
+      expect(onButtonClick).not.toHaveBeenCalled();
+    });
+
     it("keeps the child's own aria state and style when not overridden", () => {
       render(
         <Button asChild style={{ margin: 0 }}>

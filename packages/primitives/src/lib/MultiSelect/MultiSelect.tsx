@@ -74,7 +74,9 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     const popoverId = useId();
     const triggerRef = useRef<HTMLButtonElement>(null);
 
+    // Only while open: a closed control has nothing to close.
     useEffect(() => {
+      if (!isOpen) return undefined;
       const handleClickOutside = (event: MouseEvent) => {
         if (!containerRef.current?.contains(event.target as Node)) {
           setIsOpen(false);
@@ -83,7 +85,14 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       document.addEventListener('mousedown', handleClickOutside);
       return () =>
         document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [isOpen]);
+
+    // The done button unmounts with the popover, so focus goes back to the
+    // trigger instead of falling to the body.
+    const close = () => {
+      setIsOpen(false);
+      triggerRef.current?.focus();
+    };
 
     // Escape closes the popover from anywhere inside the control and hands
     // focus back to the trigger, as a disclosure should.
@@ -91,8 +100,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       props.onKeyDown?.(event);
       if (event.defaultPrevented || !isOpen || event.key !== 'Escape') return;
       event.preventDefault();
-      setIsOpen(false);
-      triggerRef.current?.focus();
+      close();
     };
 
     const toggleValue = (optionValue: string) => {
@@ -167,12 +175,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
               ))}
             </div>
             <div className={styles.footer}>
-              <Button
-                type="button"
-                variant="link"
-                size="sm"
-                onClick={() => setIsOpen(false)}
-              >
+              <Button type="button" variant="link" size="sm" onClick={close}>
                 {doneLabel}
               </Button>
             </div>

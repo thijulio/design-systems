@@ -1,5 +1,6 @@
 import { createRef } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { Dialog } from '../Dialog/Dialog';
 import { Tooltip } from './Tooltip';
 import styles from './Tooltip.module.css';
 
@@ -48,6 +49,27 @@ describe('Tooltip', () => {
     expect(tooltip).toHaveAttribute('data-state', 'closed');
     fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
     expect(tooltip).toHaveAttribute('data-state', 'open');
+  });
+
+  it('takes an Escape for itself inside a Dialog, leaving the dialog open', () => {
+    const onClose = jest.fn();
+    render(
+      <Dialog closeLabel="Close" open title="Details" onClose={onClose}>
+        <Tooltip content="Hint">{glyph}</Tooltip>
+      </Dialog>,
+    );
+    const tooltip = screen.getByRole('tooltip');
+    const trigger = tooltip.previousElementSibling as HTMLElement;
+    fireEvent.focus(trigger);
+    expect(tooltip).toHaveAttribute('data-state', 'open');
+
+    fireEvent.keyDown(trigger, { key: 'Escape' });
+    expect(tooltip).toHaveAttribute('data-state', 'closed');
+    expect(onClose).not.toHaveBeenCalled();
+
+    // With the tooltip closed, the next Escape reaches the dialog.
+    fireEvent.keyDown(trigger, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it('can name an icon-only trigger instead of describing it', () => {
