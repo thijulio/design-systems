@@ -1,0 +1,13 @@
+/*
+ * Off-screen rather than display:none, so to a bot reading the page it looks
+ * like any other field. Pushed toward the inline start, which never scrolls,
+ * in either text direction.
+ */
+.honeypot {
+  position: absolute;
+  inset-block-start: auto;
+  inset-inline-start: -10000px;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+}

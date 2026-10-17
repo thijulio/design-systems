@@ -1,0 +1,4 @@
+/* Centred content also centres its wrapped lines. */
+.center {
+  text-align: center;
+}

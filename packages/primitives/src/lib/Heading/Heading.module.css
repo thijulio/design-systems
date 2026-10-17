@@ -1,0 +1,6 @@
+/* Type styles come from Text.module.css via textClasses(); this keeps the
+   heading free of user-agent margins even if Text's module loads later. */
+.heading {
+  margin: 0;
+  overflow-wrap: break-word;
+}

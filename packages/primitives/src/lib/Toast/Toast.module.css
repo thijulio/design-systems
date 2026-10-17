@@ -1,0 +1,73 @@
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-space-3);
+  margin: 0;
+  padding: var(--ds-space-3) var(--ds-space-4);
+  background: var(--ds-surface-raised);
+  border: 1px solid var(--ds-border-subtle);
+  border-inline-start: 4px solid var(--ds-info);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-sm);
+  color: var(--ds-text);
+  font-family: var(--ds-font-body);
+}
+
+/* The tone bar: its meaning is semantic, so it uses the status tokens. */
+.success {
+  border-inline-start-color: var(--ds-success);
+}
+.info {
+  border-inline-start-color: var(--ds-info);
+}
+.warning {
+  border-inline-start-color: var(--ds-warning);
+}
+.danger {
+  border-inline-start-color: var(--ds-danger);
+}
+
+.content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--ds-size-body-sm);
+  font-weight: var(--ds-weight-bold);
+  line-height: var(--ds-leading-snug);
+}
+
+.body {
+  margin-block-start: var(--ds-space-1);
+  color: var(--ds-text-secondary);
+  font-size: var(--ds-size-caption);
+  line-height: var(--ds-leading-normal);
+}
+
+/* The children with no title: they take the title's size and colour. */
+.lead {
+  font-size: var(--ds-size-body-sm);
+  line-height: var(--ds-leading-normal);
+}
+
+.close {
+  flex-shrink: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-muted);
+  font-size: var(--ds-size-body);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--ds-text);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--ds-focus);
+  outline-offset: 2px;
+}

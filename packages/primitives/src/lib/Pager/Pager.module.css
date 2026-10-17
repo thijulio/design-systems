@@ -1,0 +1,47 @@
+/* A compact pill: two text controls around the current label or a divider. */
+.pager {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-1) var(--ds-space-2);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--ds-radius-full);
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-caption);
+  font-weight: var(--ds-weight-semibold);
+}
+
+.control {
+  padding: 0 var(--ds-space-1);
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  background: none;
+  font: inherit;
+  color: var(--ds-accent-fg);
+  cursor: pointer;
+}
+
+.control:where(:not(:disabled)):hover {
+  color: var(--ds-accent-fg-hover);
+}
+
+.control:focus-visible {
+  outline: 2px solid var(--ds-focus);
+  outline-offset: 2px;
+}
+
+.control:disabled {
+  color: var(--ds-text-disabled);
+  cursor: default;
+}
+
+.current {
+  color: var(--ds-text-soft);
+  white-space: nowrap;
+}
+
+.separator {
+  inline-size: 1px;
+  block-size: 1em;
+  background: var(--ds-text-placeholder);
+}

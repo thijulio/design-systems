@@ -1,0 +1,97 @@
+.disclosure {
+  min-width: 0;
+}
+
+/* Accordion mode: the heading only carries the outline level; the button
+   inside it sets the type. */
+.heading {
+  margin: 0;
+  font: inherit;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-text);
+  border-radius: var(--ds-radius-sm);
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--ds-focus);
+  outline-offset: 2px;
+}
+
+/* Accordion mode: reset the native button chrome. */
+.trigger {
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: start;
+}
+
+/* Summary and the optional end slot; the end slot wraps under the summary
+   on a narrow row instead of pushing the chevron out. */
+.summaryMain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-2) var(--ds-space-3);
+  min-width: 0;
+}
+
+.summaryText {
+  min-width: 0;
+}
+
+.summaryEnd {
+  display: inline-flex;
+  min-width: 0;
+}
+
+.chevron {
+  flex: none;
+  color: var(--ds-text-muted);
+  transition: transform 0.16s ease;
+}
+
+.disclosure[open] > .summary .chevron,
+.trigger[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+.content {
+  padding-block-start: var(--ds-space-3);
+}
+
+/* Plain: the toggle takes its weight and colour from the context, and the
+   chevron follows the text. */
+.plain .summary {
+  justify-content: flex-start;
+  gap: var(--ds-space-2);
+  font-weight: inherit;
+  color: inherit;
+}
+
+.plain .content {
+  padding-block-start: var(--ds-space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}

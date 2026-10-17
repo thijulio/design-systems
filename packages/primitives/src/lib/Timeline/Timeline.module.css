@@ -1,0 +1,135 @@
+/* Zero-specificity resets: a caller's own class sets the margin or the
+   padding whatever order the stylesheets load in. */
+:where(.timeline) {
+  margin: 0;
+  padding: 0;
+}
+
+.timeline {
+  --ds-timeline-dot: var(--ds-space-2);
+  --ds-timeline-rail: 2px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-timeline-gap);
+  list-style: none;
+}
+
+/* Two classes on the indents, so an item's own padding class cannot remove
+   the room the marker or the rail needs. */
+.timeline.dots > *,
+.timeline.rail > * {
+  position: relative;
+  min-width: 0;
+}
+.timeline.rail > * {
+  padding-inline-start: calc(var(--ds-timeline-rail) + var(--ds-space-4));
+}
+.timeline.dots > * {
+  padding-inline-start: calc(var(--ds-timeline-dot) + var(--ds-space-3));
+}
+
+/* The dot sits on the middle of the item's first line. */
+.dots > *::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: calc(0.75em - var(--ds-timeline-dot) / 2);
+  inset-block-start: calc((1lh - var(--ds-timeline-dot)) / 2);
+  inline-size: var(--ds-timeline-dot);
+  block-size: var(--ds-timeline-dot);
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-timeline-tone, var(--ds-accent));
+}
+
+/* One rule along the whole list, so it runs through the gaps too. With dots
+   it passes through their centres. */
+.rail::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: var(--ds-timeline-rail);
+  background: var(--ds-border-subtle);
+}
+.rail.dots::before {
+  inset-inline-start: calc(
+    (var(--ds-timeline-dot) - var(--ds-timeline-rail)) / 2
+  );
+}
+
+.item {
+  min-width: 0;
+}
+
+.toneNeutral {
+  --ds-timeline-tone: var(--ds-text-muted);
+}
+.toneAccent {
+  --ds-timeline-tone: var(--ds-accent);
+}
+.toneSuccess {
+  --ds-timeline-tone: var(--ds-success);
+}
+.toneWarning {
+  --ds-timeline-tone: var(--ds-warning);
+}
+.toneDanger {
+  --ds-timeline-tone: var(--ds-danger);
+}
+
+/* Title then time on one line, the time wrapping under when it runs out. */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--ds-space-3);
+  row-gap: var(--ds-space-1);
+}
+
+.title {
+  min-width: 0;
+}
+
+.time {
+  color: var(--ds-text-soft);
+}
+
+.body {
+  margin-block-start: var(--ds-space-1);
+  min-width: 0;
+}
+
+.g0 {
+  --ds-timeline-gap: 0px;
+}
+.g1 {
+  --ds-timeline-gap: var(--ds-space-1);
+}
+.g2 {
+  --ds-timeline-gap: var(--ds-space-2);
+}
+.g3 {
+  --ds-timeline-gap: var(--ds-space-3);
+}
+.g4 {
+  --ds-timeline-gap: var(--ds-space-4);
+}
+.g5 {
+  --ds-timeline-gap: var(--ds-space-5);
+}
+.g6 {
+  --ds-timeline-gap: var(--ds-space-6);
+}
+.g8 {
+  --ds-timeline-gap: var(--ds-space-8);
+}
+.g10 {
+  --ds-timeline-gap: var(--ds-space-10);
+}
+.g12 {
+  --ds-timeline-gap: var(--ds-space-12);
+}
+.g16 {
+  --ds-timeline-gap: var(--ds-space-16);
+}

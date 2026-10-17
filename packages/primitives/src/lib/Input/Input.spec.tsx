@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Input, Select, Textarea } from './Input';
 
@@ -15,12 +16,33 @@ describe('Input', () => {
     });
     expect(onChange).toHaveBeenCalledTimes(1);
   });
+
+  it('forwards a ref to the native input', () => {
+    const ref = createRef<HTMLInputElement>();
+    render(<Input ref={ref} aria-label="Name" />);
+    expect(ref.current).toBe(screen.getByRole('textbox', { name: 'Name' }));
+  });
+
+  it('announces invalid and keeps a consumer className', () => {
+    render(<Input invalid aria-label="Email" className="consumer" />);
+    const input = screen.getByRole('textbox', { name: 'Email' });
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toHaveClass('consumer');
+  });
 });
 
 describe('Textarea', () => {
   it('renders a textbox and forwards value', () => {
     render(<Textarea defaultValue="notes" />);
     expect(screen.getByRole('textbox')).toHaveValue('notes');
+  });
+
+  it('forwards a ref and announces invalid', () => {
+    const ref = createRef<HTMLTextAreaElement>();
+    render(<Textarea ref={ref} invalid aria-label="Notes" />);
+    const textarea = screen.getByRole('textbox', { name: 'Notes' });
+    expect(ref.current).toBe(textarea);
+    expect(textarea).toHaveAttribute('aria-invalid', 'true');
   });
 });
 
@@ -73,5 +95,15 @@ describe('Select', () => {
       </Select>,
     );
     expect(screen.getByRole('combobox')).toBeDisabled();
+  });
+
+  it('forwards a ref to the native select, not its wrapper', () => {
+    const ref = createRef<HTMLSelectElement>();
+    render(
+      <Select aria-label="Species" ref={ref} fullWidth={false}>
+        {options}
+      </Select>,
+    );
+    expect(ref.current).toBe(screen.getByRole('combobox', { name: 'Species' }));
   });
 });

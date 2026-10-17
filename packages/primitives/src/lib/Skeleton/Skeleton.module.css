@@ -1,0 +1,44 @@
+.skeleton {
+  display: block;
+  width: var(--ds-skeleton-width, 100%);
+  height: var(--ds-skeleton-height, 1em);
+  background-color: var(--ds-surface-sunken);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ds-surface-raised) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: ds-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.radiusSm {
+  border-radius: var(--ds-radius-sm);
+}
+.radiusMd {
+  border-radius: var(--ds-radius-md);
+}
+.radiusLg {
+  border-radius: var(--ds-radius-lg);
+}
+.radiusFull {
+  border-radius: var(--ds-radius-full);
+}
+
+@keyframes ds-skeleton-shimmer {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background-image: none;
+  }
+}

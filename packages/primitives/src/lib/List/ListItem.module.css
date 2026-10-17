@@ -1,0 +1,63 @@
+.item {
+  min-width: 0;
+}
+
+/* With actions: the children grow, the actions keep their width and wrap
+   under the children when the row runs out of space. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.alignStart {
+  align-items: flex-start;
+}
+.alignCenter {
+  align-items: center;
+}
+
+.grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: inherit;
+}
+
+.g0 {
+  gap: 0;
+}
+.g1 {
+  gap: var(--ds-space-1);
+}
+.g2 {
+  gap: var(--ds-space-2);
+}
+.g3 {
+  gap: var(--ds-space-3);
+}
+.g4 {
+  gap: var(--ds-space-4);
+}
+.g5 {
+  gap: var(--ds-space-5);
+}
+.g6 {
+  gap: var(--ds-space-6);
+}
+.g8 {
+  gap: var(--ds-space-8);
+}
+.g10 {
+  gap: var(--ds-space-10);
+}
+.g12 {
+  gap: var(--ds-space-12);
+}
+.g16 {
+  gap: var(--ds-space-16);
+}

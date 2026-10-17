@@ -1,0 +1,100 @@
+.options {
+  display: flex;
+  gap: var(--ds-space-3);
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+.horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--ds-space-4);
+}
+
+.option {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--ds-space-2);
+  cursor: pointer;
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-size-body-sm);
+  color: var(--ds-text);
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: var(--ds-text-disabled);
+}
+
+.input {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: 0.15em 0 0;
+  accent-color: var(--ds-accent);
+  cursor: inherit;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--ds-focus);
+  outline-offset: 2px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  display: block;
+}
+
+.hint {
+  display: block;
+  font-size: var(--ds-size-caption);
+  color: var(--ds-text-muted);
+}
+
+/* Card: the whole bordered block is the label, so it is the click target. */
+.card {
+  display: flex;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border: 1px solid var(--ds-card-border, var(--ds-border));
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-raised);
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.card:hover:not(.disabled) {
+  border-color: var(--ds-card-hover-border, var(--ds-accent));
+}
+
+.card:has(.input:checked) {
+  border-color: var(--ds-accent);
+  background: var(--ds-accent-soft);
+}
+
+.card.disabled {
+  border-color: var(--ds-border-subtle);
+}
+
+.card .label {
+  font-weight: var(--ds-weight-semibold);
+}
+
+/* Soft rather than muted on the accent fill, to keep 4.5:1 contrast. */
+.card:has(.input:checked) .hint {
+  color: var(--ds-text-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}

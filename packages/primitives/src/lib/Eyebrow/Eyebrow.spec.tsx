@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import { Eyebrow } from './Eyebrow';
 
@@ -13,5 +14,11 @@ describe('Eyebrow', () => {
 
     rerender(<Eyebrow line={false}>Cat sitting</Eyebrow>);
     expect(container.querySelector('[aria-hidden="true"]')).toBeNull();
+  });
+
+  it('forwards a ref to its root span', () => {
+    const ref = createRef<HTMLSpanElement>();
+    render(<Eyebrow ref={ref}>Nos services</Eyebrow>);
+    expect(ref.current).toBe(screen.getByText('Nos services'));
   });
 });

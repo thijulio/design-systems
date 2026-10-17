@@ -1,0 +1,166 @@
+.grid {
+  display: grid;
+}
+
+/* The minimum is capped at 100% so a single track never overflows a narrow
+   container. */
+.autoFit {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(var(--ds-grid-min-item, 16rem), 100%), 1fr)
+  );
+}
+
+.alignStart {
+  align-items: start;
+}
+.alignCenter {
+  align-items: center;
+}
+.alignEnd {
+  align-items: end;
+}
+.alignStretch {
+  align-items: stretch;
+}
+
+.g0 {
+  gap: 0;
+}
+.g1 {
+  gap: var(--ds-space-1);
+}
+.g2 {
+  gap: var(--ds-space-2);
+}
+.g3 {
+  gap: var(--ds-space-3);
+}
+.g4 {
+  gap: var(--ds-space-4);
+}
+.g5 {
+  gap: var(--ds-space-5);
+}
+.g6 {
+  gap: var(--ds-space-6);
+}
+.g8 {
+  gap: var(--ds-space-8);
+}
+.g10 {
+  gap: var(--ds-space-10);
+}
+.g12 {
+  gap: var(--ds-space-12);
+}
+.g16 {
+  gap: var(--ds-space-16);
+}
+
+.cols1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.cols2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.cols3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.cols4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.cols5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.cols6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+/* sm */
+@media (min-width: 40rem) {
+  .smCols1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .smCols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .smCols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .smCols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .smCols5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .smCols6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* md */
+@media (min-width: 48rem) {
+  .mdCols1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .mdCols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mdCols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .mdCols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .mdCols5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .mdCols6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* lg */
+@media (min-width: 64rem) {
+  .lgCols1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .lgCols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lgCols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .lgCols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .lgCols5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .lgCols6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* xl */
+@media (min-width: 80rem) {
+  .xlCols1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .xlCols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .xlCols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .xlCols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .xlCols5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .xlCols6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}

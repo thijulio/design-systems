@@ -1,0 +1,345 @@
+/* Tone: the colours every item reads, set on the nav. Zero specificity, so
+   a caller's class on the nav can retune one (e.g. a brand focus ring). */
+:where(.root) {
+  --ds-nav-fg: var(--ds-text-soft);
+  --ds-nav-fg-hover: var(--ds-accent-fg);
+  --ds-nav-fg-current: var(--ds-accent-fg);
+  --ds-nav-bg-current: var(--ds-surface-raised);
+  --ds-nav-focus: var(--ds-focus);
+}
+:where(.inverse) {
+  --ds-nav-fg: var(--ds-text-inverse-muted);
+  --ds-nav-fg-hover: var(--ds-text-inverse);
+  --ds-nav-fg-current: var(--ds-text-inverse);
+  --ds-nav-bg-current: var(--ds-surface-inverse-raised);
+  --ds-nav-focus: var(--ds-text-inverse);
+}
+
+/* The list and the actions share one wrapping row. */
+:where(.withActions) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-4);
+}
+
+/* Layout rules have no specificity: a caller's `listClassName` sets the
+   padding, gap or wrapping whatever order the stylesheets load in. Padding
+   still has to beat a brand reset such as `ul[role='list']`. */
+:where(.list) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-nav-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* `orientation`: `.horizontal` / `.vertical` at base, `.<bp>Horizontal` /
+   `.<bp>Vertical` from each breakpoint up. */
+:where(.horizontal) {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+:where(.vertical) {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+/* sm */
+@media (min-width: 40rem) {
+  :where(.smHorizontal) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  :where(.smVertical) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+}
+
+/* md */
+@media (min-width: 48rem) {
+  :where(.mdHorizontal) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  :where(.mdVertical) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+}
+
+/* lg */
+@media (min-width: 64rem) {
+  :where(.lgHorizontal) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  :where(.lgVertical) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+}
+
+/* xl */
+@media (min-width: 80rem) {
+  :where(.xlHorizontal) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  :where(.xlVertical) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+}
+
+/* `gap`: `.gN` at base, `.<bp>GN` from each breakpoint up. */
+.g0 {
+  --ds-nav-gap: 0px;
+}
+.g1 {
+  --ds-nav-gap: var(--ds-space-1);
+}
+.g2 {
+  --ds-nav-gap: var(--ds-space-2);
+}
+.g3 {
+  --ds-nav-gap: var(--ds-space-3);
+}
+.g4 {
+  --ds-nav-gap: var(--ds-space-4);
+}
+.g5 {
+  --ds-nav-gap: var(--ds-space-5);
+}
+.g6 {
+  --ds-nav-gap: var(--ds-space-6);
+}
+.g8 {
+  --ds-nav-gap: var(--ds-space-8);
+}
+.g10 {
+  --ds-nav-gap: var(--ds-space-10);
+}
+.g12 {
+  --ds-nav-gap: var(--ds-space-12);
+}
+.g16 {
+  --ds-nav-gap: var(--ds-space-16);
+}
+
+/* sm */
+@media (min-width: 40rem) {
+  .smG0 {
+    --ds-nav-gap: 0px;
+  }
+  .smG1 {
+    --ds-nav-gap: var(--ds-space-1);
+  }
+  .smG2 {
+    --ds-nav-gap: var(--ds-space-2);
+  }
+  .smG3 {
+    --ds-nav-gap: var(--ds-space-3);
+  }
+  .smG4 {
+    --ds-nav-gap: var(--ds-space-4);
+  }
+  .smG5 {
+    --ds-nav-gap: var(--ds-space-5);
+  }
+  .smG6 {
+    --ds-nav-gap: var(--ds-space-6);
+  }
+  .smG8 {
+    --ds-nav-gap: var(--ds-space-8);
+  }
+  .smG10 {
+    --ds-nav-gap: var(--ds-space-10);
+  }
+  .smG12 {
+    --ds-nav-gap: var(--ds-space-12);
+  }
+  .smG16 {
+    --ds-nav-gap: var(--ds-space-16);
+  }
+}
+
+/* md */
+@media (min-width: 48rem) {
+  .mdG0 {
+    --ds-nav-gap: 0px;
+  }
+  .mdG1 {
+    --ds-nav-gap: var(--ds-space-1);
+  }
+  .mdG2 {
+    --ds-nav-gap: var(--ds-space-2);
+  }
+  .mdG3 {
+    --ds-nav-gap: var(--ds-space-3);
+  }
+  .mdG4 {
+    --ds-nav-gap: var(--ds-space-4);
+  }
+  .mdG5 {
+    --ds-nav-gap: var(--ds-space-5);
+  }
+  .mdG6 {
+    --ds-nav-gap: var(--ds-space-6);
+  }
+  .mdG8 {
+    --ds-nav-gap: var(--ds-space-8);
+  }
+  .mdG10 {
+    --ds-nav-gap: var(--ds-space-10);
+  }
+  .mdG12 {
+    --ds-nav-gap: var(--ds-space-12);
+  }
+  .mdG16 {
+    --ds-nav-gap: var(--ds-space-16);
+  }
+}
+
+/* lg */
+@media (min-width: 64rem) {
+  .lgG0 {
+    --ds-nav-gap: 0px;
+  }
+  .lgG1 {
+    --ds-nav-gap: var(--ds-space-1);
+  }
+  .lgG2 {
+    --ds-nav-gap: var(--ds-space-2);
+  }
+  .lgG3 {
+    --ds-nav-gap: var(--ds-space-3);
+  }
+  .lgG4 {
+    --ds-nav-gap: var(--ds-space-4);
+  }
+  .lgG5 {
+    --ds-nav-gap: var(--ds-space-5);
+  }
+  .lgG6 {
+    --ds-nav-gap: var(--ds-space-6);
+  }
+  .lgG8 {
+    --ds-nav-gap: var(--ds-space-8);
+  }
+  .lgG10 {
+    --ds-nav-gap: var(--ds-space-10);
+  }
+  .lgG12 {
+    --ds-nav-gap: var(--ds-space-12);
+  }
+  .lgG16 {
+    --ds-nav-gap: var(--ds-space-16);
+  }
+}
+
+/* xl */
+@media (min-width: 80rem) {
+  .xlG0 {
+    --ds-nav-gap: 0px;
+  }
+  .xlG1 {
+    --ds-nav-gap: var(--ds-space-1);
+  }
+  .xlG2 {
+    --ds-nav-gap: var(--ds-space-2);
+  }
+  .xlG3 {
+    --ds-nav-gap: var(--ds-space-3);
+  }
+  .xlG4 {
+    --ds-nav-gap: var(--ds-space-4);
+  }
+  .xlG5 {
+    --ds-nav-gap: var(--ds-space-5);
+  }
+  .xlG6 {
+    --ds-nav-gap: var(--ds-space-6);
+  }
+  .xlG8 {
+    --ds-nav-gap: var(--ds-space-8);
+  }
+  .xlG10 {
+    --ds-nav-gap: var(--ds-space-10);
+  }
+  .xlG12 {
+    --ds-nav-gap: var(--ds-space-12);
+  }
+  .xlG16 {
+    --ds-nav-gap: var(--ds-space-16);
+  }
+}
+
+/* One link (or a `button` that navigates, through `asChild`), so the UA
+   button chrome is reset here. */
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  background: none;
+  color: var(--ds-nav-fg);
+  font: inherit;
+  font-size: var(--ds-size-body-sm);
+  font-weight: var(--ds-weight-semibold);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.item:hover {
+  color: var(--ds-nav-fg-hover);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--ds-nav-focus);
+  outline-offset: 2px;
+}
+
+/* The current page reads from `aria-current`, never from colour alone: the
+   text variant underlines it, the block variant raises it. */
+.item[aria-current='page'] {
+  color: var(--ds-nav-fg-current);
+}
+.text .item[aria-current='page'] {
+  text-decoration-line: underline;
+  text-underline-offset: 4px;
+}
+
+.block .item {
+  padding: var(--ds-space-2) var(--ds-space-3);
+  border-radius: var(--ds-radius-lg);
+}
+.block .item[aria-current='page'] {
+  background: var(--ds-nav-bg-current);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none;
+  }
+}

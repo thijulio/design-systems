@@ -1,0 +1,95 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+.label {
+  font-size: var(--ds-size-body-sm);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-text-secondary);
+}
+
+/* The native input and the choose button share the first cell, so the input
+   sits exactly over the button without a wrapper element; the status line
+   takes the rest of the row. */
+.control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--ds-space-3);
+}
+
+/* The real input sits transparently on top of the choose button: it stays
+   focusable, in the accessibility tree, and is the element a pointer (or a
+   test runner's click at its centre) actually hits. `contain: size` keeps its
+   own intrinsic width out of the cell, so the button alone sizes it. */
+.native {
+  grid-area: 1 / 1;
+  z-index: 1;
+  inline-size: 100%;
+  block-size: 100%;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  contain: size;
+  cursor: pointer;
+}
+
+.native:disabled {
+  cursor: not-allowed;
+}
+
+.trigger {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-control);
+  background: var(--ds-surface-sunken);
+  color: var(--ds-text);
+  font-size: var(--ds-size-body-sm);
+  font-weight: var(--ds-weight-medium);
+  cursor: pointer;
+}
+
+/* The input on top takes the hover, so the button's hover follows it. */
+.native:hover + .trigger,
+.trigger:hover {
+  background: var(--ds-surface);
+}
+
+.native:focus-visible + .trigger {
+  outline: 2px solid var(--ds-focus);
+  outline-offset: 2px;
+}
+
+.native:disabled + .trigger {
+  background: var(--ds-surface-sunken);
+  color: var(--ds-text-disabled);
+  cursor: not-allowed;
+}
+
+.fileName {
+  grid-area: 1 / 2;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--ds-size-body-sm);
+  color: var(--ds-text-soft);
+}
+
+.hint,
+.error {
+  font-size: var(--ds-size-caption);
+}
+
+.hint {
+  color: var(--ds-text-muted);
+}
+
+.error {
+  color: var(--ds-danger-fg);
+}
