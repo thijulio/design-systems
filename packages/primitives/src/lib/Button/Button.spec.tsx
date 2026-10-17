@@ -244,6 +244,27 @@ describe('Button', () => {
       expect(onClick).not.toHaveBeenCalled();
     });
 
+    it('draws the spinner and announces the loading label inside the child', () => {
+      const { rerender } = render(
+        <Button asChild isLoading loadingLabel="Saving">
+          <a href="#save">Save</a>
+        </Button>,
+      );
+      const link = screen.getByRole('link', { name: /Save/ });
+      expect(link).toHaveTextContent('SaveSaving');
+      expect(screen.getByText('Saving')).toBe(link.lastElementChild);
+      expect(link.querySelector('[aria-hidden="true"]')).not.toBeNull();
+
+      rerender(
+        <Button asChild loadingLabel="Saving">
+          <a href="#save">Save</a>
+        </Button>,
+      );
+      expect(screen.getByRole('link', { name: 'Save' }).children).toHaveLength(
+        0,
+      );
+    });
+
     it('calls both the child and the Button click handlers when enabled', () => {
       const onButtonClick = jest.fn();
       const onChildClick = jest.fn();

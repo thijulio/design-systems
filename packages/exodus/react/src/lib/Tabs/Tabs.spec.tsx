@@ -177,7 +177,13 @@ describe('Tabs', () => {
   it('keeps ids valid IDREFs when a value has spaces or symbols', () => {
     expect(tabId('animals', 'for sale')).toBe('animals-tab-for_20sale');
     expect(tabPanelId('animals', 'a.b')).toBe('animals-panel-a_2Eb');
-    expect(tabId('animals', 'all_cats-1')).toBe('animals-tab-all_cats-1');
+    expect(tabId('animals', 'all_cats-1')).toBe('animals-tab-all_5Fcats-1');
+  });
+
+  it('never gives two distinct values the same id', () => {
+    const values = ['for sale', 'for_20sale', 'for%20sale', 'a.b', 'a_2Eb'];
+    const ids = values.map((value) => tabId('animals', value));
+    expect(new Set(ids).size).toBe(values.length);
   });
 
   it('omits aria-controls unless panels are declared, and forwards a ref', () => {

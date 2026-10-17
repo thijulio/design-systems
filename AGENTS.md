@@ -130,24 +130,20 @@ is a thin, tested wrapper over Style Dictionary v5. A brand's `build.mjs` calls
 The same JSON also feeds **cross-platform artifacts** (additive — the web
 outputs above are byte-for-byte unchanged):
 
-- `dist/native/` — React Native. `tokens.js` + `tokens.d.ts` (nested, typed)
-  with **normalized** values, plus `themes/<name>.js` per overlay and an
-  `index.js` barrel exporting `{ tokens, themes, resolve }` (deep-merge).
-  Values are converted by a single shared classifier in `packages/core`
-  (`src/lib/values.ts`): px/rem → logical px (`rem` assumes a 16px root),
-  `s`/`ms` → ms, `cubic-bezier` → `{x1,y1,x2,y2}`, `clamp()` → its min bound,
-  colors → `#RRGGBB`/`rgba()`, and web-only strings (font stacks, shadows,
-  compound radius) pass through verbatim.
-- `dist/dart/` — Flutter. `tokens.dart` (`abstract final class <Brand>Tokens`
-  of typed `static const`s), `theme_<name>.dart` per overlay
-  (`Map<String, Color>`), and a `themes.dart` barrel (`<Brand>Themes.all`).
-  Theme overlays are color-only in this repo, so theme maps are `Map<String,
-Color>`.
+- `dist/native/` — React Native: typed nested `tokens.js`/`.d.ts` with
+  **normalized** values, `themes/<name>.js` per overlay, and an `index.js`
+  exporting `{ tokens, themes, resolve }` (deep-merge). One classifier
+  (`packages/core/src/lib/values.ts`) converts: px/rem → logical px (16px
+  root), `s`/`ms` → ms, `cubic-bezier` → `{x1,y1,x2,y2}`, `clamp()` → its min,
+  colors → `#RRGGBB`/`rgba()`; web-only strings (font stacks, shadows, compound
+  radius) pass verbatim.
+- `dist/dart/` — Flutter: `tokens.dart` (`abstract final class <Brand>Tokens`),
+  `theme_<name>.dart` per overlay (color-only, so `Map<String, Color>`) and a
+  `themes.dart` barrel (`<Brand>Themes.all`).
 
-The native/Dart formats live in `packages/core/src/lib/formats/` and are
-registered once per build by `platforms.ts`; the pure config factories only
-reference them by name. Packages expose them via `./native` and
-`./flutter/{tokens,themes}.dart` exports.
+The formats live in `packages/core/src/lib/formats/`, registered once per build
+by `platforms.ts` (config factories reference them by name), and ship as the
+`./native` and `./flutter/{tokens,themes}.dart` exports.
 
 Token JSON authoring rules (relied upon — do not "fix"):
 
@@ -254,8 +250,9 @@ packages). When a prop name collides with a native HTML attribute you repurpose
 The Biome, Exodus, Faune and primitives packages are published to GitHub
 Packages (`private: false`, `publishConfig`, `files: ["dist"]`); their current
 versions are the `<pkg>@<version>` git tags. `core` and `fonts` stay private
-and build-only (tokens build with `core`, css packages with `fonts`). A merge to `main` that touches `packages/` publishes automatically —
-see **Release / publish** below.
+and build-only (tokens build with `core`, css packages with `fonts`). Nothing
+publishes on merge: releases are dispatched by hand — see **Release / publish**
+below.
 
 ## How to…
 
@@ -310,32 +307,43 @@ rendering.
 **See a change in Storybook:** components are consumed as **built** packages, so
 build the changed token/CSS/React package first, then `nx storybook docs`.
 
-**Release / publish packages:** automatic. `.github/workflows/release.yml` runs
-on every push to `main` touching `packages/**` (i.e. on merge; it checks out the
-tip of `main`, not the triggering SHA). Every merged `feat`/`fix` ships a bump
-(patch while 0.x) to each package it **affects** (see "Release bumps follow
-`nx affected`"). Preview with `gh workflow run release.yml -f dry_run=true`
-(`-f first_release=<bool>`; dry runs may target any `--ref`, real ones are
-refused unless dispatched from `main`). It runs `nx release --skip-publish`
-(version → changelog → commit → tag), pushes commit + tags to `main` with
-`--atomic`, and only then `nx release publish` (GitHub Packages, `GITHUB_TOKEN`).
-Order matters: registry versions are immutable, so if `main` moved mid-run the
-push is rejected **before** publishing and the other merge's queued run releases
-both. Publish skips versions already in the registry (a no-op merge is harmless;
-re-running a pushed-but-unpublished run recovers it). The `GITHUB_TOKEN` push
-triggers no workflows, so it can't loop.
-Baked-in gotchas: **`HUSKY=0`** (the dev pre-commit hook blocks nx release's
-version commit); a **release-only pre-commit hook**
-(`.github/release-hooks/pre-commit`, via `git config core.hooksPath`) that
-prettier-formats what nx release staged (it writes CHANGELOG.md without a final
-newline, which failed the next `nx format:check`); and an explicit
-**`git push --follow-tags`** (nx release tags locally but does **not** push).
-Versions resolve from the `<pkg>@<version>` tags, so never delete them. The
-Faune/primitives projects (incl. `faune-react`) have a scoped disk fallback for
-their initial release; the rest require their tags. Biome and Exodus React let
-Nx update their primitives dependency range while versioning; use the normal dry
-run (`first_release=false`) for this mixed group. Storybook Pages redeploys on
-push to `main` (`storybook-pages.yml`).
+**Release / publish packages:** manual, never on merge. A merge used to
+release whatever its commit message implied — a squash titled `feat:` bumped
+every package it touched — so the **Release** workflow
+(`.github/workflows/release.yml`) now only runs on dispatch:
+`gh workflow run release.yml -f version=<v> -f projects=<a,b> -f dry_run=<bool>`
+(or the Actions UI). `version` is an exact version (`0.1.0`) or a bump keyword
+(`minor`); empty derives bumps from conventional commits (while a package is
+0.x, Nx turns `feat`/`fix` into a patch bump) for each package they
+**affect** — see the "Release bumps follow `nx affected`" gotcha. `projects`
+is a comma-separated list of nx projects; empty means every release project.
+Both are shape-checked before anything runs. `dry_run` defaults to `true`:
+always preview first (dry runs may target any branch with `--ref`; real
+releases are refused unless dispatched from `main`). It runs the full
+format/lint/test/build/typecheck/verify-contract gate, then
+`nx release --skip-publish` (version → changelog → commit → git tag), pushes the
+version commit + tags to `main` with `--atomic`, and only then
+`nx release publish` (GitHub Packages via `GITHUB_TOKEN`). Order matters:
+registry versions are immutable, so if `main` moved during the run the push is
+rejected **before** anything is published — dispatch again from the new tip.
+Publish skips versions already in the registry, and re-running a run that
+pushed but failed to publish recovers it. The version commit is pushed with
+`GITHUB_TOKEN`, which does not trigger workflows, so it can't loop. A breaking
+change in a 0.x package needs a hand-written changelog note: Nx only records
+it as the minor bump.
+Three hard-won gotchas are baked in: **`HUSKY=0`** (the dev pre-commit hook
+otherwise blocks nx release's automated version commit), a **release-only
+pre-commit hook** (`.github/release-hooks/pre-commit`, wired via
+`git config core.hooksPath`) that prettier-formats what nx release staged —
+nx writes CHANGELOG.md without a final newline, which failed the next CI
+`nx format:check` on main — and an explicit **`git push --follow-tags`** (nx
+release commits & tags locally but does **not** push). Use `dry_run=true` to preview versions without publishing. Versions are
+resolved from the `<pkg>@<version>` git tags, so never delete them. The new
+Faune/primitives projects (including `faune-react`) have a scoped disk fallback
+for their initial release; existing projects still require their tags. Biome and Exodus React allow Nx
+to update its primitives dependency range during versioning. Use the normal
+dry run (`first_release=false`) for this mixed group. The Storybook Pages site
+redeploys automatically on push to `main` (`storybook-pages.yml`).
 
 ## Commands
 
@@ -348,8 +356,8 @@ nx storybook docs --port 6006                      # dev (needs react packages b
 nx storybook docs-web-components                   # Web Components Storybook (6007), composed into docs
 nx test-storybook docs                             # story interaction tests (headless chromium)
 nx format:write   /   nx format:check              # prettier (ignores *.swcrc, Dockerfile)
-gh workflow run release.yml -f dry_run=true        # preview a release (no publish)
-gh workflow run release.yml -f dry_run=false       # publish manually (merges to main already do)
+gh workflow run release.yml -f version=0.1.0 -f projects=primitives  # preview (dry_run defaults to true)
+gh workflow run release.yml -f version=0.1.0 -f projects=primitives -f dry_run=false  # publish
 ```
 
 ## Testing
@@ -381,16 +389,14 @@ cross-brand consumer).
   So: rebuild react packages before Storybook reflects component changes. And
   `main.ts` must keep `@vitejs/plugin-react` in `viteFinal` or JSX-in-`render`
   stories fail the export-order lexer ("Parse error @:LINE").
-- **Storybook theming:** brands are themes over one component library, so a
-  shared primitive has ONE story set (`Components/<Name>`), restyled per brand.
-  `preview.tsx` takes the brand from the title prefix (`Biome/…` / `Exodus/…` /
-  `Faune/…`) or, for `Components/…`, from the `designSystem` global the picker
-  sets (default Exodus), injects only that brand's token CSS (the brands share
-  some `:root` var names), then sets `data-mode`/`data-theme` from the toolbar.
-  A story that asserts one brand's colours pins it with
-  `globals: { designSystem: '<Brand>' }` and `tags: ['!autodocs']` (on a Docs
-  page it would restyle every other story). The logic lives in
-  `.storybook/design-system.ts` (`activeDesignSystem`).
+- **Storybook theming:** a shared primitive has ONE story set
+  (`Components/<Name>`), restyled per brand. `preview.tsx` takes the brand from
+  the title prefix or, for `Components/…`, the picker's `designSystem` global
+  (default Exodus), injects only that brand's CSS (brands share some `:root`
+  names), then sets `data-mode`/`data-theme` from the toolbar. A story asserting
+  one brand's colours pins `globals: { designSystem: '<Brand>' }` and
+  `tags: ['!autodocs']` (on a Docs page it would restyle every other story).
+  Logic: `.storybook/design-system.ts` (`activeDesignSystem`).
 - **Sidebar taxonomy:** `Components/<Name>` (flat, one file each in
   `apps/docs/src/components/`) holds the shared primitives. Every brand has the
   same tree: `<Brand>/Foundations`, `<Brand>/Components/<Name>` (flat; only
@@ -411,25 +417,20 @@ cross-brand consumer).
   design-sync configs keep the old toolbar on purpose: single-brand builds that
   load `src/components/**` with their brand forced (minus name collisions).
 - **Composition (`refs`) is decided at boot.** Storybook probes each ref once
-  when `docs` starts (server-side `GET <url>/iframe.html`). Reachable → the
-  browser fetches the ref's `index.json` without credentials; unreachable →
-  `credentials: 'include'`, which the ref's `Access-Control-Allow-Origin: *`
+  at start (`GET <url>/iframe.html`). Unreachable → the browser later fetches
+  with `credentials: 'include'`, which the ref's `Access-Control-Allow-Origin: *`
   rejects ("Loading of ref failed … CORS error") until a restart. So `main.ts`
-  waits up to 90s for 6007 before composing it, and leaves it out (with a
-  warning) if it never answers. Start order doesn't matter; if 6007 came up
-  later than that, restart `docs`.
-- **Docs & a11y:** `preview.tsx` sets `tags: ['autodocs']` globally, so every
-  meta with a `component` gets a Docs page. Docgen does NOT run on the built
-  packages, so props tables/descriptions come from **`argTypes` you define in
-  each story** (mirror the source JSDoc) — an empty `description` = a gap to
-  fill. `@storybook/addon-a11y` adds the Accessibility panel;
-  `src/Introduction.mdx` is the landing page.
-- **Interaction tests:** stories with a `play` (using `storybook/test`) are run
-  headlessly by `@storybook/addon-vitest` in real chromium via
-  `nx test-storybook docs` (config: `apps/docs/vitest.config.ts`, provider
-  `@vitest/browser-playwright`). Every story is also a smoke test (mount without
-  error); `play` functions add assertions. Needs `npx playwright install
-chromium` once. The addon also lights up the Storybook **Interactions** panel.
+  waits up to 90s for 6007, else leaves it out with a warning; if 6007 came up
+  later, restart `docs`.
+- **Docs & a11y:** `tags: ['autodocs']` is global, so every meta with a
+  `component` gets a Docs page. Docgen does NOT run on built packages: props
+  tables come from **`argTypes` in each story** (mirror the source JSDoc; an
+  empty `description` is a gap). `@storybook/addon-a11y` adds the Accessibility
+  panel; `src/Introduction.mdx` is the landing page.
+- **Interaction tests:** `nx test-storybook docs` runs every story in headless
+  chromium via `@storybook/addon-vitest` (`apps/docs/vitest.config.ts`,
+  `@vitest/browser-playwright`): each is a mount smoke test, `play` adds
+  assertions. Needs `npx playwright install chromium` once.
 - **Test-run load lives on one Node thread.** Vitest, the Vite dev server and
   the Playwright client share one event loop; when it saturates, real pointer
   actions (`userEvent.hover`, all round-trips) stall and time out at random.

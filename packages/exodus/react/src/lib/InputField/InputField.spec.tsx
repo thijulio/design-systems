@@ -15,9 +15,8 @@ describe('InputField', () => {
       <InputField label="Email" name="email" hint="Use your work email" />,
     );
     const input = screen.getByRole('textbox', { name: 'Email' });
-    expect(input).toHaveAttribute('id', 'email');
     expect(input).toHaveAccessibleDescription('Use your work email');
-    expect(input).toHaveAttribute('aria-describedby', 'email-hint');
+    expect(input).toHaveAttribute('aria-describedby', `${input.id}-hint`);
     expect(input).not.toHaveAttribute('aria-invalid');
     expect(screen.getByText('Use your work email').closest('label')).toBeNull();
   });
@@ -29,13 +28,13 @@ describe('InputField', () => {
     const input = screen.getByRole('textbox', { name: 'Email' });
     const error = screen.getByRole('alert');
     expect(input).toHaveAttribute('aria-invalid', 'true');
-    expect(error).toHaveAttribute('id', 'email-error');
+    expect(error).toHaveAttribute('id', `${input.id}-error`);
     expect(input).toHaveAttribute('aria-describedby', error.id);
     expect(error).toHaveTextContent('Required');
     expect(screen.queryByText('Hint')).toBeNull();
   });
 
-  it('prefers id over name and generates one without either', () => {
+  it('uses the id given, else a generated one — never the name', () => {
     const { rerender } = render(
       <InputField label="Email" id="contact-email" name="email" />,
     );
@@ -43,8 +42,24 @@ describe('InputField', () => {
       'id',
       'contact-email',
     );
-    rerender(<InputField label="Email" />);
-    expect(screen.getByRole('textbox', { name: 'Email' }).id).not.toBe('');
+    rerender(<InputField label="Email" name="email" />);
+    const input = screen.getByRole('textbox', { name: 'Email' });
+    expect(input.id).not.toBe('');
+    expect(input.id).not.toBe('email');
+  });
+
+  it('keeps two fields with the same name apart', () => {
+    render(
+      <>
+        <InputField label="Work email" name="email" hint="Work" />
+        <InputField label="Home email" name="email" hint="Home" />
+      </>,
+    );
+    const work = screen.getByRole('textbox', { name: 'Work email' });
+    const home = screen.getByRole('textbox', { name: 'Home email' });
+    expect(work.id).not.toBe(home.id);
+    expect(work).toHaveAccessibleDescription('Work');
+    expect(home).toHaveAccessibleDescription('Home');
   });
 
   it('renders no label element without a label', () => {
@@ -106,7 +121,7 @@ describe('SelectField', () => {
       </SelectField>,
     );
     const select = screen.getByRole('combobox', { name: 'Species' });
-    expect(select).toHaveAttribute('aria-describedby', 'species-hint');
+    expect(select).toHaveAttribute('aria-describedby', `${select.id}-hint`);
     expect(screen.getAllByRole('option')).toHaveLength(2);
   });
 
@@ -126,7 +141,7 @@ describe('SelectField', () => {
     const select = screen.getByRole('combobox', { name: 'Species' });
     expect(ref.current).toBe(select);
     expect(select).toHaveAttribute('aria-invalid', 'true');
-    expect(select).toHaveAttribute('aria-describedby', 'species-error');
+    expect(select).toHaveAttribute('aria-describedby', `${select.id}-error`);
     expect(container.firstElementChild).toHaveClass('layout-slot');
     expect(select.parentElement).not.toHaveClass('layout-slot');
   });
@@ -160,8 +175,7 @@ describe('TextareaField', () => {
         hint="Two lines at most"
       />,
     );
-    expect(
-      screen.getByRole('textbox', { name: 'Description' }),
-    ).toHaveAttribute('aria-describedby', 'description-hint');
+    const textarea = screen.getByRole('textbox', { name: 'Description' });
+    expect(textarea).toHaveAttribute('aria-describedby', `${textarea.id}-hint`);
   });
 });
