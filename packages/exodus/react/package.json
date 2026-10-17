@@ -1,6 +1,6 @@
 {
   "name": "@thijulio/exodus-react",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "private": false,
   "type": "module",
   "files": [
@@ -64,6 +64,6 @@
     "directory": "packages/exodus/react"
   },
   "dependencies": {
-    "@thijulio/primitives": "^0.0.7"
+    "@thijulio/primitives": "^0.1.0"
   }
 }

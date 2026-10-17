@@ -1,3 +1,16 @@
+## 0.1.0 (2026-10-17)
+
+### 🩹 Fixes
+
+- **primitives:** close MultiSelect when focus tabs out of it ([183bf85](https://github.com/thijulio/design-systems/commit/183bf85))
+- **primitives:** show the loading spinner and label on an asChild button ([d24741d](https://github.com/thijulio/design-systems/commit/d24741d))
+- **primitives:** stop deriving field ids from name ([e5d3bfa](https://github.com/thijulio/design-systems/commit/e5d3bfa))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio
+
 ## 0.0.7 (2026-10-17)
 
 ### 🚀 Features

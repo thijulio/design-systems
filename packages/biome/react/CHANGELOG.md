@@ -1,3 +1,18 @@
+## 0.0.9 (2026-10-17)
+
+### 🚀 Features
+
+- **biome-react:** forward refs and set displayName on every component ([9f0e09f](https://github.com/thijulio/design-systems/commit/9f0e09f))
+
+### 🧱 Updated Dependencies
+
+- Updated primitives to 0.1.0
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio @thijulio
+
 ## 0.0.8 (2026-10-17)
 
 ### 🧱 Updated Dependencies

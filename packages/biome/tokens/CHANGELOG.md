@@ -1,3 +1,15 @@
+## 0.1.0 (2026-10-17)
+
+### 🩹 Fixes
+
+- **biome-tokens:** give dark mode its own danger text and soft surface ([a2799c0](https://github.com/thijulio/design-systems/commit/a2799c0))
+- **biome-tokens:** deepen danger text so it meets aa on bone ([4c185c5](https://github.com/thijulio/design-systems/commit/4c185c5))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio
+
 ## 0.0.10 (2026-10-17)
 
 ### 🚀 Features

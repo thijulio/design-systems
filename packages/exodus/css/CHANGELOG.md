@@ -1,3 +1,18 @@
+## 0.1.0 (2026-10-17)
+
+### 🩹 Fixes
+
+- **exodus-css:** give bare small text an aa-compliant muted colour ([#847](https://github.com/thijulio/design-systems/issues/847))
+
+### 🧱 Updated Dependencies
+
+- Updated exodus-tokens to 0.1.0
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio
+
 ## 0.0.9 (2026-10-17)
 
 ### 🚀 Features

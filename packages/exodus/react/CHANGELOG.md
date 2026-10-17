@@ -1,3 +1,21 @@
+## 0.1.0 (2026-10-17)
+
+### 🩹 Fixes
+
+- **exodus-react:** scope the toast's muted dismiss colour to its button ([dfa4cd4](https://github.com/thijulio/design-systems/commit/dfa4cd4))
+- **exodus-react:** keep a checkbox description out of its accessible name ([9da006a](https://github.com/thijulio/design-systems/commit/9da006a))
+- **exodus-react:** give tab values that differ distinct ids ([6a15ad3](https://github.com/thijulio/design-systems/commit/6a15ad3))
+- **primitives:** stop deriving field ids from name ([e5d3bfa](https://github.com/thijulio/design-systems/commit/e5d3bfa))
+
+### 🧱 Updated Dependencies
+
+- Updated primitives to 0.1.0
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio
+
 ## 0.0.8 (2026-10-17)
 
 ### 🚀 Features
