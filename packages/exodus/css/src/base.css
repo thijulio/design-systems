@@ -35,9 +35,10 @@ h3 {
   font-weight: var(--weight-bold);
 }
 
+/* Muted, not placeholder: n-500 is ~3.8:1 on n-50 and fails WCAG AA. */
 small {
   font-size: var(--text-caption);
-  color: var(--n-500);
+  color: var(--ds-text-muted);
 }
 
 a {
