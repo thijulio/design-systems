@@ -102,8 +102,8 @@ components migrate. Biome `Button`, `Tag` and the `Card` root, and Exodus
 `Button`, `Card`, `Badge`, `Avatar`, `EmptyState`, `ErrorState`, `LoadMore`,
 `Input`, `Textarea`, `Select` and `Toast`, delegate to primitives; their local
 CSS skins keep native tokens, metrics and consumer class overrides. Exodus
-`*Field`s wait on its `Field` delegating. Only genuinely
-brand-specific components go in brand packages (e.g. Biome's `TerminalHero`).
+`*Field`s wait on its `Field` delegating (re-exports drop its skins). Only
+genuinely brand-specific components go in brand packages (e.g. Biome's `TerminalHero`).
 
 **Every brand has the same shape: `<brand>-tokens → <brand>-css → <brand>-react`.**
 Consumers always import components from `@thijulio/<brand>-react`, never from

@@ -1,6 +1,7 @@
 /* Compatibility skin: the published Exodus 0.0.2 stylesheet predates --ds-*.
    Keep the shared markup while resolving its skin from the legacy Exodus
-   tokens, including the toast's own lighter dismiss glyph (--n-400). */
+   tokens. These vars also reach the toast's children, so each one keeps an
+   AA value there (--ds-text-secondary is the toast's lighter body copy). */
 .compat {
   --ds-surface-raised: var(--accent-on);
   --ds-border-subtle: var(--n-200);
@@ -10,7 +11,6 @@
   --ds-font-body: var(--font-sans);
   --ds-text: var(--n-900);
   --ds-text-secondary: var(--n-600);
-  --ds-text-muted: var(--n-400);
   --ds-size-caption: var(--text-caption);
   --ds-size-body-sm: var(--text-body-sm);
   --ds-size-body: var(--text-body);
@@ -25,4 +25,10 @@
   --ds-danger: var(--danger);
   --ds-info: var(--info);
   --ds-focus: var(--accent-ring, var(--accent));
+}
+
+/* The toast's own lighter dismiss glyph, scoped to that button (a direct
+   child) so muted text inside the toast's content keeps its AA colour. */
+.compat > button {
+  --ds-text-muted: var(--n-400);
 }
