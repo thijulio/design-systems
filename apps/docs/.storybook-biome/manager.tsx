@@ -49,7 +49,9 @@ function BrandTool({ config }: { config: Config }) {
   const [globals, updateGlobals] = useGlobals();
 
   const story = api.getCurrentStoryData();
-  const brand = (story?.title ?? '').split('/')[0];
+  const root = (story?.title ?? '').split('/')[0];
+  // Shared `Components/…` stories render in this build's brand.
+  const brand = root === 'Components' ? 'Biome' : root;
   if (brand !== config.brand) return null; // hide on the other brand's stories
 
   const current = globals[config.globalKey] as string;

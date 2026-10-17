@@ -11,7 +11,11 @@ import biomeCss from '@thijulio/biome-css/biome.css?inline';
 import exodusCss from '@thijulio/exodus-css/exodus.css?inline';
 import fauneCss from '@thijulio/faune-css/faune.css?inline';
 
-import { type DesignSystem, designSystemOf } from './design-system';
+import {
+  activeDesignSystem,
+  DEFAULT_DESIGN_SYSTEM,
+  type DesignSystem,
+} from './design-system';
 
 const IN_VITEST_BROWSER = '__vitest_browser__' in globalThis;
 
@@ -21,8 +25,10 @@ const BRAND_CSS: Record<DesignSystem, string> = {
   Faune: fauneCss,
 };
 
+// A branded title (`Exodus/…`) names its brand; a shared `Components/…` story
+// takes the one picked in the toolbar (the `designSystem` global).
 const withBrandTokens: Decorator = (Story, context) => {
-  const brand = designSystemOf(context.title);
+  const brand = activeDesignSystem(context.title, context.globals.designSystem);
   const css = brand ? BRAND_CSS[brand] : '';
   const mode = context.globals.mode as string;
   const accent = context.globals.accent as string;
@@ -54,12 +60,14 @@ const preview: Preview = {
   parameters: {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: {
-      // One tree per design system, all the same shape (design-system.ts
-      // SECTIONS — repeated as literals because Storybook reads storySort
-      // statically). The manager's picker shows one design system at a time.
+      // The shared Components tree, then one tree per design system, all the
+      // same shape (design-system.ts SHARED_ROOT and SECTIONS — repeated as
+      // literals because Storybook reads storySort statically). The manager's
+      // picker shows the shared tree plus one design system at a time.
       storySort: {
         order: [
           'Introduction',
+          'Components',
           'Biome',
           ['Foundations', 'Components', 'Migration'],
           'Exodus',
@@ -84,9 +92,14 @@ const preview: Preview = {
     },
   },
   // Globals only (no `toolbar`): the toolbar UI is the manager addon
-  // (.storybook/manager.tsx) — a design-system picker plus the active design
+  // (.storybook/manager.tsx) — a design-system picker (which also sets
+  // `designSystem`, the brand shared stories render in) plus the active design
   // system's theme control (Biome mode, Exodus accent).
   globalTypes: {
+    designSystem: {
+      description: 'Design system the shared Components stories render in',
+      defaultValue: DEFAULT_DESIGN_SYSTEM,
+    },
     mode: { description: 'Biome light / dark', defaultValue: 'light' },
     accent: { description: 'Exodus accent theme', defaultValue: 'sage' },
   },

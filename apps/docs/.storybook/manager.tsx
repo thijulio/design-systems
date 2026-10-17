@@ -14,12 +14,15 @@ import {
 } from 'storybook/internal/components';
 
 import {
+  activeDesignSystem,
   ALL,
   type CatalogEntry,
   counterpartEntry,
+  DESIGN_SYSTEM_GLOBAL,
   DESIGN_SYSTEMS,
   type DesignSystem,
   designSystemOf,
+  isDesignSystem,
   isSelection,
   isVisible,
   type Selection,
@@ -37,6 +40,21 @@ function storedSelection(): Selection {
     return isSelection(value) ? value : DEFAULT_SELECTION;
   } catch {
     return DEFAULT_SELECTION;
+  }
+}
+
+// A design system named in the URL's `globals` (e.g. a shared story's deep
+// link `&globals=designSystem:Faune`), which wins over the remembered pick.
+function designSystemInUrl(): DesignSystem | undefined {
+  try {
+    const globals = new URLSearchParams(window.location.search).get('globals');
+    const match = new RegExp(`(?:^|;)${DESIGN_SYSTEM_GLOBAL}:([^;]+)`).exec(
+      globals ?? '',
+    );
+    const value = match?.[1];
+    return isDesignSystem(value) ? value : undefined;
+  } catch {
+    return undefined;
   }
 }
 
@@ -75,11 +93,14 @@ function Dropdown({ label, links }: { label: string; links: Link[] }) {
   );
 }
 
-// Shows one design system's sidebar tree at a time, and switching keeps you on
-// the same page when the target design system has it.
+// Shows the shared Components tree plus one design system's tree at a time,
+// and sets the `designSystem` global so shared stories restyle live. Switching
+// keeps you on the same page: a shared story stays put, a branded one moves to
+// the target's counterpart when it has one.
 function DesignSystemTool() {
   const api = useStorybookApi();
   const { index } = useStorybookState(); // also re-renders on navigation
+  const [globals, updateGlobals] = useGlobals();
   const [selection, setSelection] = useAddonState<Selection>(
     ADDON_ID,
     storedSelection(),
@@ -87,18 +108,48 @@ function DesignSystemTool() {
 
   const story = api.getCurrentStoryData();
   const storySystem = designSystemOf(story?.title);
+  const globalSystem = globals[DESIGN_SYSTEM_GLOBAL] as unknown;
 
   // The URL wins: landing on (or navigating to) another design system's story
-  // switches the tree to it, so a shared link never opens on a hidden story.
-  // Keyed on the story id so a pick isn't undone before its navigation lands.
+  // switches the tree to it, so a shared link never opens on a hidden story;
+  // on a shared story, a `designSystem` in the URL's globals does the same.
+  // Then the global follows the pick. Keyed on the story id so a pick isn't
+  // undone before its navigation lands; waits for the preview's globals.
   const lastStoryId = useRef<string | undefined>(undefined);
+  const readUrl = useRef(true);
   useEffect(() => {
-    if (story?.id === lastStoryId.current) return;
-    lastStoryId.current = story?.id;
-    if (storySystem && selection !== ALL && storySystem !== selection) {
-      setSelection(storySystem);
+    if (globalSystem === undefined) return; // preview not ready yet
+    if (story?.id !== lastStoryId.current) {
+      lastStoryId.current = story?.id;
+      if (storySystem && selection !== ALL && storySystem !== selection) {
+        setSelection(storySystem);
+        return; // the next run moves the global
+      }
     }
-  }, [story?.id, storySystem, selection, setSelection]);
+    if (readUrl.current) {
+      readUrl.current = false;
+      const fromUrl = designSystemInUrl();
+      if (
+        !storySystem &&
+        fromUrl &&
+        selection !== ALL &&
+        fromUrl !== selection
+      ) {
+        setSelection(fromUrl);
+        return;
+      }
+    }
+    if (selection !== ALL && globalSystem !== selection) {
+      updateGlobals({ [DESIGN_SYSTEM_GLOBAL]: selection });
+    }
+  }, [
+    story?.id,
+    storySystem,
+    selection,
+    setSelection,
+    globalSystem,
+    updateGlobals,
+  ]);
 
   useEffect(() => {
     storeSelection(selection);
@@ -109,7 +160,10 @@ function DesignSystemTool() {
 
   const pick = (target: Selection) => {
     setSelection(target);
-    if (target === ALL || !storySystem || target === storySystem) return;
+    if (target === ALL) return; // shared stories keep the last design system
+    updateGlobals({ [DESIGN_SYSTEM_GLOBAL]: target });
+    // Shared and unbranded pages stay put; only branded ones move.
+    if (!storySystem || target === storySystem) return;
 
     // The unfiltered index, in sidebar order (filteredIndex hides the target).
     const entries: CatalogEntry[] = Object.values(index ?? {})
@@ -146,7 +200,8 @@ type ThemeConfig = {
 };
 
 // Each control drives one design system's theme axis and only shows on that
-// design system's stories. Faune is light-only, so it has none.
+// design system's stories (shared ones included while it is the active
+// design system). Faune is light-only, so it has none.
 const THEMES: ThemeConfig[] = [
   {
     globalKey: 'mode',
@@ -175,15 +230,18 @@ function ThemeTool({ config }: { config: ThemeConfig }) {
   const [globals, updateGlobals] = useGlobals();
 
   const story = api.getCurrentStoryData();
-  if (designSystemOf(story?.title) !== config.designSystem) return null;
+  const active = activeDesignSystem(
+    story?.title,
+    globals[DESIGN_SYSTEM_GLOBAL],
+  );
+  if (active !== config.designSystem) return null;
 
   const current = globals[config.globalKey] as string;
-  const active =
-    config.items.find((i) => i.value === current) ?? config.items[0];
+  const item = config.items.find((i) => i.value === current) ?? config.items[0];
 
   return (
     <Dropdown
-      label={`${config.label}: ${active.title}`}
+      label={`${config.label}: ${item.title}`}
       links={config.items.map((i) => ({
         id: i.value,
         title: i.title,
