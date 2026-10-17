@@ -15,16 +15,13 @@ import styles from './Section.module.css';
  * `wash` is a full-bleed page band (a soft vertical gradient, no frame);
  * `accent` a framed lead panel (hero) outlined in the soft accent.
  */
-export type SectionSurface =
-  | 'plain'
-  | 'raised'
-  | 'sunken'
-  | 'wash'
-  | 'accent';
+export type SectionSurface = 'plain' | 'raised' | 'sunken' | 'wash' | 'accent';
 export type SectionPadding = 'none' | 'sm' | 'md' | 'lg' | 'xl';
 
-export interface SectionProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
+export interface SectionProps extends Omit<
+  HTMLAttributes<HTMLElement>,
+  'title'
+> {
   /** Element to render; defaults to `section`. */
   as?: ElementType;
   title?: ReactNode;

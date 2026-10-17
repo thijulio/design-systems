@@ -1,14 +1,12 @@
-import {
-  forwardRef,
-  type AnchorHTMLAttributes,
-  type MouseEvent,
-} from 'react';
+import { forwardRef, type AnchorHTMLAttributes, type MouseEvent } from 'react';
 import { cx } from '../_util/style';
 import { VisuallyHidden } from '../VisuallyHidden/VisuallyHidden';
 import styles from './SkipLink.module.css';
 
-export interface SkipLinkProps
-  extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'children'> {
+export interface SkipLinkProps extends Omit<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  'href' | 'children'
+> {
   /** Fragment of the landmark to jump to, e.g. `#main-content`. */
   href: `#${string}`;
   /** The link text. Required: there is no default copy. */

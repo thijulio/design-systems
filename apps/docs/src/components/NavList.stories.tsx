@@ -11,9 +11,7 @@ const RouterLink = forwardRef<
   HTMLAnchorElement,
   AnchorHTMLAttributes<HTMLAnchorElement> & { active?: boolean }
 >(function RouterLink({ active, ...props }, ref) {
-  return (
-    <a ref={ref} aria-current={active ? 'page' : undefined} {...props} />
-  );
+  return <a ref={ref} aria-current={active ? 'page' : undefined} {...props} />;
 });
 
 const meta: Meta<typeof NavList> = {

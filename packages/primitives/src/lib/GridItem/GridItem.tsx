@@ -15,10 +15,7 @@ const spanKey = (span: GridSpan) => (span === 'full' ? 'Full' : String(span));
 
 /** GridItem — a Grid child that spans several columns. */
 export const GridItem = forwardRef<HTMLElement, GridItemProps>(
-  function GridItem(
-    { as: Component = 'div', span, className, ...props },
-    ref,
-  ) {
+  function GridItem({ as: Component = 'div', span, className, ...props }, ref) {
     return (
       <Component
         ref={ref}

@@ -5,11 +5,15 @@ import { Rating } from './Rating';
 describe('Rating', () => {
   it('is an image named by its label', () => {
     render(<Rating value={4.5} label="4.5 out of 5" />);
-    expect(screen.getByRole('img', { name: '4.5 out of 5' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: '4.5 out of 5' }),
+    ).toBeInTheDocument();
   });
 
   it('renders one star per max, filled to the nearest lower half', () => {
-    const { container } = render(<Rating value={2.6} max={4} label="2.6 out of 4" />);
+    const { container } = render(
+      <Rating value={2.6} max={4} label="2.6 out of 4" />,
+    );
     const stars = Array.from(container.querySelectorAll('svg'));
     expect(stars).toHaveLength(4);
     expect(stars.map((svg) => svg.getAttribute('data-fill'))).toEqual([
@@ -28,13 +32,15 @@ describe('Rating', () => {
       </>,
     );
     // Attribute selector: SVG's camelCase tag names are awkward to select in jsdom.
-    const ids = Array.from(container.querySelectorAll('[id^="ds-rating-"]')).map(
-      (gradient) => gradient.id,
-    );
+    const ids = Array.from(
+      container.querySelectorAll('[id^="ds-rating-"]'),
+    ).map((gradient) => gradient.id);
     expect(ids).toHaveLength(2);
     expect(new Set(ids).size).toBe(2);
     for (const id of ids) {
-      expect(container.querySelector(`path[fill="url(#${id})"]`)).not.toBeNull();
+      expect(
+        container.querySelector(`path[fill="url(#${id})"]`),
+      ).not.toBeNull();
     }
   });
 

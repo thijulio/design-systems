@@ -16,8 +16,7 @@ interface ControlProps {
 }
 
 export interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement>,
-    ControlProps {}
+  extends InputHTMLAttributes<HTMLInputElement>, ControlProps {}
 
 /** Input — text control with a contract-driven focus ring. */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
@@ -42,8 +41,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 Input.displayName = 'Input';
 
 export interface TextareaProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement>,
-    ControlProps {}
+  extends TextareaHTMLAttributes<HTMLTextAreaElement>, ControlProps {}
 
 /** Textarea — same skin as Input, auto-height with vertical resize. */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
@@ -68,8 +66,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 Textarea.displayName = 'Textarea';
 
 export interface SelectProps
-  extends SelectHTMLAttributes<HTMLSelectElement>,
-    ControlProps {
+  extends SelectHTMLAttributes<HTMLSelectElement>, ControlProps {
   children?: ReactNode;
 }
 

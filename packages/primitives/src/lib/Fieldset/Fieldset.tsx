@@ -7,8 +7,7 @@ import {
 import { cx } from '../_util/style';
 import styles from './Fieldset.module.css';
 
-export interface FieldsetProps
-  extends FieldsetHTMLAttributes<HTMLFieldSetElement> {
+export interface FieldsetProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> {
   /** Group label. Required: a fieldset without a legend is unnamed. */
   legend: ReactNode;
   /** Help text under the legend; it describes the group. */

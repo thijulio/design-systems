@@ -68,7 +68,8 @@ export const LongKey: Story = {
   args: {
     block: true,
     size: 'body-sm',
-    children: 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP',
+    children:
+      'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP',
   },
   render: (args) => (
     <div style={{ maxWidth: 240 }}>

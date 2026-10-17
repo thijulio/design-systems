@@ -8,9 +8,7 @@ const RouterLink = forwardRef<
   HTMLAnchorElement,
   AnchorHTMLAttributes<HTMLAnchorElement> & { active?: boolean }
 >(function RouterLink({ active, ...props }, ref) {
-  return (
-    <a ref={ref} aria-current={active ? 'page' : undefined} {...props} />
-  );
+  return <a ref={ref} aria-current={active ? 'page' : undefined} {...props} />;
 });
 
 describe('NavList', () => {
@@ -31,9 +29,7 @@ describe('NavList', () => {
     expect(list).toHaveAttribute('role', 'list');
     expect(list).toHaveClass(styles.list, styles.horizontal, styles.g2);
     expect(list.querySelectorAll(':scope > li > a')).toHaveLength(2);
-    expect(screen.getByRole('link', { name: 'One' })).toHaveClass(
-      styles.item,
-    );
+    expect(screen.getByRole('link', { name: 'One' })).toHaveClass(styles.item);
   });
 
   it('maps orientation and gap per breakpoint, variant and tone', () => {

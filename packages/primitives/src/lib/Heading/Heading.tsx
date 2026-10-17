@@ -12,8 +12,10 @@ import styles from './Heading.module.css';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-export interface HeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'color'> {
+export interface HeadingProps extends Omit<
+  HTMLAttributes<HTMLHeadingElement>,
+  'color'
+> {
   /** Document outline level; renders `h{level}`. */
   level: HeadingLevel;
   /** Visual size, independent of the level. Defaults by level. */

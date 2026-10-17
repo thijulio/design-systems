@@ -108,7 +108,9 @@ export const Default: Story = {
       'This name is shown to people you work with.',
     );
     await waitFor(() =>
-      expect(within(dialog).getByRole('button', { name: 'Close' })).toHaveFocus(),
+      expect(
+        within(dialog).getByRole('button', { name: 'Close' }),
+      ).toHaveFocus(),
     );
     await userEvent.keyboard('{Escape}');
     await waitFor(() => expect(page.queryByRole('dialog')).toBeNull());
@@ -151,7 +153,10 @@ const StackedDialogs = () => {
         closeLabel="Close"
         footer={
           <Inline gap={2} justify="between">
-            <Button variant="danger-outline" onClick={() => setConfirming(true)}>
+            <Button
+              variant="danger-outline"
+              onClick={() => setConfirming(true)}
+            >
               Delete item
             </Button>
             <Button onClick={() => setEditing(false)}>Save</Button>
@@ -218,7 +223,9 @@ export const Stacked: Story = {
     });
     await waitFor(() => expect(second).toHaveAttribute('data-theme', 'harbor'));
     await waitFor(() =>
-      expect(within(second).getByRole('button', { name: 'Close' })).toHaveFocus(),
+      expect(
+        within(second).getByRole('button', { name: 'Close' }),
+      ).toHaveFocus(),
     );
 
     await userEvent.keyboard('{Escape}');

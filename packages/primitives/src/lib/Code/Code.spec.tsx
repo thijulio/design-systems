@@ -41,10 +41,7 @@ describe('Code', () => {
         ABCD-1234
       </Code>,
     );
-    expect(screen.getByText('ABCD-1234')).toHaveClass(
-      styles.bodySm,
-      'custom',
-    );
+    expect(screen.getByText('ABCD-1234')).toHaveClass(styles.bodySm, 'custom');
   });
 
   it('forwards a ref to the inline code', () => {

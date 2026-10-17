@@ -43,10 +43,7 @@ describe('ToastViewport', () => {
   it('carries the ThemeScope theme when portalled out of it', () => {
     render(
       <ThemeScope theme="harbor" mode="dark" data-testid="scope">
-        {createPortal(
-          <ToastViewport label="Notifications" />,
-          document.body,
-        )}
+        {createPortal(<ToastViewport label="Notifications" />, document.body)}
       </ThemeScope>,
     );
     const region = screen.getByRole('status', { name: 'Notifications' });

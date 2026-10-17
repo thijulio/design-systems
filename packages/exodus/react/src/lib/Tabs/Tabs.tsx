@@ -157,11 +157,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
       ref={ref}
       role="tablist"
       aria-label={label}
-      className={cx(
-        styles.tabs,
-        variant === 'pill' && styles.pill,
-        className,
-      )}
+      className={cx(styles.tabs, variant === 'pill' && styles.pill, className)}
     >
       {tabs.map((tab, index) => {
         const active = tab.value === selectedValue;

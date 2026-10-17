@@ -1,9 +1,6 @@
 import { createRef, useState } from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import {
-  ReorderableList,
-  type ReorderableListProps,
-} from './ReorderableList';
+import { ReorderableList, type ReorderableListProps } from './ReorderableList';
 
 interface Pet {
   id: string;
@@ -46,9 +43,7 @@ function Demo(props: Partial<ReorderableListProps<Pet>>) {
 }
 
 const names = () =>
-  screen
-    .getAllByRole('listitem')
-    .map((item) => item.textContent?.trim() ?? '');
+  screen.getAllByRole('listitem').map((item) => item.textContent?.trim() ?? '');
 
 describe('ReorderableList', () => {
   it('renders an ol of li with labelled move controls', () => {

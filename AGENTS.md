@@ -278,7 +278,7 @@ see **Release / publish** below.
 **Add a primitive** (the home for anything generic):
 
 1. `packages/primitives/src/lib/Name/{Name.tsx, Name.module.css,
-   Name.spec.tsx}`: `forwardRef` + `displayName`; the module CSS uses only
+Name.spec.tsx}`: `forwardRef` + `displayName`; the module CSS uses only
    `var(--ds-*)`, never a brand variable or a fallback to one.
 2. Generic copy only: no product naming or concepts, and every user-facing
    string (label, accessible name) is a **required** prop with no default.

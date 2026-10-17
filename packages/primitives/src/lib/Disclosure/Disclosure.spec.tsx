@@ -17,7 +17,9 @@ describe('Disclosure', () => {
     const details = container.querySelector('details');
     expect(details).not.toBeNull();
     expect(details?.open).toBe(false);
-    expect(container.querySelector('summary')).toHaveTextContent('Health records');
+    expect(container.querySelector('summary')).toHaveTextContent(
+      'Health records',
+    );
   });
 
   it('starts open with defaultOpen and reports toggles', () => {

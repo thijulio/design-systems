@@ -49,9 +49,7 @@ export const External: Story = {
     const link = within(canvasElement).getByRole('link');
     await expect(link).toHaveAttribute('target', '_blank');
     await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-    await expect(link).toHaveAccessibleName(
-      'Help centre (opens in a new tab)',
-    );
+    await expect(link).toHaveAccessibleName('Help centre (opens in a new tab)');
   },
 };
 
@@ -60,8 +58,8 @@ export const External: Story = {
 export const InText: Story = {
   render: (args) => (
     <Text>
-      By continuing you agree to our <Link {...args}>terms of service</Link>{' '}
-      and acknowledge our privacy notice.
+      By continuing you agree to our <Link {...args}>terms of service</Link> and
+      acknowledge our privacy notice.
     </Text>
   ),
   args: { href: '#terms' },

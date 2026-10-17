@@ -8,7 +8,9 @@ describe('Section', () => {
   it('renders a section with a level-2 heading by default', () => {
     const { container } = render(<Section title="Orders">Body</Section>);
     expect(container.firstElementChild?.tagName).toBe('SECTION');
-    expect(screen.getByRole('heading', { level: 2, name: 'Orders' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Orders' }),
+    ).toBeInTheDocument();
   });
 
   it('renders description, actions and the heading level', () => {
@@ -38,7 +40,9 @@ describe('Section', () => {
   });
 
   it('maps surface, padding and gap', () => {
-    const { container, rerender } = render(<Section surface="raised" gap={6} />);
+    const { container, rerender } = render(
+      <Section surface="raised" gap={6} />,
+    );
     const root = container.firstElementChild;
     expect(root).toHaveClass(styles.raised, styles.padMd, stackStyles.g6);
 

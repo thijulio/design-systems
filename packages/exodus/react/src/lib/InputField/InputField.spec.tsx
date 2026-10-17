@@ -11,7 +11,9 @@ const options = (
 
 describe('InputField', () => {
   it('names the input by its label alone, the hint describing it', () => {
-    render(<InputField label="Email" name="email" hint="Use your work email" />);
+    render(
+      <InputField label="Email" name="email" hint="Use your work email" />,
+    );
     const input = screen.getByRole('textbox', { name: 'Email' });
     expect(input).toHaveAttribute('id', 'email');
     expect(input).toHaveAccessibleDescription('Use your work email');
@@ -50,9 +52,7 @@ describe('InputField', () => {
       <InputField aria-label="Search" name="query" />,
     );
     expect(container.querySelector('label')).toBeNull();
-    expect(
-      screen.getByRole('textbox', { name: 'Search' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Search' })).toBeInTheDocument();
   });
 
   it('puts wrapperClassName on the div root and className on the control', () => {

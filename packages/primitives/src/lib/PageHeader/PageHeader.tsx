@@ -4,8 +4,10 @@ import { Heading } from '../Heading/Heading';
 import { Text } from '../Text/Text';
 import styles from './PageHeader.module.css';
 
-export interface PageHeaderProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface PageHeaderProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'title'
+> {
   title: ReactNode;
   subtitle?: ReactNode;
   /** Page-level controls aligned to the end. */
@@ -21,7 +23,15 @@ export interface PageHeaderProps
  */
 export const PageHeader = forwardRef<HTMLDivElement, PageHeaderProps>(
   function PageHeader(
-    { title, subtitle, actions, children, headingLevel = 1, className, ...props },
+    {
+      title,
+      subtitle,
+      actions,
+      children,
+      headingLevel = 1,
+      className,
+      ...props
+    },
     ref,
   ) {
     const hasSubtitle =

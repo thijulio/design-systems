@@ -10,8 +10,10 @@ import styles from './IconButton.module.css';
 export type IconButtonVariant = 'ghost' | 'secondary' | 'primary' | 'danger';
 export type IconButtonSize = 'sm' | 'md' | 'lg';
 
-export interface IconButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
+export interface IconButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'children'
+> {
   /** Accessible name (`aria-label`). Required: the button has no visible text. */
   label: string;
   /** The glyph, usually an `<Icon>`; it is hidden from assistive technology. */

@@ -17,11 +17,7 @@ const declared = new Set(
   ),
 );
 const required = new Set(
-  [
-    ...`${primitivesCss}\n${primitivesJs}`.matchAll(
-      /var\((--ds-[a-z0-9-]+)\)/g,
-    ),
-  ]
+  [...`${primitivesCss}\n${primitivesJs}`.matchAll(/var\((--ds-[a-z0-9-]+)\)/g)]
     .map((match) => match[1])
     .filter((name) => !declared.has(name)),
 );

@@ -78,9 +78,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(
       <div className={styles.content}>
         {hasTitle && <div className={styles.title}>{title}</div>}
         {hasChildren && (
-          <div className={hasTitle ? styles.body : styles.lead}>
-            {children}
-          </div>
+          <div className={hasTitle ? styles.body : styles.lead}>{children}</div>
         )}
       </div>
       {onClose && (

@@ -17,7 +17,9 @@ describe('IconButton', () => {
   });
 
   it('maps size and variant', () => {
-    render(<IconButton label="Delete" icon={glyph} size="lg" variant="danger" />);
+    render(
+      <IconButton label="Delete" icon={glyph} size="lg" variant="danger" />,
+    );
     expect(screen.getByRole('button')).toHaveClass(styles.lg, styles.danger);
   });
 
@@ -30,7 +32,9 @@ describe('IconButton', () => {
 
   it('stays focusable but refuses presses while loading', () => {
     const onClick = jest.fn();
-    render(<IconButton label="Save" icon={glyph} isLoading onClick={onClick} />);
+    render(
+      <IconButton label="Save" icon={glyph} isLoading onClick={onClick} />,
+    );
     const button = screen.getByRole('button', { name: 'Save' });
     expect(button).not.toBeDisabled();
     expect(button).toHaveAttribute('aria-busy', 'true');

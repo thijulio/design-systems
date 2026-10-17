@@ -22,9 +22,9 @@ describe('RadioGroup', () => {
 
   it('describes an option by its hint and disables options', () => {
     render(<RadioGroup name="species" legend="Species" options={options} />);
-    expect(screen.getByRole('radio', { name: 'Phone' })).toHaveAccessibleDescription(
-      'Weekdays only',
-    );
+    expect(
+      screen.getByRole('radio', { name: 'Phone' }),
+    ).toHaveAccessibleDescription('Weekdays only');
     expect(screen.getByRole('radio', { name: 'Bird' })).toBeDisabled();
   });
 
@@ -104,9 +104,9 @@ describe('RadioGroup', () => {
     const card = screen.getByTestId('card-phone');
     expect(card).toHaveClass('card');
     expect(screen.getAllByRole('radio')).toHaveLength(3);
-    screen.getAllByRole('radio').forEach((radio) =>
-      expect(radio).not.toBeChecked(),
-    );
+    screen
+      .getAllByRole('radio')
+      .forEach((radio) => expect(radio).not.toBeChecked());
     fireEvent.click(screen.getByText('Weekdays only'));
     expect(onChange).toHaveBeenCalledWith('phone');
   });

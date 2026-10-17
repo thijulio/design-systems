@@ -25,7 +25,10 @@ function isPerBreakpoint<T>(
  */
 export function responsiveClasses<T>(
   value: Responsive<T> | undefined,
-  classFor: (prefix: '' | Exclude<Breakpoint, 'base'>, value: T) => string | undefined,
+  classFor: (
+    prefix: '' | Exclude<Breakpoint, 'base'>,
+    value: T,
+  ) => string | undefined,
 ): Array<string | undefined> {
   if (value === undefined || value === null) return [];
   if (!isPerBreakpoint(value)) return [classFor('', value as T)];

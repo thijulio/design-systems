@@ -10,7 +10,9 @@ describe('Fieldset', () => {
         <input aria-label="Email" />
       </Fieldset>,
     );
-    expect(screen.getByRole('group', { name: 'Contact preference' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('group', { name: 'Contact preference' }),
+    ).toBeInTheDocument();
   });
 
   it('is described by its hint and error, and marks itself invalid', () => {

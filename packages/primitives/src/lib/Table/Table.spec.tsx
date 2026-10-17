@@ -71,8 +71,13 @@ describe('Table', () => {
     expect(headers.map((th) => th.textContent)).toEqual(['Name', 'Amount']);
     headers.forEach((th) => expect(th).toHaveAttribute('scope', 'col'));
     expect(screen.getAllByRole('row')).toHaveLength(3);
-    expect(screen.getByText('10 EUR')).toHaveClass(styles.alignEnd, 'amount-cell');
-    expect(headers[1].style.getPropertyValue('--ds-table-column-width')).toBe('8rem');
+    expect(screen.getByText('10 EUR')).toHaveClass(
+      styles.alignEnd,
+      'amount-cell',
+    );
+    expect(headers[1].style.getPropertyValue('--ds-table-column-width')).toBe(
+      '8rem',
+    );
   });
 
   it('renders a caption, optionally visually hidden', () => {
@@ -87,7 +92,9 @@ describe('Table', () => {
       />,
     );
     const table = screen.getByRole('table', { name: 'Payments' });
-    expect(within(table).getByText('Payments')).toHaveClass(styles.visuallyHidden);
+    expect(within(table).getByText('Payments')).toHaveClass(
+      styles.visuallyHidden,
+    );
   });
 
   it('is not a focusable region while it fits', () => {
@@ -166,7 +173,10 @@ describe('Table', () => {
         stickyHeader
       />,
     );
-    expect(screen.getByRole('table')).toHaveClass(styles.compact, styles.sticky);
+    expect(screen.getByRole('table')).toHaveClass(
+      styles.compact,
+      styles.sticky,
+    );
   });
 
   it('renders a rowHeader column as row headers, under an empty corner', () => {
@@ -185,9 +195,9 @@ describe('Table', () => {
     expect(rowHeaders.map((th) => th.textContent)).toEqual(['Alice', 'Bob']);
     rowHeaders.forEach((th) => expect(th).toHaveAttribute('scope', 'row'));
     expect(rowHeaders[0]).toHaveClass(styles.td, styles.rowHeader);
-    expect(container.querySelector('thead tr')?.firstElementChild?.tagName).toBe(
-      'TD',
-    );
+    expect(
+      container.querySelector('thead tr')?.firstElementChild?.tagName,
+    ).toBe('TD');
     expect(screen.getAllByRole('columnheader')).toHaveLength(1);
   });
 
@@ -232,10 +242,9 @@ describe('Table', () => {
       expect(amount).toHaveAttribute('aria-sort', 'none');
       expect(id).not.toHaveAttribute('aria-sort');
       expect(within(id).queryByRole('button')).toBeNull();
-      expect(within(name).getByRole('button', { name: 'Name' })).toHaveAttribute(
-        'type',
-        'button',
-      );
+      expect(
+        within(name).getByRole('button', { name: 'Name' }),
+      ).toHaveAttribute('type', 'button');
     });
 
     it('describes and reports the next state of each press', () => {
@@ -269,9 +278,9 @@ describe('Table', () => {
       expect(amount).toHaveAccessibleDescription('Remove sort');
       fireEvent.click(amount);
       expect(onSortChange).toHaveBeenLastCalledWith(null);
-      expect(screen.getByRole('button', { name: 'Name' })).toHaveAccessibleDescription(
-        'Sort ascending',
-      );
+      expect(
+        screen.getByRole('button', { name: 'Name' }),
+      ).toHaveAccessibleDescription('Sort ascending');
     });
 
     it('keeps headers plain without the sort props', () => {

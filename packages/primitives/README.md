@@ -42,18 +42,18 @@ Components retain their default contract values when overrides are absent.
 
 ## Contract reference
 
-| Group          | Names                                                                                                                                 |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Surfaces       | `--ds-surface`, `-raised`, `-sunken`, `-inverse`, `-inverse-raised`, `--ds-overlay` (modal scrim)                                     |
-| Text           | `--ds-text`, `-secondary`, `-soft`, `-muted`, `-placeholder`, `-disabled`, `-inverse`, `-inverse-muted`                               |
-| Brand          | `--ds-brand`, `-hover`, `--ds-on-brand`                                                                                               |
-| Accent         | `--ds-accent`, `-hover`, `-soft`, `-fg`, `-fg-hover`, `--ds-on-accent`                                                                |
-| Highlight      | `--ds-highlight`, `--ds-on-highlight`                                                                                                 |
-| Border / focus | `--ds-border`, `-inverse`, `-subtle`, `--ds-focus` (solid, ≥ 3:1 on surfaces)                                                         |
-| Status         | `--ds-{success,warning,danger,info}` + `-soft` + `-fg` + `-border`                                                                    |
+| Group          | Names                                                                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Surfaces       | `--ds-surface`, `-raised`, `-sunken`, `-inverse`, `-inverse-raised`, `--ds-overlay` (modal scrim)                                          |
+| Text           | `--ds-text`, `-secondary`, `-soft`, `-muted`, `-placeholder`, `-disabled`, `-inverse`, `-inverse-muted`                                    |
+| Brand          | `--ds-brand`, `-hover`, `--ds-on-brand`                                                                                                    |
+| Accent         | `--ds-accent`, `-hover`, `-soft`, `-fg`, `-fg-hover`, `--ds-on-accent`                                                                     |
+| Highlight      | `--ds-highlight`, `--ds-on-highlight`                                                                                                      |
+| Border / focus | `--ds-border`, `-inverse`, `-subtle`, `--ds-focus` (solid, ≥ 3:1 on surfaces)                                                              |
+| Status         | `--ds-{success,warning,danger,info}` + `-soft` + `-fg` + `-border`                                                                         |
 | Typography     | `--ds-font-{display,body,ui,mono}`, `--ds-size-*` (incl. `-lead`), `--ds-weight-*`, `--ds-leading-*`, `--ds-tracking-*` (incl. `-eyebrow`) |
-| Layout         | `--ds-space-{1,2,3,4,5,6,8,10,12,16}`, `--ds-radius-{control,field,card,sm,md,lg,xl,2xl,full}`, `--ds-shadow-{sm,md,lg}`              |
-| Layering       | `--ds-z-{overlay,toast}`                                                                                                              |
+| Layout         | `--ds-space-{1,2,3,4,5,6,8,10,12,16}`, `--ds-radius-{control,field,card,sm,md,lg,xl,2xl,full}`, `--ds-shadow-{sm,md,lg}`                   |
+| Layering       | `--ds-z-{overlay,toast}`                                                                                                                   |
 
 ## Components
 

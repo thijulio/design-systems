@@ -23,8 +23,7 @@ const meta: Meta<typeof InputField> = {
         'Show the decorative `*` (hidden from assistive tech). Set `required` for the constraint.',
     },
     wrapperClassName: {
-      description:
-        'Class for the field root; `className` styles the control.',
+      description: 'Class for the field root; `className` styles the control.',
     },
     id: {
       description: 'Control id; defaults to `name`, else a generated id.',

@@ -1,12 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
-import {
-  Grid,
-  Icon,
-  Inline,
-  Text,
-  type IconName,
-} from '@thijulio/primitives';
+import { Grid, Icon, Inline, Text, type IconName } from '@thijulio/primitives';
 
 // The registry, in display order (mirrors the primitive's ICON_NAMES).
 const NAMES: IconName[] = [

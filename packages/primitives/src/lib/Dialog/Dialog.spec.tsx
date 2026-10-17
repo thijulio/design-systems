@@ -44,7 +44,12 @@ describe('Dialog', () => {
   describe('render output', () => {
     test('does not render when closed', () => {
       render(
-        <Dialog closeLabel="Close" open={false} title="Details" onClose={() => undefined}>
+        <Dialog
+          closeLabel="Close"
+          open={false}
+          title="Details"
+          onClose={() => undefined}
+        >
           Content
         </Dialog>,
       );
@@ -64,7 +69,9 @@ describe('Dialog', () => {
           Content
         </Dialog>,
       );
-      expect(screen.getByRole('heading', { name: 'Details' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { name: 'Details' }),
+      ).toBeInTheDocument();
       expect(screen.getByText('More info')).toBeInTheDocument();
       expect(screen.getByText('Content')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Done' })).toBeInTheDocument();
@@ -72,7 +79,12 @@ describe('Dialog', () => {
 
     test('portals into document.body as a modal dialog', () => {
       const { container } = render(
-        <Dialog closeLabel="Close" open title="Details" onClose={() => undefined}>
+        <Dialog
+          closeLabel="Close"
+          open
+          title="Details"
+          onClose={() => undefined}
+        >
           Content
         </Dialog>,
       );
@@ -179,7 +191,12 @@ describe('Dialog', () => {
     test('takes the enclosing ThemeScope theme and mode without an opener', () => {
       render(
         <ThemeScope theme="harbor" mode="dark">
-          <Dialog closeLabel="Close" open title="Details" onClose={() => undefined}>
+          <Dialog
+            closeLabel="Close"
+            open
+            title="Details"
+            onClose={() => undefined}
+          >
             Content
           </Dialog>
         </ThemeScope>,
@@ -313,20 +330,25 @@ describe('Dialog', () => {
           Content
         </Dialog>,
       );
-      expect(screen.getByRole('dialog', { name: 'Details' })).toHaveAccessibleDescription(
-        'More info',
-      );
+      expect(
+        screen.getByRole('dialog', { name: 'Details' }),
+      ).toHaveAccessibleDescription('More info');
     });
 
     test('leaves the dialog without a description when it has none', () => {
       render(
-        <Dialog closeLabel="Close" open title="Details" onClose={() => undefined}>
+        <Dialog
+          closeLabel="Close"
+          open
+          title="Details"
+          onClose={() => undefined}
+        >
           Content
         </Dialog>,
       );
-      expect(screen.getByRole('dialog', { name: 'Details' })).not.toHaveAttribute(
-        'aria-describedby',
-      );
+      expect(
+        screen.getByRole('dialog', { name: 'Details' }),
+      ).not.toHaveAttribute('aria-describedby');
     });
 
     test('supports the alertdialog role, test ids and ref', () => {
@@ -354,14 +376,24 @@ describe('Dialog', () => {
     test('locks body scroll while open and restores it on close', () => {
       document.body.style.overflow = 'auto';
       const { rerender } = render(
-        <Dialog closeLabel="Close" open title="Details" onClose={() => undefined}>
+        <Dialog
+          closeLabel="Close"
+          open
+          title="Details"
+          onClose={() => undefined}
+        >
           Content
         </Dialog>,
       );
       expect(document.body.style.overflow).toBe('hidden');
 
       rerender(
-        <Dialog closeLabel="Close" open={false} title="Details" onClose={() => undefined}>
+        <Dialog
+          closeLabel="Close"
+          open={false}
+          title="Details"
+          onClose={() => undefined}
+        >
           Content
         </Dialog>,
       );
@@ -455,7 +487,9 @@ describe('Dialog', () => {
         <Dialog closeLabel="Close" open title="Details" onClose={onClose}>
           <input
             aria-label="Search"
-            onKeyDown={(event) => event.key === 'Escape' && event.preventDefault()}
+            onKeyDown={(event) =>
+              event.key === 'Escape' && event.preventDefault()
+            }
           />
         </Dialog>,
       );
@@ -471,7 +505,15 @@ describe('Dialog', () => {
       ${'Close'} | ${true}  | ${'Save'}
     `(
       'moves focus from $from to $to on Tab with shift $shiftKey',
-      ({ from, shiftKey, to }: { from: string; shiftKey: boolean; to: string }) => {
+      ({
+        from,
+        shiftKey,
+        to,
+      }: {
+        from: string;
+        shiftKey: boolean;
+        to: string;
+      }) => {
         render(<FieldsDialog onClose={() => undefined} />);
         const start = screen.getByRole('button', { name: from });
         start.focus();
@@ -511,7 +553,12 @@ describe('Dialog', () => {
 
     test('holds Tab on the close control when the dialog has no other control', () => {
       render(
-        <Dialog closeLabel="Close" open title="Details" onClose={() => undefined}>
+        <Dialog
+          closeLabel="Close"
+          open
+          title="Details"
+          onClose={() => undefined}
+        >
           Read-only content
         </Dialog>,
       );
@@ -525,7 +572,12 @@ describe('Dialog', () => {
 
     test('wraps Tab from the last control past a trailing disabled button', () => {
       render(
-        <Dialog closeLabel="Close" open title="Details" onClose={() => undefined}>
+        <Dialog
+          closeLabel="Close"
+          open
+          title="Details"
+          onClose={() => undefined}
+        >
           <input aria-label="Reason" />
           <button disabled>Submit</button>
         </Dialog>,
@@ -540,7 +592,12 @@ describe('Dialog', () => {
 
     test('wraps Tab from the last control past a trailing tabindex -1 field', () => {
       render(
-        <Dialog closeLabel="Close" open title="Details" onClose={() => undefined}>
+        <Dialog
+          closeLabel="Close"
+          open
+          title="Details"
+          onClose={() => undefined}
+        >
           <input aria-label="Reason" />
           <input aria-label="Honeypot" tabIndex={-1} />
         </Dialog>,
@@ -561,7 +618,12 @@ describe('Dialog', () => {
         </Dialog>,
       );
       rerender(
-        <Dialog closeLabel="Close" open={false} title="Details" onClose={onClose}>
+        <Dialog
+          closeLabel="Close"
+          open={false}
+          title="Details"
+          onClose={onClose}
+        >
           Content
         </Dialog>,
       );

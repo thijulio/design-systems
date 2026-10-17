@@ -24,7 +24,9 @@ const meta: Meta<typeof Alert> = {
       description:
         'off: no role; polite: role="status"; assertive: role="alert". An explicit role wins.',
     },
-    icon: { description: 'Leading decorative icon (hidden from assistive tech).' },
+    icon: {
+      description: 'Leading decorative icon (hidden from assistive tech).',
+    },
     as: { description: 'Element to render; defaults to div.' },
   },
   decorators: [

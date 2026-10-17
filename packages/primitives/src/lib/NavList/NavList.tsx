@@ -89,9 +89,7 @@ export const NavList = forwardRef<HTMLElement, NavListProps>(function NavList(
         className={cx(
           styles.list,
           ...responsiveClasses(orientation, (prefix, value) =>
-            prefix
-              ? styles[`${prefix}${capitalise(value)}`]
-              : styles[value],
+            prefix ? styles[`${prefix}${capitalise(value)}`] : styles[value],
           ),
           ...responsiveClasses(gap, (prefix, n) =>
             prefix ? styles[`${prefix}G${n}`] : styles[`g${n}`],

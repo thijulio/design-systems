@@ -86,9 +86,7 @@ export const Default: Story = {
 // rendered elsewhere to recover.
 export const Failed: Story = {
   args: { failed: true, onLoadMore: fn() },
-  render: (args) => (
-    <LoadMore {...args} shown={6} total={18} hasMore={false} />
-  ),
+  render: (args) => <LoadMore {...args} shown={6} total={18} hasMore={false} />,
   play: async ({ args, canvasElement }) => {
     const button = within(canvasElement).getByRole('button');
     await expect(button).toHaveAttribute('aria-disabled', 'true');

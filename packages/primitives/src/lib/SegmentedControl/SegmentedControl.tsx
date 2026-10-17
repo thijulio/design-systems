@@ -9,8 +9,10 @@ export interface SegmentedControlOption {
   testId?: string;
 }
 
-export interface SegmentedControlProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface SegmentedControlProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'onChange'
+> {
   /** Group name (`aria-label`). Required: the group has no visible label. */
   label: string;
   options: ReadonlyArray<SegmentedControlOption>;

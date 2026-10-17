@@ -25,8 +25,10 @@ import styles from './Dialog.module.css';
 
 export type DialogSize = 'sm' | 'md' | 'lg' | 'xl';
 
-export interface DialogProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'title' | 'role' | 'children'> {
+export interface DialogProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'title' | 'role' | 'children'
+> {
   open: boolean;
   /** Called by the close control and on Escape (unless a control inside called `preventDefault()`). */
   onClose: () => void;

@@ -21,8 +21,7 @@ const meta: Meta<typeof DescriptionList> = {
     layout: {
       control: 'inline-radio',
       options: ['stacked', 'inline'],
-      description:
-        '`stacked`: term above description. `inline`: side by side.',
+      description: '`stacked`: term above description. `inline`: side by side.',
     },
   },
 };

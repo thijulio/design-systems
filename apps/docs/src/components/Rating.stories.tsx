@@ -33,9 +33,9 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const stars = canvas.getByRole('img', { name: 'Rated 4.5 out of 5' });
-    await expect(stars.querySelectorAll('svg[aria-hidden="true"]')).toHaveLength(
-      5,
-    );
+    await expect(
+      stars.querySelectorAll('svg[aria-hidden="true"]'),
+    ).toHaveLength(5);
     await expect(stars).not.toHaveTextContent('4.5');
     await expect(canvas.getByText('4.5')).toBeVisible();
   },

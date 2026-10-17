@@ -149,8 +149,10 @@ const ICON_PATHS: Record<IconName, readonly string[]> = {
 /** Glyphs drawn as a solid shape rather than an outline. */
 const FILLED: ReadonlySet<IconName> = new Set<IconName>(['bookmark-filled']);
 
-export interface IconProps
-  extends Omit<SVGAttributes<SVGSVGElement>, 'name' | 'children'> {
+export interface IconProps extends Omit<
+  SVGAttributes<SVGSVGElement>,
+  'name' | 'children'
+> {
   name: IconName;
   /** Rendered width and height in px. */
   size?: number;

@@ -38,14 +38,7 @@ export interface CheckboxProps extends Omit<
  */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   function Checkbox(
-    {
-      label,
-      description,
-      align = 'center',
-      labelTestId,
-      className,
-      ...props
-    },
+    { label, description, align = 'center', labelTestId, className, ...props },
     ref,
   ) {
     const generatedId = useId();

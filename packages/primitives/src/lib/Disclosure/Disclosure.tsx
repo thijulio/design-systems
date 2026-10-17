@@ -19,11 +19,10 @@ import styles from './Disclosure.module.css';
  */
 export type DisclosureVariant = 'default' | 'plain';
 
-export interface DisclosureProps
-  extends Omit<
-    DetailsHTMLAttributes<HTMLElement>,
-    'open' | 'onToggle' | 'children'
-  > {
+export interface DisclosureProps extends Omit<
+  DetailsHTMLAttributes<HTMLElement>,
+  'open' | 'onToggle' | 'children'
+> {
   /** Always-visible toggle content (`<summary>`, or the heading's button). */
   summary: ReactNode;
   /**
@@ -99,11 +98,7 @@ export const Disclosure = forwardRef<HTMLElement, DisclosureProps>(
     if (headingLevel !== undefined) {
       const HeadingTag = `h${headingLevel}` as const;
       return (
-        <div
-          ref={ref as Ref<HTMLDivElement>}
-          {...props}
-          className={rootClass}
-        >
+        <div ref={ref as Ref<HTMLDivElement>} {...props} className={rootClass}>
           <HeadingTag className={styles.heading}>
             <button
               type="button"

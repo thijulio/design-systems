@@ -35,7 +35,10 @@ describe('Icon', () => {
 
   it('fills the filled variants', () => {
     const { container } = render(<Icon name="bookmark-filled" />);
-    expect(container.querySelector('svg')).toHaveAttribute('fill', 'currentColor');
+    expect(container.querySelector('svg')).toHaveAttribute(
+      'fill',
+      'currentColor',
+    );
   });
 
   it('forwards ref', () => {

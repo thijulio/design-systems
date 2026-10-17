@@ -3,8 +3,10 @@ import { cx } from '../_util/style';
 import styles from './VisuallyHidden.module.css';
 
 /** All HTML attributes, so `as="a"` can take `href` (skip links). */
-export interface VisuallyHiddenProps
-  extends Omit<AllHTMLAttributes<HTMLElement>, 'as'> {
+export interface VisuallyHiddenProps extends Omit<
+  AllHTMLAttributes<HTMLElement>,
+  'as'
+> {
   /** Element to render; defaults to `span`. */
   as?: ElementType;
   /** Reveal while it (or a descendant) has focus — for skip links. */
@@ -21,10 +23,7 @@ export const VisuallyHidden = forwardRef<HTMLElement, VisuallyHiddenProps>(
       <Component
         ref={ref}
         {...props}
-        className={cx(
-          focusable ? styles.focusable : styles.hidden,
-          className,
-        )}
+        className={cx(focusable ? styles.focusable : styles.hidden, className)}
       />
     );
   },

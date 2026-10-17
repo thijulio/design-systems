@@ -1,8 +1,4 @@
-import {
-  createRef,
-  forwardRef,
-  type AnchorHTMLAttributes,
-} from 'react';
+import { createRef, forwardRef, type AnchorHTMLAttributes } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Link } from './Link';
 import styles from './Link.module.css';
@@ -19,7 +15,11 @@ describe('Link', () => {
     render(<Link href="/pets">Pets</Link>);
     const link = screen.getByRole('link', { name: 'Pets' });
     expect(link).toHaveAttribute('href', '/pets');
-    expect(link).toHaveClass(styles.link, styles.accent, styles.underlineAlways);
+    expect(link).toHaveClass(
+      styles.link,
+      styles.accent,
+      styles.underlineAlways,
+    );
   });
 
   it('maps tone and underline', () => {
@@ -36,11 +36,17 @@ describe('Link', () => {
 
   it('opens external links in a new tab with a hidden suffix', () => {
     render(
-      <Link href="https://example.org" external externalLabel="(opens in a new tab)">
+      <Link
+        href="https://example.org"
+        external
+        externalLabel="(opens in a new tab)"
+      >
         Docs
       </Link>,
     );
-    const link = screen.getByRole('link', { name: 'Docs (opens in a new tab)' });
+    const link = screen.getByRole('link', {
+      name: 'Docs (opens in a new tab)',
+    });
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });

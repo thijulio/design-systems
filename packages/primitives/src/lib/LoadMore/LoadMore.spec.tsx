@@ -4,8 +4,7 @@ import { LoadMore, type LoadMoreProps } from './LoadMore';
 import hiddenStyles from '../VisuallyHidden/VisuallyHidden.module.css';
 import styles from './LoadMore.module.css';
 
-const status = (shown: number, total: number) =>
-  `Showing ${shown} of ${total}`;
+const status = (shown: number, total: number) => `Showing ${shown} of ${total}`;
 
 function renderLoadMore(props: Partial<LoadMoreProps> = {}) {
   const onLoadMore = jest.fn();
@@ -41,8 +40,7 @@ describe('LoadMore', () => {
     const region = screen.getByTestId('status');
     const button = screen.getByTestId('more');
     expect(
-      region.compareDocumentPosition(button) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
+      region.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
   });
 

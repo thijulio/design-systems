@@ -77,14 +77,7 @@ export function useNestedThemeScope(
  */
 export const ThemeScope = forwardRef<HTMLElement, ThemeScopeProps>(
   function ThemeScope(
-    {
-      theme,
-      mode,
-      as: Component = 'div',
-      asChild = false,
-      children,
-      ...props
-    },
+    { theme, mode, as: Component = 'div', asChild = false, children, ...props },
     ref,
   ) {
     const value = useNestedThemeScope(theme, mode);

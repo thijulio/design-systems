@@ -151,7 +151,9 @@ export const PortalledDialog: Story = {
     await expect(canvasElement).not.toContainElement(dialog);
     await expect(dialog).toHaveAttribute('data-theme', 'harbor');
     await waitFor(() =>
-      expect(within(dialog).getByRole('button', { name: 'Close' })).toHaveFocus(),
+      expect(
+        within(dialog).getByRole('button', { name: 'Close' }),
+      ).toHaveFocus(),
     );
     await userEvent.keyboard('{Escape}');
     await waitFor(() => expect(page.queryByRole('dialog')).toBeNull());

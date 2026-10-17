@@ -13,15 +13,21 @@ describe('PageHeader', () => {
         <span>Extra</span>
       </PageHeader>,
     );
-    expect(screen.getByRole('heading', { level: 1, name: 'My pets' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'My pets' }),
+    ).toBeInTheDocument();
     expect(screen.getByText('Everything you follow')).toBeInTheDocument();
     expect(screen.getByText('Extra')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Add item' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Add item' }),
+    ).toBeInTheDocument();
   });
 
   it('supports a level-2 heading', () => {
     render(<PageHeader title="Settings" headingLevel={2} />);
-    expect(screen.getByRole('heading', { level: 2, name: 'Settings' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Settings' }),
+    ).toBeInTheDocument();
   });
 
   it('is not a banner landmark', () => {

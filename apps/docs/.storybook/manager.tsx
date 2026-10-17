@@ -129,7 +129,12 @@ function DesignSystemTool() {
     if (readUrl.current) {
       readUrl.current = false;
       const fromUrl = designSystemInUrl();
-      if (!storySystem && fromUrl && selection !== ALL && fromUrl !== selection) {
+      if (
+        !storySystem &&
+        fromUrl &&
+        selection !== ALL &&
+        fromUrl !== selection
+      ) {
         setSelection(fromUrl);
         return;
       }

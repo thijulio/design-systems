@@ -66,8 +66,18 @@ export const WithoutCaption: Story = { args: { caption: undefined } };
 const STATS = [
   { tone: 'neutral', label: 'Orders', value: '1,204', caption: 'This week' },
   { tone: 'accent', label: 'Conversion', value: '3.2%', caption: 'Goal 3%' },
-  { tone: 'success', label: 'Uptime', value: '99.98%', caption: 'Last 30 days' },
-  { tone: 'warning', label: 'Open tickets', value: '37', caption: '12 overdue' },
+  {
+    tone: 'success',
+    label: 'Uptime',
+    value: '99.98%',
+    caption: 'Last 30 days',
+  },
+  {
+    tone: 'warning',
+    label: 'Open tickets',
+    value: '37',
+    caption: '12 overdue',
+  },
   { tone: 'danger', label: 'Failed payments', value: '5', caption: 'Today' },
 ] as const;
 
@@ -96,13 +106,7 @@ export const InDescriptionList: Story = {
   render: () => (
     <Grid as="dl" minItemWidth="10rem" gap={4}>
       {STATS.slice(0, 3).map(({ tone, label, value }) => (
-        <Stat
-          key={label}
-          markup="dl"
-          tone={tone}
-          label={label}
-          value={value}
-        />
+        <Stat key={label} markup="dl" tone={tone} label={label} value={value} />
       ))}
     </Grid>
   ),

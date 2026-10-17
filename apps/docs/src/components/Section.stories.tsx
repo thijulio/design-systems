@@ -49,8 +49,7 @@ const meta: Meta<typeof Section> = {
     padding: {
       control: 'inline-radio',
       options: ['none', 'sm', 'md', 'lg', 'xl'],
-      description:
-        'Inner padding; `none` on plain and wash, `md` otherwise.',
+      description: 'Inner padding; `none` on plain and wash, `md` otherwise.',
     },
     gap: {
       control: 'select',

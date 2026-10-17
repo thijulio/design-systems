@@ -1,9 +1,4 @@
-import {
-  forwardRef,
-  useId,
-  type ChangeEvent,
-  type ReactNode,
-} from 'react';
+import { forwardRef, useId, type ChangeEvent, type ReactNode } from 'react';
 import { cx } from '../_util/style';
 import { Fieldset, type FieldsetProps } from '../Fieldset/Fieldset';
 import styles from './RadioGroup.module.css';
@@ -24,11 +19,10 @@ export interface RadioOption {
   labelTestId?: string;
 }
 
-export interface RadioGroupProps
-  extends Omit<
-    FieldsetProps,
-    'onChange' | 'children' | 'defaultValue' | 'legend'
-  > {
+export interface RadioGroupProps extends Omit<
+  FieldsetProps,
+  'onChange' | 'children' | 'defaultValue' | 'legend'
+> {
   /** Shared `name` of the radio inputs. */
   name: string;
   legend: ReactNode;
@@ -104,7 +98,10 @@ export const RadioGroup = forwardRef<HTMLFieldSetElement, RadioGroupProps>(
                   aria-describedby={hintId}
                   className={styles.input}
                   {...(controlled
-                    ? { checked: value === option.value, onChange: handleChange }
+                    ? {
+                        checked: value === option.value,
+                        onChange: handleChange,
+                      }
                     : {
                         defaultChecked: defaultValue === option.value,
                         onChange: onChange ? handleChange : undefined,

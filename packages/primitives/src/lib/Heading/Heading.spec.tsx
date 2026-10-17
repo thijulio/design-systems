@@ -6,12 +6,17 @@ import textStyles from '../Text/Text.module.css';
 describe('Heading', () => {
   it.each([1, 2, 3, 4, 5, 6] as const)('renders an h%s', (level) => {
     render(<Heading level={level}>Title</Heading>);
-    expect(screen.getByRole('heading', { level, name: 'Title' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level, name: 'Title' }),
+    ).toBeInTheDocument();
   });
 
   it('derives size and weight from the level', () => {
     const { rerender } = render(<Heading level={1}>Title</Heading>);
-    expect(screen.getByRole('heading')).toHaveClass(textStyles.h1, textStyles.bold);
+    expect(screen.getByRole('heading')).toHaveClass(
+      textStyles.h1,
+      textStyles.bold,
+    );
 
     rerender(<Heading level={3}>Title</Heading>);
     expect(screen.getByRole('heading')).toHaveClass(
@@ -30,7 +35,11 @@ describe('Heading', () => {
       </Heading>,
     );
     const heading = screen.getByRole('heading', { level: 2 });
-    expect(heading).toHaveClass(textStyles.lead, textStyles.medium, textStyles.toneMuted);
+    expect(heading).toHaveClass(
+      textStyles.lead,
+      textStyles.medium,
+      textStyles.toneMuted,
+    );
     expect(heading).not.toHaveClass(textStyles.h2);
   });
 

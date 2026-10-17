@@ -5,7 +5,9 @@ import styles from './ToggleButton.module.css';
 
 describe('ToggleButton', () => {
   it('exposes its state with aria-pressed', () => {
-    const { rerender } = render(<ToggleButton pressed={false}>Follow</ToggleButton>);
+    const { rerender } = render(
+      <ToggleButton pressed={false}>Follow</ToggleButton>,
+    );
     expect(screen.getByRole('button', { name: 'Follow' })).toHaveAttribute(
       'aria-pressed',
       'false',

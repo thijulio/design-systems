@@ -50,8 +50,7 @@ function controlWiring(controlId: string, error: ReactNode, hint: ReactNode) {
 }
 
 export interface InputFieldProps
-  extends Omit<InputProps, 'invalid'>,
-    FieldFrameProps {}
+  extends Omit<InputProps, 'invalid'>, FieldFrameProps {}
 
 /**
  * InputField — an `Input` inside a `Field`: a `<div>` root, a label holding
@@ -87,8 +86,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
 InputField.displayName = 'InputField';
 
 export interface SelectFieldProps
-  extends Omit<SelectProps, 'invalid'>,
-    FieldFrameProps {}
+  extends Omit<SelectProps, 'invalid'>, FieldFrameProps {}
 
 /** SelectField — a native `Select` (with `<option>` children) inside a `Field`; same wiring as `InputField`. */
 export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
@@ -119,8 +117,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
 SelectField.displayName = 'SelectField';
 
 export interface TextareaFieldProps
-  extends Omit<TextareaProps, 'invalid'>,
-    FieldFrameProps {}
+  extends Omit<TextareaProps, 'invalid'>, FieldFrameProps {}
 
 /** TextareaField — a `Textarea` inside a `Field`; same wiring as `InputField`. */
 export const TextareaField = forwardRef<

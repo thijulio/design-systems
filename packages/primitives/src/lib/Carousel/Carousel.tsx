@@ -13,8 +13,10 @@ import { gapClass, type Space } from '../_util/space';
 import { cx } from '../_util/style';
 import styles from './Carousel.module.css';
 
-export interface CarouselProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface CarouselProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'children'
+> {
   /** The track content: slides in scroll mode, any block when paged. */
   children: ReactNode;
   /** Accessible name of the icon-only previous control. Required. */

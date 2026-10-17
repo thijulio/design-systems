@@ -14,13 +14,7 @@ export interface CardPaddingSpace {
 }
 export type CardSurface = 'raised' | 'flat' | 'sunken' | 'dashed';
 export type CardTone =
-  | 'neutral'
-  | 'accent'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'danger'
-  | 'inverse';
+  'neutral' | 'accent' | 'info' | 'success' | 'warning' | 'danger' | 'inverse';
 export type CardElement = 'div' | 'section' | 'article' | 'li' | 'aside';
 export type CardHeadingLevel = 2 | 3 | 4 | 5 | 6;
 

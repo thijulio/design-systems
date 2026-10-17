@@ -45,7 +45,8 @@ export function mergeSlotProps(
         typeof childValue === 'function'
           ? (...args: unknown[]) => {
               (childValue as (...a: unknown[]) => void)(...args);
-              const event = args[0] as { defaultPrevented?: boolean } | undefined;
+              const event = args[0] as
+                { defaultPrevented?: boolean } | undefined;
               if (!event?.defaultPrevented) {
                 (slotValue as (...a: unknown[]) => void)(...args);
               }

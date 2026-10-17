@@ -23,8 +23,10 @@ export type TooltipPlacement = 'top' | 'bottom';
  */
 export type TooltipRelation = 'description' | 'label';
 
-export interface TooltipProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'content'> {
+export interface TooltipProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'content'
+> {
   /** The tooltip text. Required: there is no default copy. */
   content: ReactNode;
   /**

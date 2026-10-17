@@ -20,7 +20,9 @@ describe('Skeleton', () => {
   });
 
   it('sets size through custom properties and maps the radius', () => {
-    const { container } = render(<Skeleton width={120} height="2rem" radius="full" />);
+    const { container } = render(
+      <Skeleton width={120} height="2rem" radius="full" />,
+    );
     const root = container.firstElementChild as HTMLElement;
     expect(root.style.getPropertyValue('--ds-skeleton-width')).toBe('120px');
     expect(root.style.getPropertyValue('--ds-skeleton-height')).toBe('2rem');

@@ -9,7 +9,14 @@ import { cx, type StyleWithVars } from '../_util/style';
 import styles from './Badge.module.css';
 
 /** The Exodus `--tone-*` palette (same hues StatusBadge uses). */
-const PALETTE_TONES = ['amber', 'blue', 'green', 'teal', 'violet', 'red'] as const;
+const PALETTE_TONES = [
+  'amber',
+  'blue',
+  'green',
+  'teal',
+  'violet',
+  'red',
+] as const;
 type PaletteTone = (typeof PALETTE_TONES)[number];
 
 export type BadgeTone = Exclude<PrimitiveBadgeTone, 'brand'> | PaletteTone;

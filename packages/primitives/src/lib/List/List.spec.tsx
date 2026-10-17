@@ -27,11 +27,7 @@ describe('List', () => {
     const list = screen.getByRole('list');
     expect(list.tagName).toBe('OL');
     expect(list).toHaveAttribute('start', '2');
-    expect(list).toHaveClass(
-      styles.g3,
-      styles.divided,
-      styles.markerDecimal,
-    );
+    expect(list).toHaveClass(styles.g3, styles.divided, styles.markerDecimal);
   });
 
   it('stays a single column without `columns`', () => {

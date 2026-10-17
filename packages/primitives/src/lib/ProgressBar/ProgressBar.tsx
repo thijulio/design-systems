@@ -2,8 +2,10 @@ import { forwardRef, type HTMLAttributes } from 'react';
 import { cx, type StyleWithVars } from '../_util/style';
 import styles from './ProgressBar.module.css';
 
-export interface ProgressBarProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'role'> {
+export interface ProgressBarProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'children' | 'role'
+> {
   /** Accessible name, e.g. a translated "Upload progress". Required. */
   label: string;
   /**
@@ -23,8 +25,7 @@ export interface ProgressBarProps
   formatValue?: (value: number, max: number) => string;
 }
 
-const clamp = (value: number, max: number) =>
-  Math.min(Math.max(value, 0), max);
+const clamp = (value: number, max: number) => Math.min(Math.max(value, 0), max);
 
 /**
  * ProgressBar — a `progressbar` showing how far a task has got. The test
@@ -38,9 +39,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
     const bound = max > 0 ? max : 100;
     const current = value == null ? null : clamp(value, bound);
     const valueText =
-      current !== null && formatValue
-        ? formatValue(current, bound)
-        : undefined;
+      current !== null && formatValue ? formatValue(current, bound) : undefined;
     const vars: StyleWithVars = { ...style };
     if (current !== null) {
       vars['--ds-progress-value'] = `${(current / bound) * 100}%`;

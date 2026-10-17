@@ -3,14 +3,7 @@ import { cx } from '../_util/style';
 import styles from './Text.module.css';
 
 export type TextSize =
-  | 'caption'
-  | 'body-sm'
-  | 'body'
-  | 'lead'
-  | 'h3'
-  | 'h2'
-  | 'h1'
-  | 'display';
+  'caption' | 'body-sm' | 'body' | 'lead' | 'h3' | 'h2' | 'h1' | 'display';
 
 export type TextTone =
   | 'default'
@@ -51,8 +44,7 @@ export interface TextStyleProps {
 }
 
 export interface TextProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'color'>,
-    TextStyleProps {
+  extends Omit<HTMLAttributes<HTMLElement>, 'color'>, TextStyleProps {
   /** Element to render; defaults to `p`. */
   as?: ElementType;
 }

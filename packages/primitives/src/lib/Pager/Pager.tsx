@@ -2,8 +2,10 @@ import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cx } from '../_util/style';
 import styles from './Pager.module.css';
 
-export interface PagerProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'aria-label'> {
+export interface PagerProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'children' | 'aria-label'
+> {
   /** Accessible name of the group (`aria-label`), e.g. what is paged. */
   label: string;
   /** Visible text of the previous control. There is no default copy. */

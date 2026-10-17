@@ -37,7 +37,9 @@ const meta: Meta<typeof MultiSelect> = {
   title: 'Components/MultiSelect',
   component: MultiSelect,
   argTypes: {
-    placeholder: { description: 'Trigger text with no selection (no default copy).' },
+    placeholder: {
+      description: 'Trigger text with no selection (no default copy).',
+    },
     doneLabel: { description: 'Close button text (no default copy).' },
     formatSummary: {
       description: 'Trigger text for a selection, given the selected labels.',
@@ -52,7 +54,9 @@ export const Default: Story = {
   render: () => <Stateful />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole('group', { name: 'Coat types' })).toBeVisible();
+    await expect(
+      canvas.getByRole('group', { name: 'Coat types' }),
+    ).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: 'Select coats' }));
     await userEvent.click(canvas.getByLabelText('Wire'));
     await expect(canvas.getByRole('button', { name: 'Wire' })).toHaveAttribute(

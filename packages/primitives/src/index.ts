@@ -280,9 +280,7 @@ export type {
 } from './lib/List/List';
 
 export { ReorderableList } from './lib/ReorderableList/ReorderableList';
-export type {
-  ReorderableListProps,
-} from './lib/ReorderableList/ReorderableList';
+export type { ReorderableListProps } from './lib/ReorderableList/ReorderableList';
 
 export { Timeline, TimelineItem } from './lib/Timeline/Timeline';
 export type {

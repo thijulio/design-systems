@@ -69,9 +69,7 @@ export const AnnounceMessage: Story = {
     const canvas = within(canvasElement);
     const message = canvas.getByTestId('error-message');
     await expect(canvas.getByRole('alert')).toBe(message);
-    await expect(message).toHaveTextContent(
-      /^The list could not be loaded\.$/,
-    );
+    await expect(message).toHaveTextContent(/^The list could not be loaded\.$/);
     await userEvent.tab();
     await expect(
       canvas.getByRole('button', { name: 'Try again' }),

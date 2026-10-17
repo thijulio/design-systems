@@ -83,8 +83,10 @@ interface TableUnsortedProps {
   sortLabels?: undefined;
 }
 
-interface TableBaseProps<T>
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+interface TableBaseProps<T> extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'children'
+> {
   columns: ReadonlyArray<TableColumn<T>>;
   rows: ReadonlyArray<T>;
   getRowKey: (row: T) => string;
@@ -191,11 +193,7 @@ function TableInner<T>(
 
   if (isEmpty) {
     return (
-      <div
-        ref={setRefs}
-        {...props}
-        className={cx(styles.empty, className)}
-      >
+      <div ref={setRefs} {...props} className={cx(styles.empty, className)}>
         {emptyLabel}
       </div>
     );
@@ -247,7 +245,10 @@ function TableInner<T>(
         {hasCaption && (
           <caption
             id={captionId}
-            className={cx(styles.caption, captionHidden && styles.visuallyHidden)}
+            className={cx(
+              styles.caption,
+              captionHidden && styles.visuallyHidden,
+            )}
           >
             {caption}
           </caption>

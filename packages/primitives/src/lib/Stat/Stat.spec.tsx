@@ -12,7 +12,9 @@ describe('Stat', () => {
   });
 
   it('omits the caption when absent and maps the tone', () => {
-    const { container } = render(<Stat label="Errors" value={3} tone="danger" />);
+    const { container } = render(
+      <Stat label="Errors" value={3} tone="danger" />,
+    );
     expect(container.querySelectorAll('p')).toHaveLength(2);
     expect(container.firstElementChild).toHaveClass(styles.danger);
   });

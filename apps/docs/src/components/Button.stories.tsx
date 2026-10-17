@@ -20,7 +20,8 @@ const meta: Meta<typeof Button> = {
         'danger',
         'danger-outline',
       ],
-      description: 'primary = brand, accent = the accent hue; the rest as named.',
+      description:
+        'primary = brand, accent = the accent hue; the rest as named.',
     },
     size: {
       control: 'inline-radio',
@@ -37,7 +38,9 @@ export const Primary: Story = {
   args: { onClick: fn() },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: /book a visit/i }));
+    await userEvent.click(
+      canvas.getByRole('button', { name: /book a visit/i }),
+    );
     await expect(args.onClick).toHaveBeenCalledTimes(1);
   },
 };

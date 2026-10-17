@@ -58,7 +58,11 @@ export const Rating = forwardRef<HTMLSpanElement, RatingProps>(function Rating(
                 <defs>
                   <linearGradient id={gradientId} x1="0" x2="1" y1="0" y2="0">
                     <stop offset="50%" stopColor="currentColor" />
-                    <stop offset="50%" stopColor="currentColor" stopOpacity="0" />
+                    <stop
+                      offset="50%"
+                      stopColor="currentColor"
+                      stopOpacity="0"
+                    />
                   </linearGradient>
                 </defs>
               )}

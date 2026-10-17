@@ -124,7 +124,11 @@ export const LegendHidden: Story = {
       <Stack gap={3}>
         <TextField label="Street" name="street" autoComplete="street-address" />
         <TextField label="City" name="city" autoComplete="address-level2" />
-        <TextField label="Postcode" name="postcode" autoComplete="postal-code" />
+        <TextField
+          label="Postcode"
+          name="postcode"
+          autoComplete="postal-code"
+        />
       </Stack>
     </Fieldset>
   ),

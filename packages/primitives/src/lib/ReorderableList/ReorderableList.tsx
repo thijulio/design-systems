@@ -17,8 +17,10 @@ import { List, ListItem } from '../List/List';
 import { LiveRegion } from '../LiveRegion/LiveRegion';
 import type { Space } from '../_util/space';
 
-export interface ReorderableListProps<T>
-  extends Omit<OlHTMLAttributes<HTMLElement>, 'children'> {
+export interface ReorderableListProps<T> extends Omit<
+  OlHTMLAttributes<HTMLElement>,
+  'children'
+> {
   /** The items in their current order. The caller owns the order. */
   items: readonly T[];
   /** Stable key of an item (React key, and how a move is tracked). */

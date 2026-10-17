@@ -39,10 +39,7 @@ export const HoneypotField = forwardRef<HTMLInputElement, HoneypotFieldProps>(
     const generatedId = useId();
     const inputId = id ?? generatedId;
     return (
-      <div
-        aria-hidden="true"
-        className={cx(styles.honeypot, wrapperClassName)}
-      >
+      <div aria-hidden="true" className={cx(styles.honeypot, wrapperClassName)}>
         <label htmlFor={inputId}>{label}</label>
         <input
           ref={ref}

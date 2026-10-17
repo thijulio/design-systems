@@ -10,11 +10,7 @@ import styles from './Timeline.module.css';
 
 export type TimelineMarker = 'dot' | 'none';
 export type TimelineTone =
-  | 'neutral'
-  | 'accent'
-  | 'success'
-  | 'warning'
-  | 'danger';
+  'neutral' | 'accent' | 'success' | 'warning' | 'danger';
 
 export interface TimelineProps extends OlHTMLAttributes<HTMLOListElement> {
   /** Space between items. Default 3. */
@@ -68,8 +64,10 @@ export const Timeline = forwardRef<HTMLOListElement, TimelineProps>(
 );
 Timeline.displayName = 'Timeline';
 
-export interface TimelineItemProps
-  extends Omit<LiHTMLAttributes<HTMLLIElement>, 'title'> {
+export interface TimelineItemProps extends Omit<
+  LiHTMLAttributes<HTMLLIElement>,
+  'title'
+> {
   /** What happened. Rendered first on the item's top line. */
   title?: ReactNode;
   /** When it happened, as shown to the reader. */

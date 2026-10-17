@@ -116,7 +116,9 @@ export const Group: Story = {
     const group = within(canvasElement).getByRole('group', {
       name: 'Text formatting',
     });
-    await userEvent.click(within(group).getByRole('button', { name: 'Italic' }));
+    await userEvent.click(
+      within(group).getByRole('button', { name: 'Italic' }),
+    );
     await expect(
       within(group).getByRole('button', { name: 'Bold' }),
     ).toHaveAttribute('aria-pressed', 'true');

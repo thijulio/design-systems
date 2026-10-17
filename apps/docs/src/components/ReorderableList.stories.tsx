@@ -73,8 +73,7 @@ const meta: Meta<typeof ReorderableList<Task>> = {
       description: "Accessible name of an item's move-up control. Required.",
     },
     moveDownLabel: {
-      description:
-        "Accessible name of an item's move-down control. Required.",
+      description: "Accessible name of an item's move-down control. Required.",
     },
     announcement: {
       description:

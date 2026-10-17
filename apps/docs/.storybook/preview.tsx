@@ -28,10 +28,7 @@ const BRAND_CSS: Record<DesignSystem, string> = {
 // A branded title (`Exodus/…`) names its brand; a shared `Components/…` story
 // takes the one picked in the toolbar (the `designSystem` global).
 const withBrandTokens: Decorator = (Story, context) => {
-  const brand = activeDesignSystem(
-    context.title,
-    context.globals.designSystem,
-  );
+  const brand = activeDesignSystem(context.title, context.globals.designSystem);
   const css = brand ? BRAND_CSS[brand] : '';
   const mode = context.globals.mode as string;
   const accent = context.globals.accent as string;

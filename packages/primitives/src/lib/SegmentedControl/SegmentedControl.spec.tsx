@@ -18,7 +18,9 @@ describe('SegmentedControl', () => {
         onChange={() => undefined}
       />,
     );
-    expect(screen.getByRole('group', { name: 'Owner type' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('group', { name: 'Owner type' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'List' })).toHaveAttribute(
       'aria-pressed',
       'true',

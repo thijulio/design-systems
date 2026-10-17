@@ -27,13 +27,17 @@ describe('Badge', () => {
     expect(el.style.getPropertyValue('--badge-fg')).toBe('white');
   });
 
-  it.each(['neutral', 'accent', 'info', 'success', 'warning', 'danger'] as const)(
-    'renders the %s semantic tone',
-    (tone) => {
-      render(<Badge tone={tone}>label</Badge>);
-      expect(screen.getByText('label')).toHaveAttribute('data-tone', tone);
-    },
-  );
+  it.each([
+    'neutral',
+    'accent',
+    'info',
+    'success',
+    'warning',
+    'danger',
+  ] as const)('renders the %s semantic tone', (tone) => {
+    render(<Badge tone={tone}>label</Badge>);
+    expect(screen.getByText('label')).toHaveAttribute('data-tone', tone);
+  });
 
   it('maps an Exodus palette hue onto the --tone-* tokens', () => {
     render(<Badge tone="teal">Teal</Badge>);
