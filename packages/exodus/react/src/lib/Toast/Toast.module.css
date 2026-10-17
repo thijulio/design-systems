@@ -1,51 +1,28 @@
-.toast {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: var(--ds-surface-raised, var(--accent-on));
-  border: 1px solid var(--ds-card-border, var(--n-200));
-  border-left: 4px solid var(--toast-bar);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: 13px 15px;
-  font-family: var(--font-sans);
-}
-
-.content {
-  flex: 1;
-}
-
-.title {
-  font-size: var(--text-body-sm);
-  font-weight: 700;
-  color: var(--n-900);
-}
-
-.body {
-  font-size: var(--text-caption);
-  color: var(--n-600);
-  margin-top: 2px;
-  line-height: var(--leading-normal);
-}
-
-/* The children with no title: they take the title's size and colour. */
-.lead {
-  font-size: var(--text-body-sm);
-  color: var(--n-900);
-  line-height: var(--leading-normal);
-}
-
-.close {
-  background: none;
-  border: none;
-  color: var(--n-400);
-  font-size: 16px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-}
-
-.close:focus-visible {
-  outline: 2px solid var(--ds-focus, var(--accent));
-  outline-offset: 2px;
+/* Compatibility skin: the published Exodus 0.0.2 stylesheet predates --ds-*.
+   Keep the shared markup while resolving its skin from the legacy Exodus
+   tokens, including the toast's own lighter dismiss glyph (--n-400). */
+.compat {
+  --ds-surface-raised: var(--accent-on);
+  --ds-border-subtle: var(--n-200);
+  --ds-radius-sm: var(--radius-sm);
+  --ds-radius-lg: var(--radius-lg);
+  --ds-shadow-sm: var(--shadow-sm);
+  --ds-font-body: var(--font-sans);
+  --ds-text: var(--n-900);
+  --ds-text-secondary: var(--n-600);
+  --ds-text-muted: var(--n-400);
+  --ds-size-caption: var(--text-caption);
+  --ds-size-body-sm: var(--text-body-sm);
+  --ds-size-body: var(--text-body);
+  --ds-weight-bold: var(--weight-bold);
+  --ds-leading-snug: var(--leading-snug);
+  --ds-leading-normal: var(--leading-normal);
+  --ds-space-1: var(--space-1);
+  --ds-space-3: var(--space-3);
+  --ds-space-4: var(--space-4);
+  --ds-success: var(--success);
+  --ds-warning: var(--warning);
+  --ds-danger: var(--danger);
+  --ds-info: var(--info);
+  --ds-focus: var(--accent-ring, var(--accent));
 }

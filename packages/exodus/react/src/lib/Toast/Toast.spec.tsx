@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Toast } from './Toast';
 
 describe('Toast', () => {
-  it('renders title and body and wires the tone bar', () => {
+  it('renders title and body', () => {
     render(
       <Toast tone="success" title="Saved">
         Your changes were saved.
@@ -11,7 +11,22 @@ describe('Toast', () => {
     );
     const toast = screen.getByRole('status');
     expect(toast).toHaveTextContent('Saved');
-    expect(toast.style.getPropertyValue('--toast-bar')).toBe('var(--success)');
+    expect(toast).toHaveTextContent('Your changes were saved.');
+  });
+
+  it('keeps a caller className and style on the root beside its skin', () => {
+    render(
+      <Toast
+        title="Saved"
+        className="consumer"
+        style={{ maxWidth: 320 }}
+        data-testid="t"
+      />,
+    );
+    const toast = screen.getByTestId('t');
+    expect(toast).toHaveClass('consumer');
+    expect(toast).toHaveClass('compat');
+    expect(toast).toHaveStyle({ maxWidth: '320px' });
   });
 
   it.each([

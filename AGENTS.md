@@ -104,8 +104,14 @@ New generic components belong in `@thijulio/primitives`, styled against the
 `--ds-*` contract. Existing brand React packages retain their public APIs while
 overlapping components migrate incrementally. Biome `Button`, `Tag`, and the
 `Card` root delegate to primitives; Card retains its editorial content and arcs.
-Exodus `Button`, `Card`, `Badge`, `Avatar`, `EmptyState`, `ErrorState`, `LoadMore`, `Input`, `Textarea`, and `Select` delegate to
-primitives. Local CSS-variable skins retain their native tokens, metrics, and
+Exodus `Button`, `Card`, `Badge`, `Avatar`, `EmptyState`, `ErrorState`, `LoadMore`, `Input`, `Textarea`, `Select`, and `Toast` delegate to
+primitives. Exodus `InputField` / `SelectField` / `TextareaField` keep their
+own composition on purpose: their API matches the primitives', but they
+render Exodus's `Field` (same markup as the shared one, its own skin, and
+`required` rather than `requiredMarker`) around the skinned Exodus `Input` /
+`Select` / `Textarea`. Re-exporting the shared ones would drop both skins,
+and the shared ones take no control to wrap. They become a wrapper once
+Exodus `Field` delegates to the shared `Field` under a `--ds-*` compat skin. Local CSS-variable skins retain their native tokens, metrics, and
 consumer class overrides without requiring an immediate stylesheet upgrade.
 Only genuinely brand-specific components should be added to brand React
 packages (e.g. Biome's `TerminalHero`).
