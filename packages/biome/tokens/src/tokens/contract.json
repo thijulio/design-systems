@@ -40,7 +40,7 @@
     "warning-border": { "value": "rgba(232, 166, 39, 0.5)" },
     "danger": { "value": "{bm.terracotta}" },
     "danger-soft": { "value": "{bm.bone-raised}" },
-    "danger-fg": { "value": "{bm.terracotta}" },
+    "danger-fg": { "value": "{bm.terracotta-deep}" },
     "danger-border": { "value": "rgba(181, 83, 42, 0.35)" },
     "info": { "value": "{bm.mata}" },
     "info-soft": { "value": "{bm.bone-raised}" },

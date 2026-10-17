@@ -8,6 +8,7 @@
     "mata-deep": { "value": "#2E3D28" },
     "cerrado": { "value": "#6E7A48" },
     "terracotta": { "value": "#B5532A" },
+    "terracotta-deep": { "value": "#A44B26" },
     "ipe": { "value": "#E8A627" },
     "stone": { "value": "#8C8275" },
     "hairline": { "value": "rgba(35, 42, 32, 0.12)" },

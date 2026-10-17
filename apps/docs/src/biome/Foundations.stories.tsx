@@ -101,6 +101,7 @@ const NOTES: Record<string, string> = {
   '--bm-ink-soft': 'Soft Ink · body',
   '--bm-stone': 'Stone · muted',
   '--bm-terracotta': 'Terracotta · accent',
+  '--bm-terracotta-deep': 'Terracotta Deep · danger text, AA on bone',
   '--bm-ipe': 'Ipê · highlight',
   '--bm-canopy': 'Canopy · dark ground',
   '--bm-understory': 'Understory · dark surface',
