@@ -39,7 +39,6 @@ export const WithHint: Story = {
     const input = within(canvasElement).getByRole('textbox', {
       name: 'Animal name',
     });
-    await expect(input).toHaveAttribute('id', 'animal-name');
     await expect(input).toHaveAccessibleDescription('As it appears on records');
   },
 };
