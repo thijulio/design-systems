@@ -1,3 +1,14 @@
+## 0.0.10 (2026-10-17)
+
+### 🚀 Features
+
+- generic primitives, contract tokens and shared stories for exodus adoption ([#32](https://github.com/thijulio/design-systems/pull/32))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Thiago Valença
+
 ## 0.0.9 (2026-10-04)
 
 ### 🚀 Features

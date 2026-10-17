@@ -1,3 +1,9 @@
+## 0.0.8 (2026-10-17)
+
+### 🧱 Updated Dependencies
+
+- Updated primitives to 0.0.7
+
 ## 0.0.7 (2026-10-02)
 
 ### 🧱 Updated Dependencies
