@@ -27,7 +27,7 @@ describe('FileInput', () => {
     const input = screen.getByTestId('photo-input');
     expect(screen.getByLabelText('Photo')).toBe(input);
     expect(input).toHaveAttribute('type', 'file');
-    expect(input).toHaveAttribute('id', 'photo');
+    expect(input).not.toHaveAttribute('id', 'photo');
     expect(screen.getByText('Choose file')).toHaveAttribute(
       'aria-hidden',
       'true',
@@ -102,7 +102,7 @@ describe('FileInput', () => {
     const input = screen.getByTestId('photo-input');
     expect(input).toHaveAttribute(
       'aria-describedby',
-      'photo-status photo-hint',
+      `${input.id}-status ${input.id}-hint`,
     );
     expect(input).not.toHaveAttribute('aria-invalid');
   });
@@ -112,7 +112,7 @@ describe('FileInput', () => {
     const input = screen.getByTestId('photo-input');
     const error = screen.getByRole('alert');
     expect(input).toHaveAttribute('aria-invalid', 'true');
-    expect(error).toHaveAttribute('id', 'photo-error');
+    expect(error).toHaveAttribute('id', `${input.id}-error`);
     expect(input.getAttribute('aria-describedby')).toContain(error.id);
     expect(screen.queryByText('PNG, up to 5 MB')).toBeNull();
   });

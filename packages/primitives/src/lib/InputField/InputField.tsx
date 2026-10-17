@@ -30,10 +30,14 @@ export interface FieldFrameProps {
   wrapperClassName?: string;
 }
 
-/** The control id: `id`, else `name`, else generated. */
-function useControlId(id: string | undefined, name: string | undefined) {
+/**
+ * The control id: `id`, else generated. Never `name`: names repeat (two forms
+ * with an `email` field, radio-like groups), and a shared id points every
+ * label and description at the first control.
+ */
+function useControlId(id: string | undefined) {
   const generatedId = useId();
-  return id ?? name ?? generatedId;
+  return id ?? generatedId;
 }
 
 /**
@@ -63,7 +67,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     { label, hint, error, requiredMarker, wrapperClassName, id, ...props },
     ref,
   ) {
-    const controlId = useControlId(id, props.name);
+    const controlId = useControlId(id);
     return (
       <Field
         htmlFor={controlId}
@@ -94,7 +98,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
     { label, hint, error, requiredMarker, wrapperClassName, id, ...props },
     ref,
   ) {
-    const controlId = useControlId(id, props.name);
+    const controlId = useControlId(id);
     return (
       <Field
         htmlFor={controlId}
@@ -127,7 +131,7 @@ export const TextareaField = forwardRef<
   { label, hint, error, requiredMarker, wrapperClassName, id, ...props },
   ref,
 ) {
-  const controlId = useControlId(id, props.name);
+  const controlId = useControlId(id);
   return (
     <Field
       htmlFor={controlId}
