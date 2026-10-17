@@ -46,7 +46,7 @@ export interface FileInputProps extends Omit<
  * real clicks), the decorative choose button it is drawn as, and a status
  * line with the chosen file names or `noFileLabel`.
  * The input is described by the status line plus the error or hint. The id is
- * `id`, else `name`, else generated. Rest props, the ref and `onChange` land
+ * `id`, else generated (never `name`, which may repeat). Rest props, the ref and `onChange` land
  * on the input.
  */
 export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
@@ -67,7 +67,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
     ref,
   ) {
     const generatedId = useId();
-    const inputId = id ?? props.name ?? generatedId;
+    const inputId = id ?? generatedId;
     const statusId = `${inputId}-status`;
     const [fileNames, setFileNames] = useState<string[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);

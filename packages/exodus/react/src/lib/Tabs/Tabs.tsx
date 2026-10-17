@@ -21,12 +21,14 @@ export interface TabItem {
 
 /**
  * `value` made safe inside an id: whitespace would split an IDREF list
- * (`aria-controls`, `aria-labelledby`). Letters, digits, `-` and `_` stay as
- * they are, so plain values keep readable ids; anything else is
- * percent-encoded with `_` in place of `%` (`"for sale"` → `for_20sale`).
+ * (`aria-controls`, `aria-labelledby`). Letters, digits and `-` stay as they
+ * are, so plain values keep readable ids; anything else is percent-encoded
+ * with `_` in place of `%` (`"for sale"` → `for_20sale`). A literal `_` is
+ * encoded too (`_5F`), so every `_` starts an escape and distinct values
+ * never share an id (`"for_20sale"` → `for_5F20sale`).
  */
 function idSegment(value: string): string {
-  return encodeURIComponent(value).replace(/[^A-Za-z0-9_-]/g, (char) =>
+  return encodeURIComponent(value).replace(/[^A-Za-z0-9-]/g, (char) =>
     char === '%'
       ? '_'
       : `_${char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')}`,

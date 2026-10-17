@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Button } from './Button';
 
@@ -47,5 +48,25 @@ describe('Button', () => {
     const btn = screen.getByRole('button', { name: 'grow-action' });
     fireEvent.click(btn);
     expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('forwards a ref to the native button', () => {
+    const ref = createRef<HTMLButtonElement | HTMLAnchorElement>();
+    render(<Button ref={ref}>Grow</Button>);
+    expect(ref.current).toBe(screen.getByRole('button'));
+  });
+
+  it('forwards a ref to the anchor when href is provided', () => {
+    const ref = createRef<HTMLButtonElement | HTMLAnchorElement>();
+    render(
+      <Button ref={ref} href="/projects">
+        Explore
+      </Button>,
+    );
+    expect(ref.current).toBe(screen.getByRole('link'));
+  });
+
+  it('has a displayName for React DevTools', () => {
+    expect(Button.displayName).toBe('Button');
   });
 });
