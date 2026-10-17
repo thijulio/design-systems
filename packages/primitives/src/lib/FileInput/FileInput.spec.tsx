@@ -34,6 +34,26 @@ describe('FileInput', () => {
     );
   });
 
+  it('marks the drawn choose button inactive only while the input is disabled', () => {
+    const { rerender } = renderPicker();
+    expect(screen.getByText('Choose file')).not.toHaveAttribute(
+      'aria-disabled',
+    );
+    rerender(
+      <FileInput
+        label="Photo"
+        chooseLabel="Choose file"
+        noFileLabel="No file chosen"
+        name="photo"
+        disabled
+      />,
+    );
+    expect(screen.getByText('Choose file')).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
+  });
+
   it('shows the no-file text until a file is chosen, then the file name', () => {
     renderPicker();
     expect(screen.getByText('No file chosen')).toBeInTheDocument();

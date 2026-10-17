@@ -109,8 +109,14 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             {...props}
           />
           {/* What the input on top of it is drawn as; the input itself takes the click,
-              so this is not a label (one input, one label) and stays hidden. */}
-          <span className={styles.trigger} aria-hidden="true">
+              so this is not a label (one input, one label) and stays hidden.
+              aria-disabled marks it inactive for contrast audits (WCAG 1.4.3
+              exempts inactive controls), which cannot see the input's state. */}
+          <span
+            className={styles.trigger}
+            aria-hidden="true"
+            aria-disabled={props.disabled ? true : undefined}
+          >
             {chooseLabel}
           </span>
           <span id={statusId} className={styles.fileName}>
