@@ -49,15 +49,20 @@ jobs:
   release:
     name: nx release
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # Includes the full lint/test/build/typecheck gate below.
+    timeout-minutes: 35
     steps:
       # A real (non-dry-run) release pushes to main, so it may only run from
       # main — a dispatch from a branch would fast-forward main to unreviewed
       # commits. Dry runs may target any ref (to preview a branch's versions).
+      # The ref reaches the script through env, not an expression spliced into
+      # it: a branch name is user-controlled text, never shell source.
       - name: Guard — real releases only from main
         if: ${{ github.event_name == 'workflow_dispatch' && !inputs.dry_run && github.ref != 'refs/heads/main' }}
+        env:
+          DISPATCH_REF: ${{ github.ref }}
         run: |
-          echo "::error::Real releases must be dispatched from main (got ${{ github.ref }}). Use dry_run=true to preview a branch."
+          echo "::error::Real releases must be dispatched from main (got ${DISPATCH_REF}). Use dry_run=true to preview a branch."
           exit 1
 
       # Merge-triggered runs release from the tip of main, not the triggering
@@ -76,8 +81,24 @@ jobs:
 
       - run: npm ci
 
-      # Packages publish their built dist — build the whole graph first.
-      - run: npx nx run-many -t build
+      # Release gate (DS-2): registry versions are immutable, and this workflow
+      # runs in parallel with CI on the same push, so it cannot rely on CI having
+      # passed. Run CI's checks job here — format, then lint/test/build/typecheck
+      # (packages publish their built dist, so `build` stays in it) — then the
+      # cross-brand --ds-* contract check, all before anything is versioned,
+      # pushed or published. CI's Storybook a11y job (`test-storybook`, which
+      # needs a Playwright browser) is not repeated: it tests the docs apps,
+      # which are not published.
+      # `--all`: without NX_BASE/NX_HEAD (no nx-set-shas here) the default
+      # compares main with itself and checks nothing.
+      - name: format check
+        run: npx nx format:check --all
+
+      - name: lint / test / build / typecheck
+        run: npx nx run-many -t lint test build typecheck
+
+      - name: Verify the --ds-* contract across brands
+        run: npx nx run docs:verify-contract
 
       # Release-only git hooks: .github/release-hooks/pre-commit formats the
       # files nx release stages (it writes CHANGELOG.md unformatted) so its
