@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { forwardRef, type CSSProperties } from 'react';
 
 /**
  * The standard inline-SVG glyph set, keyed by name. The whole product draws
@@ -81,18 +81,22 @@ export interface NavIconProps {
 }
 
 /** NavIcon — a stroked glyph from the shared registry. Inherits currentColor. */
-export function NavIcon({
-  name,
-  size = 18,
-  strokeWidth = 1.9,
-  className,
-  style,
-  'aria-label': ariaLabel,
-}: NavIconProps) {
+export const NavIcon = forwardRef<SVGSVGElement, NavIconProps>(function NavIcon(
+  {
+    name,
+    size = 18,
+    strokeWidth = 1.9,
+    className,
+    style,
+    'aria-label': ariaLabel,
+  },
+  ref,
+) {
   const paths = ICON_PATHS[name];
   if (!paths) return null;
   return (
     <svg
+      ref={ref}
       width={size}
       height={size}
       viewBox="0 0 24 24"
@@ -112,4 +116,6 @@ export function NavIcon({
       ))}
     </svg>
   );
-}
+});
+
+NavIcon.displayName = 'NavIcon';

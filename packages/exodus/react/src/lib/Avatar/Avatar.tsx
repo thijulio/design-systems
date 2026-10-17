@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react';
+import { forwardRef, type HTMLAttributes } from 'react';
 import { Avatar as PrimitiveAvatar } from '@thijulio/primitives';
 import '@thijulio/primitives/styles.css';
 import { cx, type StyleWithVars } from '../_util/style';
@@ -29,16 +29,19 @@ export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /** Avatar — circular (or rounded) initials chip. */
-export function Avatar({
-  initials,
-  size = 32,
-  variant = 'accent',
-  shape = 'circle',
-  tone,
-  className,
-  style,
-  ...props
-}: AvatarProps) {
+export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
+  {
+    initials,
+    size = 32,
+    variant = 'accent',
+    shape = 'circle',
+    tone,
+    className,
+    style,
+    ...props
+  },
+  ref,
+) {
   const key: AvatarTone = tone ?? (variant === 'soft' ? 'soft' : 'accent');
   const [bg, fg] = TONE_BG[key];
   const vars: StyleWithVars = {
@@ -48,12 +51,15 @@ export function Avatar({
   };
   return (
     <PrimitiveAvatar
+      {...props}
+      ref={ref}
       initials={initials}
       size={size}
       shape={shape}
-      className={cx(styles.compat, className)}
       style={vars}
-      {...props}
+      className={cx(styles.compat, className)}
     />
   );
-}
+});
+
+Avatar.displayName = 'Avatar';

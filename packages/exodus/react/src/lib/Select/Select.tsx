@@ -1,33 +1,31 @@
-import type { SelectHTMLAttributes, ReactNode } from 'react';
+import { forwardRef } from 'react';
 import { Select as PrimitiveSelect } from '@thijulio/primitives';
+import type { SelectProps as PrimitiveSelectProps } from '@thijulio/primitives';
 import '@thijulio/primitives/styles.css';
 import { cx } from '../_util/style';
 import inputStyles from '../Input/Input.module.css';
 
-export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  /** Flip to the danger outline. */
-  invalid?: boolean;
-  children?: ReactNode;
-}
+/** `invalid` flips to the danger outline; `fullWidth` defaults to true. */
+export type SelectProps = PrimitiveSelectProps;
 
 /** Select — native select with the kit skin and a custom chevron. */
-export function Select({
-  className,
-  invalid,
-  children,
-  ...props
-}: SelectProps) {
-  return (
-    <PrimitiveSelect
-      invalid={invalid}
-      className={cx(
-        inputStyles.input,
-        invalid && inputStyles.invalid,
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </PrimitiveSelect>
-  );
-}
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
+  function Select({ className, invalid, children, ...props }, ref) {
+    return (
+      <PrimitiveSelect
+        {...props}
+        ref={ref}
+        invalid={invalid}
+        className={cx(
+          inputStyles.input,
+          invalid && inputStyles.invalid,
+          className,
+        )}
+      >
+        {children}
+      </PrimitiveSelect>
+    );
+  },
+);
+
+Select.displayName = 'Select';
