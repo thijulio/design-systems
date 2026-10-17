@@ -7,11 +7,16 @@ const meta: Meta<typeof Checkbox> = {
   title: 'Exodus/Components/Checkbox',
   component: Checkbox,
   argTypes: {
-    label: { description: 'Label rendered beside the box.' },
+    label: {
+      description:
+        'Label rendered beside the box, and its accessible name. Omit it ' +
+        'only when `aria-label` or `aria-labelledby` names the box.',
+    },
     description: {
       description:
         'Secondary text under the label. Describes the input ' +
-        '(`aria-describedby`) and stays out of its accessible name.',
+        '(`aria-describedby`) and never names it: without a `label` it sits ' +
+        'outside the `<label>`, so name the box with `aria-label`.',
     },
     align: {
       control: 'inline-radio',
@@ -20,7 +25,11 @@ const meta: Meta<typeof Checkbox> = {
         'Box position: `center` for one line, `start` to hold it at the ' +
         'top of a label that wraps.',
     },
-    labelTestId: { description: '`data-testid` for the root `<label>`.' },
+    labelTestId: {
+      description:
+        '`data-testid` for the root: the `<label>`, or a `<span>` with a ' +
+        'description and no label.',
+    },
   },
 };
 export default meta;
@@ -82,6 +91,27 @@ export const WithDescription: Story = {
     await expect(box).not.toBeChecked();
     box.focus();
     await userEvent.keyboard(' ');
+    await expect(box).toBeChecked();
+  },
+};
+
+/**
+ * A description and no visible label (e.g. a row a heading already names):
+ * `aria-label` names the box and the description only describes it.
+ */
+export const DescriptionWithoutLabel: Story = {
+  args: {
+    'aria-label': 'Send me the weekly digest',
+    description: 'One email a week. Unsubscribe at any time.',
+  },
+  play: async ({ canvasElement }) => {
+    const box = within(canvasElement).getByRole('checkbox', {
+      name: 'Send me the weekly digest',
+    });
+    await expect(box).toHaveAccessibleDescription(
+      'One email a week. Unsubscribe at any time.',
+    );
+    await userEvent.click(box);
     await expect(box).toBeChecked();
   },
 };

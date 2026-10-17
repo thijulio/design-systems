@@ -12,6 +12,19 @@
   cursor: not-allowed;
 }
 
+/* A description without a label: only the box is a <label>, so only the box
+   shows the pointer. */
+.unlabelled {
+  cursor: auto;
+}
+.boxLabel {
+  display: inline-flex;
+  cursor: pointer;
+}
+.boxLabel:has(.native:disabled) {
+  cursor: not-allowed;
+}
+
 /* The box and the real input share one cell: the input sits transparently
    on the box alone, so it stays focusable, in the accessibility tree, and is
    what a pointer (or a test runner's click at its centre) hits, while links
