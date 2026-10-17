@@ -23,6 +23,14 @@ assert.match(css, /--n-900: #26241f;/, 'neutral token altered');
 assert.match(css, /--success: #3f8f5b;/, 'semantic token altered');
 assert.match(css, /--tone-teal-dot: #2f8a85;/, 'status tone missing');
 
+// Focus is the solid accent (≥ 5.8:1), re-declared per theme so a themed
+// subtree does not inherit :root's computed sage value.
+assert.equal(
+  css.match(/--ds-focus: var\(--accent\);/g)?.length,
+  4,
+  'ds-focus is not the solid accent in :root and every theme',
+);
+
 // Three accent theme overlays, each reskinning only the accent ramp.
 assert.match(css, /\[data-theme="sage"\] \{/, 'sage overlay missing');
 assert.match(css, /\[data-theme="clay"\] \{/, 'clay overlay missing');
@@ -53,7 +61,7 @@ assert.match(
 );
 assert.match(
   nativeThemes,
-  /themes = \{ sage, clay, harbor \}/,
+  /themes = \{ "sage": theme0, "clay": theme1, "harbor": theme2 \}/,
   'native themes barrel missing',
 );
 

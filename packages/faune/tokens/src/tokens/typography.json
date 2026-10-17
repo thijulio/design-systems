@@ -8,6 +8,9 @@
     },
     "ui": {
       "value": "{font.body}"
+    },
+    "mono": {
+      "value": "ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace"
     }
   },
   "text": {
@@ -19,6 +22,9 @@
     },
     "body": {
       "value": "1rem"
+    },
+    "lead": {
+      "value": "1.125rem"
     },
     "h3": {
       "value": "1.25rem"

@@ -35,6 +35,36 @@ export interface BuildBrandTokensOptions {
 const glob = (dir: string): string => `${dir.replace(/\/+$/, '')}/**/*.json`;
 const withSlash = (p: string): string => (p.endsWith('/') ? p : `${p}/`);
 
+/** A theme's name: its directory's basename, e.g. `src/themes/dark` → `dark`. */
+export const themeName = (theme: ThemeOverlay): string =>
+  basename(resolve(theme.source));
+
+// Theme names become file names, JS object keys and Dart string/class names.
+const THEME_NAME_RE = /^[a-z][a-z0-9-]*$/;
+
+/**
+ * Reject theme names the generated artifacts cannot carry safely: anything
+ * outside lowercase letters, digits and hyphens, and duplicates — including
+ * names that collapse to the same Dart class once hyphens are dropped
+ * (`high-contrast` / `highcontrast`).
+ */
+export function assertThemeNames(names: string[]): void {
+  const seen = new Map<string, string>();
+  for (const name of names) {
+    if (!THEME_NAME_RE.test(name)) {
+      throw new Error(
+        `Theme directory "${name}" must match ${THEME_NAME_RE} (lowercase letters, digits, hyphens).`,
+      );
+    }
+    const key = name.replace(/-/g, '');
+    const clash = seen.get(key);
+    if (clash !== undefined) {
+      throw new Error(`Theme directories "${clash}" and "${name}" collide.`);
+    }
+    seen.set(key, name);
+  }
+}
+
 /** Temp filename an overlay is built to before being concatenated into tokens.css. */
 export const themeTempFile = (index: number): string => `__theme-${index}.css`;
 
@@ -131,7 +161,7 @@ export function createThemeConfig(
   const { source, buildPath, prefix, displayName } = options;
   const out = withSlash(buildPath);
   const themeDir = resolve(theme.source);
-  const themeName = basename(themeDir);
+  const name = themeName(theme);
   // Emit only tokens that came from this overlay's directory.
   const filter = (token: { filePath?: string }): boolean =>
     resolve(token.filePath ?? '').startsWith(themeDir);
@@ -170,7 +200,7 @@ export function createThemeConfig(
         buildPath: withSlash(resolve(buildPath, 'native')),
         files: [
           {
-            destination: `themes/${themeName}.js`,
+            destination: `themes/${name}.js`,
             format: 'thijulio/native-theme-es6',
             filter,
           },
@@ -181,9 +211,9 @@ export function createThemeConfig(
         buildPath: withSlash(resolve(buildPath, 'dart')),
         files: [
           {
-            destination: `theme_${themeName}.dart`,
+            destination: `theme_${name}.dart`,
             format: 'thijulio/dart-theme',
-            options: { displayName, themeName },
+            options: { displayName, themeName: name },
             filter,
           },
         ],

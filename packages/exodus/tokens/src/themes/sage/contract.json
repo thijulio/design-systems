@@ -18,8 +18,11 @@
     "accent-fg": {
       "value": "{accent-fg}"
     },
+    "accent-fg-hover": {
+      "value": "{accent-800}"
+    },
     "focus": {
-      "value": "{accent-ring}"
+      "value": "{accent}"
     },
     "card-hover-border": {
       "value": "{accent-200}"

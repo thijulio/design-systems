@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./exodus.css": "./dist/exodus.css",
+    "./exodus-tokens.css": "./dist/exodus-tokens.css",
     "./fonts/*": "./dist/fonts/*",
     "./package.json": "./package.json"
   },

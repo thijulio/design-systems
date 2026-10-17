@@ -8,8 +8,17 @@
   "ink-raised": {
     "value": "#244e4b"
   },
+  "ink-soft": {
+    "value": "rgba(24, 61, 60, 0.86)"
+  },
   "ink-muted": {
     "value": "rgba(24, 61, 60, 0.74)"
+  },
+  "ink-placeholder": {
+    "value": "rgba(24, 61, 60, 0.64)"
+  },
+  "ink-disabled": {
+    "value": "rgba(24, 61, 60, 0.42)"
   },
   "paper": {
     "value": "#f7f4ed"
@@ -20,11 +29,17 @@
   "cream": {
     "value": "#fffdf8"
   },
+  "cream-muted": {
+    "value": "rgba(255, 253, 248, 0.72)"
+  },
   "coral": {
     "value": "#e56c50"
   },
   "coral-deep": {
     "value": "#bf4833"
+  },
+  "coral-deeper": {
+    "value": "#9c3a29"
   },
   "coral-soft": {
     "value": "#fff4ed"
@@ -47,6 +62,9 @@
   "line": {
     "value": "rgba(24, 61, 60, 0.18)"
   },
+  "line-subtle": {
+    "value": "rgba(24, 61, 60, 0.1)"
+  },
   "light-line": {
     "value": "rgba(255, 255, 255, 0.24)"
   },
@@ -59,6 +77,9 @@
   "success-fg": {
     "value": "#27725e"
   },
+  "success-border": {
+    "value": "#b9d7c6"
+  },
   "warning": {
     "value": "#b9821f"
   },
@@ -67,6 +88,9 @@
   },
   "warning-fg": {
     "value": "#8a5e12"
+  },
+  "warning-border": {
+    "value": "#ecd3a0"
   },
   "warning-on": {
     "value": "#102625"
@@ -80,6 +104,9 @@
   "danger-fg": {
     "value": "#8f3320"
   },
+  "danger-border": {
+    "value": "#f2b9a8"
+  },
   "info": {
     "value": "#3b6964"
   },
@@ -88,5 +115,8 @@
   },
   "info-fg": {
     "value": "#1d5f5c"
+  },
+  "info-border": {
+    "value": "#b3d3d0"
   }
 }
