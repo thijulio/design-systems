@@ -317,7 +317,10 @@ every package it touched — so the **Release** workflow
 0.x, Nx turns `feat`/`fix` into a patch bump) for each package they
 **affect** — see the "Release bumps follow `nx affected`" gotcha. `projects`
 is a comma-separated list of nx projects; empty means every release project.
-Both are shape-checked before anything runs. `dry_run` defaults to `true`:
+Both inputs are shape-checked before anything runs. Nx also bumps and tags the
+listed projects' dependents (a `primitives` release bumps `biome-react` by a
+patch), so publish is not filtered: it ships every release project whose
+version is not in the registry yet. Check the dry run for them. `dry_run` defaults to `true`:
 always preview first (dry runs may target any branch with `--ref`; real
 releases are refused unless dispatched from `main`). It runs the full
 format/lint/test/build/typecheck/verify-contract gate, then

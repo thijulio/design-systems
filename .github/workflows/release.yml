@@ -152,14 +152,13 @@ jobs:
       # Publishes every release project whose current version isn't in the
       # registry yet (existing versions are skipped). Also makes a re-run the
       # recovery path if a previous run pushed its tags but failed to publish.
+      # Deliberately not filtered by `projects`: versioning also bumps and tags
+      # the dependents of the listed projects (biome-react follows primitives),
+      # and a filter here would tag versions the registry never gets.
       - name: nx release publish
-        run: |
-          args=()
-          [[ -n "$RELEASE_PROJECTS" ]] && args+=("--projects=$RELEASE_PROJECTS")
-          npx nx release publish "${args[@]}" ${{ inputs.first_release && '--first-release' || '' }} ${{ inputs.dry_run && '--dry-run' || '' }}
+        run: npx nx release publish ${{ inputs.first_release && '--first-release' || '' }} ${{ inputs.dry_run && '--dry-run' || '' }}
         env:
           # Repo .npmrc reads _authToken=${NODE_AUTH_TOKEN}; GITHUB_TOKEN carries
           # packages:write for this repo's GitHub Packages registry.
-          RELEASE_PROJECTS: ${{ inputs.projects }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
