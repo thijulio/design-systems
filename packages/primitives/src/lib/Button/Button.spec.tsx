@@ -262,14 +262,18 @@ describe('Button', () => {
     it("keeps the child's own aria state and style when not overridden", () => {
       render(
         <Button asChild style={{ margin: 0 }}>
-          <a href="#checkout" aria-busy="true" style={{ color: 'red' }}>
+          <a
+            href="#checkout"
+            aria-busy="true"
+            style={{ color: 'rgb(255, 0, 0)' }}
+          >
             Checkout
           </a>
         </Button>,
       );
       const link = screen.getByRole('link', { name: 'Checkout' });
       expect(link).toHaveAttribute('aria-busy', 'true');
-      expect(link).toHaveStyle({ color: 'red', margin: '0px' });
+      expect(link).toHaveStyle({ color: 'rgb(255, 0, 0)', margin: '0px' });
     });
   });
 });
