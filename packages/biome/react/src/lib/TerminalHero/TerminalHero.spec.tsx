@@ -65,6 +65,39 @@ describe('TerminalHero', () => {
     expect(ref.current).toBe(screen.getByTestId('hero'));
   });
 
+  it('renders neutral placeholder copy by default', () => {
+    render(<TerminalHero loop={false} />);
+    expect(screen.getByText('Eyebrow · Context')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        name: 'Your headline goes here, in two short lines.',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/^A short lede that introduces the page\./),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Primary action →' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Secondary action ›' }),
+    ).toBeInTheDocument();
+  });
+
+  it('ships no personal copy in its defaults', () => {
+    const { container } = render(<TerminalHero loop={false} />);
+    const text = container.textContent ?? '';
+    for (const banned of [
+      /ecosystem/i,
+      /thiago/i,
+      /são paulo/i,
+      /senior roles/i,
+      /recruiter/i,
+    ]) {
+      expect(text).not.toMatch(banned);
+    }
+  });
+
   it('has a displayName for React DevTools', () => {
     expect(TerminalHero.displayName).toBe('TerminalHero');
   });
