@@ -3,15 +3,20 @@
 #
 # Split of responsibilities (https://code.claude.com/docs/en/cloud-environments):
 # - The environment's *setup script* (claude.ai UI, runs as root, cached in the VM snapshot)
-#   provisions the machine: Node 24 into /opt/node24 (the image ships 20/21/22 only) and
-#   Chromium's apt dependencies (`playwright install-deps chromium`).
+#   provisions the machine: Node 24 into /opt/node24 (the image ships 20/21/22 only), plus
+#   Chromium and its apt dependencies (`npx -y playwright@<locked> install --with-deps
+#   chromium`) into $PLAYWRIGHT_BROWSERS_PATH (/opt/pw-browsers, not ~/.cache/ms-playwright).
 # - This hook does the project part on every startup/resume, and is cheap when nothing changed:
 #   1. puts the `.nvmrc` Node major (nvm, else /opt) first on PATH, also for Claude's later
 #      shells via CLAUDE_ENV_FILE;
 #   2. `npm ci` from the lockfile, skipped while package-lock.json + Node version are unchanged
 #      (a stale node_modules is the failure mode we've actually hit);
-#   3. `playwright install chromium` for the *locked* Playwright version (a no-op when present).
+#   3. `playwright install chromium` for the *locked* Playwright version: a no-op while the
+#      setup script's pin matches the lockfile, a download once a Playwright bump outruns it.
 #      Needed by `nx test-storybook docs` and Playwright-driven visual reviews.
+#   4. a local `main` (created, or fast-forwarded): Nx's base for `nx format:check` in
+#      .husky/pre-commit and `nx affected`. Cloud clones carry only the session branch, so
+#      without it every commit logs `fatal: ambiguous argument 'main'` and checks all files.
 #
 # Network: the Playwright CDN (cdn.playwright.dev, playwright.download.prss.microsoft.com) and
 # nodejs.org are NOT among the default package-manager domains; the environment uses "Limited"
@@ -77,4 +82,13 @@ fi
 # 3. Chromium for the locked Playwright (revision must match playwright-core)
 node_modules/.bin/playwright install chromium >>"$log" 2>&1 || fail "playwright install chromium failed"
 
-echo "cloud-session-start: Node $(node -v), $deps, Playwright chromium ready."
+# 4. Nx's base branch. Best effort: an offline fetch, or `main` checked out (git refuses to
+#    fetch into it), still leaves a usable session.
+if git fetch -q origin main:main >>"$log" 2>&1 ||
+  git rev-parse -q --verify refs/heads/main >/dev/null; then
+  base="local main ready"
+else
+  base="no local main (git fetch failed, see $log)"
+fi
+
+echo "cloud-session-start: Node $(node -v), $deps, Playwright chromium ready, $base."
