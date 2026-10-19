@@ -56,6 +56,11 @@
   margin: 0;
   color: var(--terminal-title);
 }
+/* Emphasis in any title (default or consumer-supplied) gets the keyword accent. */
+.title em {
+  font-style: italic;
+  color: var(--terminal-syntax-keyword);
+}
 
 .lede {
   font-family: var(--font-reading, 'Spectral', serif);

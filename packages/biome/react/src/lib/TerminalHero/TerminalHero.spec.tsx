@@ -74,7 +74,9 @@ describe('TerminalHero', () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/^A short lede that introduces the page\./),
+      screen.getByText(
+        'A one- or two-sentence introduction to the page goes here.',
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: 'Primary action →' }),
@@ -82,6 +84,25 @@ describe('TerminalHero', () => {
     expect(
       screen.getByRole('link', { name: 'Secondary action ›' }),
     ).toBeInTheDocument();
+  });
+
+  // Pins every default string, so any change to the defaults (including
+  // personal copy creeping back in) fails here and has to be reviewed.
+  it('pins the full default text', () => {
+    const { container } = render(<TerminalHero loop={false} />);
+    const text = (container.textContent ?? '').replace(/\s+/g, ' ').trim();
+    expect(text).toBe(
+      [
+        'Eyebrow · Context',
+        'Your headline goes here,in two short lines.',
+        'A one- or two-sentence introduction to the page goes here.',
+        'Primary action →Secondary action ›',
+        '~/biome — node',
+        'const app = new App(); function build(idea) { return app .plan(idea) ',
+        ".ship().iterate();}$ build('your project')",
+        "→ { status: 'ready', result: 'ok' }",
+      ].join(''),
+    );
   });
 
   it('ships no personal copy in its defaults', () => {

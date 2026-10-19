@@ -42,9 +42,7 @@ const DEFAULT_TITLE = (
   <>
     Your headline goes here,
     <br />
-    <em style={{ fontStyle: 'italic', color: T.keyword }}>
-      in two short lines.
-    </em>
+    <em>in two short lines.</em>
   </>
 );
 
@@ -99,8 +97,8 @@ const DEFAULT_OUTPUT = (
   <>
     → <Tok c="var(--terminal-syntax-output)">{'{ status: '}</Tok>
     <Tok c={T.string}>'ready'</Tok>
-    <Tok c="var(--terminal-syntax-output)">, version: </Tok>
-    <Tok c={T.string}>'1.0.0'</Tok>
+    <Tok c="var(--terminal-syntax-output)">, result: </Tok>
+    <Tok c={T.string}>'ok'</Tok>
     <Tok c="var(--terminal-syntax-output)">{' }'}</Tok>
   </>
 );
@@ -136,7 +134,7 @@ export const TerminalHero = forwardRef<HTMLElement, TerminalHeroProps>(
     {
       eyebrow = 'Eyebrow · Context',
       title = DEFAULT_TITLE,
-      lede = 'A short lede that introduces the page. Replace this placeholder copy with your own via the lede prop.',
+      lede = 'A one- or two-sentence introduction to the page goes here.',
       primaryLabel = 'Primary action →',
       primaryHref = '#',
       secondaryLabel = 'Secondary action ›',
