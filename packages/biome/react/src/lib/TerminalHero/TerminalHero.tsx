@@ -40,44 +40,44 @@ const T = {
 
 const DEFAULT_TITLE = (
   <>
-    I grow software
+    Your headline goes here,
     <br />
-    <em style={{ fontStyle: 'italic', color: T.keyword }}>like ecosystems.</em>
+    <em>in two short lines.</em>
   </>
 );
 
 const DEFAULT_LINES: ReactNode[] = [
   <>
-    <Tok c={T.keyword}>const</Tok> <Tok c={T.text}>biome</Tok>{' '}
+    <Tok c={T.keyword}>const</Tok> <Tok c={T.text}>app</Tok>{' '}
     <Tok c={T.punct}>=</Tok> <Tok c={T.keyword}>new</Tok>{' '}
-    <Tok c={T.fn}>Ecosystem</Tok>
+    <Tok c={T.fn}>App</Tok>
     <Tok c={T.punct}>();</Tok>
   </>,
   <>{' '}</>,
   <>
-    <Tok c={T.keyword}>function</Tok> <Tok c={T.fn}>thiago</Tok>
+    <Tok c={T.keyword}>function</Tok> <Tok c={T.fn}>build</Tok>
     <Tok c={T.punct}>(</Tok>
-    <Tok c={T.string}>challenge</Tok>
+    <Tok c={T.string}>idea</Tok>
     <Tok c={T.punct}>) {'{'}</Tok>
   </>,
   <>
     {sp(2)}
-    <Tok c={T.keyword}>return</Tok> <Tok c={T.text}>biome</Tok>
+    <Tok c={T.keyword}>return</Tok> <Tok c={T.text}>app</Tok>
   </>,
   <>
     {sp(4)}
     <Tok c={T.punct}>.</Tok>
-    <Tok c={T.fn}>observe</Tok>
+    <Tok c={T.fn}>plan</Tok>
     <Tok c={T.punct}>(</Tok>
-    <Tok c={T.string}>challenge</Tok>
+    <Tok c={T.string}>idea</Tok>
     <Tok c={T.punct}>)</Tok>
   </>,
   <>
     {sp(4)}
     <Tok c={T.punct}>.</Tok>
-    <Tok c={T.fn}>adapt</Tok>
+    <Tok c={T.fn}>ship</Tok>
     <Tok c={T.punct}>().</Tok>
-    <Tok c={T.fn}>grow</Tok>
+    <Tok c={T.fn}>iterate</Tok>
     <Tok c={T.punct}>();</Tok>
   </>,
   <>
@@ -87,18 +87,18 @@ const DEFAULT_LINES: ReactNode[] = [
 
 const DEFAULT_COMMAND = (
   <>
-    <Tok c={T.comment}>$</Tok> thiago<Tok c={T.punct}>(</Tok>
-    <Tok c={T.string}>'a living interface'</Tok>
+    <Tok c={T.comment}>$</Tok> build<Tok c={T.punct}>(</Tok>
+    <Tok c={T.string}>'your project'</Tok>
     <Tok c={T.punct}>)</Tok>
   </>
 );
 
 const DEFAULT_OUTPUT = (
   <>
-    → <Tok c="var(--terminal-syntax-output)">{'{ state: '}</Tok>
-    <Tok c={T.string}>'growing'</Tok>
-    <Tok c="var(--terminal-syntax-output)">, uptime: </Tok>
-    <Tok c={T.string}>'∞'</Tok>
+    → <Tok c="var(--terminal-syntax-output)">{'{ status: '}</Tok>
+    <Tok c={T.string}>'ready'</Tok>
+    <Tok c="var(--terminal-syntax-output)">, result: </Tok>
+    <Tok c={T.string}>'ok'</Tok>
     <Tok c="var(--terminal-syntax-output)">{' }'}</Tok>
   </>
 );
@@ -132,12 +132,12 @@ export interface TerminalHeroProps extends Omit<
 export const TerminalHero = forwardRef<HTMLElement, TerminalHeroProps>(
   function TerminalHero(
     {
-      eyebrow = 'Software Engineer · São Paulo',
+      eyebrow = 'Eyebrow · Context',
       title = DEFAULT_TITLE,
-      lede = 'Resilient front-end architecture, real-time data, and the occasional living interface. Currently open to senior roles.',
-      primaryLabel = 'Explore projects →',
+      lede = 'A one- or two-sentence introduction to the page goes here.',
+      primaryLabel = 'Primary action →',
       primaryHref = '#',
-      secondaryLabel = 'Recruiter view ›',
+      secondaryLabel = 'Secondary action ›',
       secondaryHref = '#',
       terminalTitle = '~/biome — node',
       lines = DEFAULT_LINES,
