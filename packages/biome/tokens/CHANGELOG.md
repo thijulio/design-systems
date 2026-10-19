@@ -1,3 +1,14 @@
+## 0.1.1 (2026-10-19)
+
+### 🚀 Features
+
+- **biome-tokens:** list metric-matched fallbacks in the font stacks ([0a29146](https://github.com/thijulio/design-systems/commit/0a29146))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio @thijulio
+
 ## 0.1.0 (2026-10-17)
 
 ### 🩹 Fixes

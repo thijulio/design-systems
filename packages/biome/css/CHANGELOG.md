@@ -1,3 +1,18 @@
+## 0.0.13 (2026-10-19)
+
+### 🚀 Features
+
+- **biome-css:** metric-matched fallbacks and per-face font stylesheets ([0844fef](https://github.com/thijulio/design-systems/commit/0844fef))
+
+### 🧱 Updated Dependencies
+
+- Updated biome-tokens to 0.1.1
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio @thijulio
+
 ## 0.0.12 (2026-10-17)
 
 ### 🧱 Updated Dependencies
