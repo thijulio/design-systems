@@ -7,6 +7,7 @@
     "./biome.css": "./dist/biome.css",
     "./biome-core.css": "./dist/biome-core.css",
     "./fonts-optional.css": "./dist/fonts-optional.css",
+    "./faces/*": "./dist/faces/*",
     "./fonts/*": "./dist/fonts/*",
     "./package.json": "./package.json"
   },

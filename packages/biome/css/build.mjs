@@ -1,7 +1,7 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildFonts, fontFacesCss } from '@thijulio/fonts';
+import { buildFonts, fontFacesCss, fontSlug } from '@thijulio/fonts';
 import { fonts } from './fonts.config.mjs';
 
 const here = import.meta.dirname;
@@ -48,6 +48,40 @@ await writeFile(
   `${optionalFontsCss.trim()}\n`,
 );
 
+// Per-face stylesheets, for pages that pick font-display face by face: one
+// per family × style × display, each the webfont faces of that family and
+// style plus their metric-matched fallbacks. A face whose fallback makes the
+// swap shift-free (a monospace pair) or that is not on the first screen can
+// swap; the first screen's faces stay optional, preloaded.
+await rm(join(dist, 'faces'), { recursive: true, force: true });
+await mkdir(join(dist, 'faces'), { recursive: true });
+const faceFiles = fonts.flatMap(({ family, source, styles }) =>
+  Object.keys(styles).flatMap((style) =>
+    ['swap', 'optional'].map((display) => ({
+      file: `faces/${fontSlug(source.package)}-${style}-${display}.css`,
+      family,
+      style,
+      display,
+    })),
+  ),
+);
+await Promise.all(
+  faceFiles.map(async ({ file, family, style, display }) =>
+    writeFile(
+      join(dist, file),
+      `${(
+        await fontFacesCss({
+          packageRoot: here,
+          fonts,
+          display,
+          only: { family, style },
+          fontsDir: '../fonts',
+        })
+      ).trim()}\n`,
+    ),
+  ),
+);
+
 console.log(
-  '✓ @thijulio/biome-css built → dist/{biome.css,biome-core.css,fonts-optional.css} + dist/fonts/',
+  `✓ @thijulio/biome-css built → dist/{biome.css,biome-core.css,fonts-optional.css} + dist/faces/ (${faceFiles.length}) + dist/fonts/`,
 );

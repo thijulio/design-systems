@@ -11,7 +11,11 @@ their SIL OFL licences ship in `fonts/`, next to the CSS.
 | `@thijulio/biome-css/biome.css`          | Everything: `@font-face` rules (`font-display: swap`), then styles |
 | `@thijulio/biome-css/biome-core.css`     | `biome.css` without its `@font-face` rules                         |
 | `@thijulio/biome-css/fonts-optional.css` | The same faces, same files, with `font-display: optional`          |
+| `@thijulio/biome-css/faces/*`            | The same faces cut by family × style, one file per display         |
 | `@thijulio/biome-css/fonts/*`            | The woff2 files and licences, for preloads                         |
+
+Every face stylesheet also declares the
+[metric-matched fallbacks](#metric-matched-fallbacks) of its faces.
 
 Use **one** of:
 
@@ -22,9 +26,12 @@ Use **one** of:
   shift (CLS 0). A face not ready at first render is skipped for that page
   view and the fallback stays. Once a face is in the HTTP cache, later page
   views use it.
+- **`biome-core.css` + one `faces/<family>-<style>-<display>.css` per
+  family × style + preloads**: pages that must not shift but also need faces
+  they don't preload. See [Picking the display per face](#picking-the-display-per-face).
 
-`verify.mjs` holds the split to being `biome.css` cut in two, so both choices
-get the same styles and the same font files.
+`verify.mjs` holds the split and the per-face files to being `biome.css` cut
+up, so every choice gets the same styles and the same font files.
 
 ## Font families
 
@@ -41,6 +48,56 @@ the `@font-face` rules declare:
 
 It's `Newsreader`, not `Newsreader Variable` (that is fontsource's own name
 for its CSS; Biome writes its own rules from the same files).
+
+## Metric-matched fallbacks
+
+The `--font-*` tokens list, right after each webfont, fallback families that
+the face stylesheets declare from system fonts:
+
+| Token            | Fallbacks (`'<family> Fallback <name>'`) | System fonts (`local()`)                                         |
+| ---------------- | ---------------------------------------- | ---------------------------------------------------------------- |
+| `--font-display` | `Times`, `Noto`                          | Times New Roman / Liberation Serif / Tinos; Noto Serif (Android) |
+| `--font-reading` | `Times`, `Noto`                          | the same                                                         |
+| `--font-ui`      | `Arial`, `Roboto`                        | Arial / Liberation Sans / Arimo; Roboto (Android)                |
+| `--font-mono`    | `Courier`                                | Courier New / Liberation Mono / Cousine                          |
+
+Each is resized (`size-adjust`) to the webfont's average advance and given
+its vertical metrics (`ascent-`, `descent-`, `line-gap-override`), computed at
+build time with capsize from the shipped woff2 and capsize's measurements of
+the system font. Clones such as Liberation and Tinos share a face: their
+advances are identical to the font they clone.
+
+What that buys:
+
+- **JetBrains Mono**: every glyph of both fonts is 0.6 em wide, so the swap
+  moves nothing. It can `swap` with no preload and no layout shift.
+- **Newsreader, Spectral, Space Grotesk**: the average matches, single words
+  and lines don't. A line can still re-wrap when the webfont arrives, which
+  shifts what follows it (the 2026-10-04 measurement below). Newsreader is
+  also an optical-size font: its widths change with the rendered size, and
+  the fallback is matched to the file's default instance. At 17 px and 24 px
+  Chrome renders the italic 1 to 3% wider than the computed ratio.
+- **Optional faces** that miss first paint stay in a fallback that looks
+  closer to the brand for the whole page view.
+
+## Picking the display per face
+
+```css
+@import '@thijulio/biome-css/biome-core.css';
+/* First screen, proportional: optional, preloaded (see below). */
+@import '@thijulio/biome-css/faces/newsreader-normal-optional.css';
+@import '@thijulio/biome-css/faces/spectral-normal-optional.css';
+@import '@thijulio/biome-css/faces/space-grotesk-normal-optional.css';
+/* Shift-free swap (monospace), or measured shift-free on this page. */
+@import '@thijulio/biome-css/faces/jetbrains-mono-normal-swap.css';
+@import '@thijulio/biome-css/faces/newsreader-italic-swap.css';
+@import '@thijulio/biome-css/faces/spectral-italic-optional.css';
+```
+
+Import exactly one file per family × style; two displays of the same face
+would declare it twice, and the last one wins. A proportional face set to
+`swap` is only safe on a page whose CLS you measure with the fonts arriving
+late (thijulio.com does, in its `fonts.spec.ts`).
 
 ## Zero layout shift: the optional split
 
@@ -99,6 +156,19 @@ for its CSS; Biome writes its own rules from the same files).
 - Without preloads, `optional` almost never shows the webfonts on a first
   visit: the browser discovers the files too late. That's the "never" row in
   the measurements below.
+
+## Measured (2026-10-19): per-face swap on thijulio.com
+
+The home page with Newsreader, Spectral and Space Grotesk optional and
+preloaded, and JetBrains Mono and the Newsreader italic on `swap`. Chromium
+via Playwright 1.63, JavaScript off, every `.woff2` response delayed 600 ms,
+CLS from CDP `PerformanceTimeline`, widths 320 to 1440 px.
+
+| Setup                                        | CLS (every width)  | Mono and italic on first view |
+| -------------------------------------------- | ------------------ | ----------------------------- |
+| all `optional` (`fonts-optional.css`)        | 0                  | never                         |
+| mono and italic `swap`, no fallback faces    | 0.00001 to 0.00009 | yes                           |
+| mono and italic `swap`, metric-matched faces | 0                  | yes                           |
 
 ## Measured (2026-10-04)
 

@@ -1,7 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
-import { parseFontFaces, stripCssComments, verifyFonts } from '@thijulio/fonts';
+import {
+  fallbackFamily,
+  fontSlug,
+  parseFontFaces,
+  stripCssComments,
+  verifyFonts,
+} from '@thijulio/fonts';
 import { fonts } from './fonts.config.mjs';
 
 const here = import.meta.dirname;
@@ -39,6 +45,64 @@ assert.deepEqual(
   'fonts-optional.css does not declare the same faces as biome.css',
 );
 
+// The per-face stylesheets are the same faces again, cut by family × style:
+// for each display, together they declare exactly the faces of the stylesheet
+// with that display (biome.css is swap), urls resolved from dist/faces/.
+const faceFiles = fonts.flatMap(({ family, source, styles }) =>
+  Object.keys(styles).flatMap((style) =>
+    ['swap', 'optional'].map((display) => ({
+      file: `faces/${fontSlug(source.package)}-${style}-${display}.css`,
+      display,
+      only: { family, style },
+    })),
+  ),
+);
+const key = (face) =>
+  JSON.stringify({
+    ...face,
+    srcUrls: face.srcUrls.map((u) => u.replace(/^\.\.\//, './')),
+  });
+for (const [display, whole] of [
+  ['swap', css],
+  ['optional', optionalFonts],
+]) {
+  const cut = (
+    await Promise.all(
+      faceFiles
+        .filter((f) => f.display === display)
+        .map(async ({ file }) =>
+          parseFontFaces(await readFile(join(dist, file), 'utf-8')),
+        ),
+    )
+  ).flat();
+  assert.deepEqual(
+    cut.map(key).sort(),
+    parseFontFaces(whole).map(key).sort(),
+    `faces/*-${display}.css do not declare exactly the faces of the ${display} stylesheet`,
+  );
+}
+
+// The font tokens name each family's fallbacks right after it, in the
+// contract's order, so a browser reaches the metric-matched faces before any
+// unadjusted system font.
+const stacks = Object.fromEntries(
+  [...stripCssComments(core).matchAll(/--font-(\w+):\s*([^;]+);/g)].map(
+    ([, name, value]) => [
+      name,
+      value.split(',').map((f) => f.trim().replace(/^['"]|['"]$/g, '')),
+    ],
+  ),
+);
+for (const { family, fallbacks = [] } of fonts) {
+  const stack = Object.values(stacks).find((s) => s[0] === family);
+  assert.ok(stack, `no --font-* token leads with ${family}`);
+  assert.deepEqual(
+    stack.slice(1, 1 + fallbacks.length),
+    fallbacks.map((f) => fallbackFamily(family, f)),
+    `the ${family} token does not list its fallbacks right after it`,
+  );
+}
+
 // Self-hosted fonts: no http(s) URL in any served file; every url()/@import
 // resolves inside dist; every family × style × weight has a latin and a
 // latin-ext face with the listed font-display, leading its stylesheet; OFL
@@ -50,6 +114,7 @@ await verifyFonts({
     { file: 'biome.css', display: 'swap' },
     { file: 'biome-core.css', display: null },
     { file: 'fonts-optional.css', display: 'optional' },
+    ...faceFiles,
   ],
   fonts,
 });

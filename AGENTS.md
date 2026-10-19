@@ -229,14 +229,25 @@ relative urls (Angular → hashed `media/`, Vite → hashed `assets/`).
 
 **`font-display` is the consumer's call, and `<brand>.css` stays `swap`.** It
 can't be overridden outside the `@font-face` rule, so a brand needing both ships
-both: Biome also exports `./biome-core.css` (no faces) and `./fonts-optional.css`
-(same faces and files, `font-display: optional`, from `fontFacesCss()`). `swap`
-suits apps and pages without preloads (an SPA under `optional` keeps the fallback
-all session on a first visit); `optional` + preloads from
-`@thijulio/biome-css/fonts/<file>.woff2` is the only zero-shift path (measured:
-metric-matched fallbacks only reduce the shift). Biome's `verify.mjs` asserts the
-split is the bundle cut in two and that every preload in
-`packages/biome/css/README.md` (the consumer guide) is a face it uses. Declared
+both: Biome also exports `./biome-core.css` (no faces), `./fonts-optional.css`
+(same faces and files, `font-display: optional`, from `fontFacesCss()`) and
+`./faces/<family>-<style>-<swap|optional>.css` (the same faces cut by family ×
+style, `fontFacesCss({ only })`, so a page picks the display face by face).
+`swap` suits apps and pages without preloads (an SPA under `optional` keeps the
+fallback all session on a first visit); `optional` + preloads from
+`@thijulio/biome-css/fonts/<file>.woff2` is the zero-shift path for proportional
+first-screen faces. A family's optional `fallbacks` in `fonts.config.mjs` make
+`@thijulio/fonts` emit metric-matched `local()` faces (`'<family> Fallback
+<name>'`, `size-adjust` + `*-override` from capsize: the shipped woff2 via
+`@capsizecss/unpack`, the system font via `@capsizecss/metrics`) after the
+webfont faces in every face stylesheet; the brand's `--font-*` tokens name them
+right after the webfont. They make a monospace swap shift-free (equal advances)
+and only reduce a proportional one (measured; a re-wrap still shifts), so a
+proportional face swaps only where the consumer has measured its own page.
+Biome's `verify.mjs` asserts the split and the per-face sheets are the bundle
+cut up, that the tokens list the fallbacks, and that every preload in
+`packages/biome/css/README.md` (the consumer guide) is a face it uses;
+`verifyFonts()` re-derives every fallback face and its overrides. Declared
 family names are `fonts.config.mjs`'s `family` (`'Newsreader'`, not
 `'Newsreader Variable'`); consumers use the `--font-*` tokens.
 
