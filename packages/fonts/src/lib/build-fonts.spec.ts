@@ -1,9 +1,13 @@
 import { mkdtempSync, rmSync } from 'node:fs';
-import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { buildFonts, fontFacesCss } from './build-fonts.js';
-import type { BrandFonts } from './font-faces.js';
+import {
+  buildFonts,
+  fontFacesCss,
+  type FontMetricsLoader,
+} from './build-fonts.js';
+import { parseFontFaces, type BrandFonts } from './font-faces.js';
 import { verifyFonts, type FontStylesheet } from './verify-fonts.js';
 
 const UNICODE = {
@@ -51,6 +55,24 @@ const FONTS: BrandFonts = [
     styles: { normal: [400] },
   },
 ];
+
+/** Fixed metrics: every webfont is 0.5 em wide on average, every system font 0.6. */
+const METRICS: FontMetricsLoader = {
+  webfont: async () => ({
+    ascent: 900,
+    descent: -300,
+    lineGap: 0,
+    unitsPerEm: 1000,
+    xWidthAvg: 500,
+  }),
+  system: async () => ({
+    ascent: 1800,
+    descent: -400,
+    lineGap: 100,
+    unitsPerEm: 2000,
+    xWidthAvg: 1200,
+  }),
+};
 
 describe('buildFonts + verifyFonts', () => {
   let root: string;
@@ -242,6 +264,123 @@ describe('buildFonts + verifyFonts', () => {
         { file: 'fonts-optional.css', display: 'optional' },
       ]),
     ).rejects.toThrow('fonts-optional.css is listed but was not built');
+  });
+
+  describe('with metric-matched fallbacks', () => {
+    const WITH_FALLBACKS: BrandFonts = [
+      FONTS[0],
+      {
+        ...FONTS[1],
+        fallbacks: [
+          {
+            name: 'Courier',
+            metrics: 'courierNew',
+            local: { normal: ['Courier New', 'Cousine'] },
+          },
+        ],
+      },
+    ];
+    const buildWith = async (fonts = WITH_FALLBACKS) =>
+      writeFile(
+        join(dist, 'brand.css'),
+        await buildFonts({
+          packageRoot: root,
+          outDir: dist,
+          fonts,
+          metrics: METRICS,
+        }),
+      );
+    const verifyWith = (
+      stylesheets: FontStylesheet[] = [{ file: 'brand.css', display: 'swap' }],
+    ) =>
+      verifyFonts({
+        packageRoot: root,
+        dist,
+        stylesheets,
+        fonts: WITH_FALLBACKS,
+        metrics: METRICS,
+      });
+
+    it('emits the fallback face after the webfont faces, and verifies', async () => {
+      await buildWith();
+      const faces = parseFontFaces(
+        await readFile(join(dist, 'brand.css'), 'utf-8'),
+      );
+
+      expect(faces.at(-1)).toEqual(
+        expect.objectContaining({
+          family: 'Mono Fallback Courier',
+          srcLocals: ['Courier New', 'Cousine'],
+          sizeAdjust: '83.33%',
+          ascentOverride: '108%',
+          descentOverride: '36%',
+          lineGapOverride: '0%',
+        }),
+      );
+      await expect(verifyWith()).resolves.toBeUndefined();
+    });
+
+    it('fails when a fallback face is missing or stale', async () => {
+      await buildWith(FONTS);
+      await expect(verifyWith()).rejects.toThrow(
+        'brand.css: Mono Fallback Courier normal: expected one fallback @font-face, found 0',
+      );
+
+      await buildWith();
+      const css = await readFile(join(dist, 'brand.css'), 'utf-8');
+      await writeFile(
+        join(dist, 'brand.css'),
+        css.replace('size-adjust: 83.33%', 'size-adjust: 90%'),
+      );
+      await expect(verifyWith()).rejects.toThrow(
+        'size-adjust must be 83.33% (found 90%)',
+      );
+    });
+
+    it('writes and verifies a per-face stylesheet', async () => {
+      await buildWith();
+      await mkdir(join(dist, 'faces'));
+      await writeFile(
+        join(dist, 'faces', 'mono-normal-swap.css'),
+        await fontFacesCss({
+          packageRoot: root,
+          fonts: WITH_FALLBACKS,
+          display: 'swap',
+          only: { family: 'Mono', style: 'normal' },
+          fontsDir: '../fonts',
+          metrics: METRICS,
+        }),
+      );
+      const scoped: FontStylesheet = {
+        file: 'faces/mono-normal-swap.css',
+        display: 'swap',
+        only: { family: 'Mono', style: 'normal' },
+      };
+
+      await expect(
+        verifyWith([{ file: 'brand.css', display: 'swap' }, scoped]),
+      ).resolves.toBeUndefined();
+      await expect(
+        verifyWith([
+          { file: 'brand.css', display: 'swap' },
+          { ...scoped, only: { family: 'Sans', style: 'normal' } },
+        ]),
+      ).rejects.toThrow(
+        /faces\/mono-normal-swap\.css: Mono normal 400–400: outside Sans normal[\s\S]*Sans normal 400: no latin @font-face/,
+      );
+    });
+
+    it('refuses a per-face stylesheet outside the contract', async () => {
+      await expect(
+        fontFacesCss({
+          packageRoot: root,
+          fonts: WITH_FALLBACKS,
+          display: 'swap',
+          only: { family: 'Mono', style: 'italic' },
+          metrics: METRICS,
+        }),
+      ).rejects.toThrow('Mono italic: not in the font contract');
+    });
   });
 
   it('fails when no stylesheet declares the faces', async () => {

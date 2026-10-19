@@ -36,12 +36,41 @@ export type FontSource =
   /** One file per weight per style per subset (`@fontsource/*`). */
   | { kind: 'static'; package: string };
 
+/**
+ * A system font that stands in for a webfont until the webfont loads,
+ * declared as its own family: `'<family> Fallback <name>'`. Its face is
+ * resized (`size-adjust`) to the webfont's average advance and given the
+ * webfont's vertical metrics (`ascent-`/`descent-`/`line-gap-override`), so
+ * swapping the webfont in moves the text as little as the two designs allow
+ * — not at all for a monospace pair, whose advances match exactly.
+ */
+export interface FallbackFont {
+  /** Appended to the family name: `'<family> Fallback <name>'`. */
+  name: string;
+  /**
+   * The `@capsizecss/metrics` entry measured for the system font, e.g.
+   * `timesNewRoman` (its `/regular` or `/italic` metrics are used per style).
+   */
+  metrics: string;
+  /**
+   * The `local()` names to try, per style the family contracts: full and
+   * PostScript names, most common first. Metric-compatible clones (Liberation,
+   * Tinos, Cousine, Arimo) share the face: same advances, same overrides.
+   */
+  local: Partial<Record<FontStyle, readonly string[]>>;
+}
+
 export interface FontFamily {
   /** The CSS `font-family` name the brand's tokens reference. */
   family: string;
   source: FontSource;
   /** Weights each style must render — the brand's font contract. */
   styles: Partial<Record<FontStyle, readonly number[]>>;
+  /**
+   * Metric-matched fallbacks, in the order the brand's font tokens list them
+   * right after `family`. None: the tokens fall straight to system fonts.
+   */
+  fallbacks?: readonly FallbackFont[];
 }
 
 export type BrandFonts = readonly FontFamily[];
@@ -123,6 +152,134 @@ export function planFontFaces(
   return faces;
 }
 
+/** The family name a fallback face declares, as the brand's tokens list it. */
+export const fallbackFamily = (
+  family: string,
+  fallback: FallbackFont,
+): string => `${family} Fallback ${fallback.name}`;
+
+/** Vertical metrics and average advance, as `@capsizecss/*` report them. */
+export interface FontMetrics {
+  ascent: number;
+  /** Negative below the baseline, as in the font's tables. */
+  descent: number;
+  lineGap: number;
+  unitsPerEm: number;
+  /** Average advance of latin text, weighted by letter frequency. */
+  xWidthAvg: number;
+}
+
+/** One metric-matched fallback face to emit, and what to measure for it. */
+export interface PlannedFallbackFace {
+  /** `'<family> Fallback <name>'`. */
+  family: string;
+  style: FontStyle;
+  local: readonly string[];
+  /** The webfont file whose metrics the face matches (the latin subset). */
+  webfont: { package: string; file: string };
+  /** `@capsizecss/metrics` module of the system font, e.g. `timesNewRoman/italic`. */
+  metrics: string;
+}
+
+/**
+ * Plan one fallback face per fallback per contracted style. The webfont is
+ * measured on its latin file: the variable file's default instance, or the
+ * static weight closest to 400 (the body weight, which most text renders in).
+ */
+export function planFallbackFaces(fonts: BrandFonts): PlannedFallbackFace[] {
+  const faces: PlannedFallbackFace[] = [];
+  for (const { family, source, styles, fallbacks = [] } of fonts) {
+    const slug = fontSlug(source.package);
+    for (const [style, weights] of Object.entries(styles) as [
+      FontStyle,
+      readonly number[],
+    ][]) {
+      const body = [...weights].sort(
+        (a, b) => Math.abs(a - 400) - Math.abs(b - 400) || a - b,
+      )[0];
+      const file =
+        source.kind === 'variable'
+          ? `${slug}-latin-${source.axes}-${style}.woff2`
+          : `${slug}-latin-${body}-${style}.woff2`;
+      for (const fallback of fallbacks) {
+        const local = fallback.local[style];
+        if (!local?.length)
+          throw new Error(
+            `${fallbackFamily(family, fallback)}: no local() names for ${style}`,
+          );
+        faces.push({
+          family: fallbackFamily(family, fallback),
+          style,
+          local,
+          webfont: { package: source.package, file },
+          metrics: `${fallback.metrics}/${style === 'italic' ? 'italic' : 'regular'}`,
+        });
+      }
+    }
+  }
+  return faces;
+}
+
+/** The descriptors that make a fallback face take the webfont's room. */
+export interface FallbackOverrides {
+  sizeAdjust: number;
+  ascentOverride: number;
+  descentOverride: number;
+  lineGapOverride: number;
+}
+
+/**
+ * Capsize's formula: scale the fallback so its average advance equals the
+ * webfont's, then give it the webfont's vertical metrics. The overrides are
+ * fractions of the used font size, which `size-adjust` has already scaled —
+ * hence the division.
+ */
+export function fallbackOverrides(
+  webfont: FontMetrics,
+  fallback: FontMetrics,
+): FallbackOverrides {
+  const sizeAdjust =
+    webfont.xWidthAvg /
+    webfont.unitsPerEm /
+    (fallback.xWidthAvg / fallback.unitsPerEm);
+  const share = (value: number) =>
+    Math.abs(value) / webfont.unitsPerEm / sizeAdjust;
+  return {
+    sizeAdjust,
+    ascentOverride: share(webfont.ascent),
+    descentOverride: share(webfont.descent),
+    lineGapOverride: share(webfont.lineGap),
+  };
+}
+
+export type ResolvedFallbackFace = PlannedFallbackFace & FallbackOverrides;
+
+/** `0.92973` → `92.97%`: how fallback descriptors are written. */
+export const percent = (fraction: number): string =>
+  `${Number((fraction * 100).toFixed(2))}%`;
+
+/** Render resolved fallback faces: `local()` sources only, no font-display. */
+export function renderFallbackFaces(
+  faces: readonly ResolvedFallbackFace[],
+): string {
+  return faces
+    .map(
+      (
+        face,
+      ) => `/* ${face.family} ${face.style}: metric-matched to ${face.webfont.file} */
+@font-face {
+  font-family: '${face.family}';
+  font-style: ${face.style};
+  src: ${face.local.map((name) => `local('${name}')`).join(', ')};
+  size-adjust: ${percent(face.sizeAdjust)};
+  ascent-override: ${percent(face.ascentOverride)};
+  descent-override: ${percent(face.descentOverride)};
+  line-gap-override: ${percent(face.lineGapOverride)};
+}`,
+    )
+    .join('\n\n');
+}
+
 const formatWeight = ([min, max]: PlannedFontFace['weight']): string =>
   min === max ? `${min}` : `${min} ${max}`;
 
@@ -131,12 +288,18 @@ export interface RenderFontFacesOptions {
   fontsDir?: string;
   /** Defaults to `swap`. */
   display?: FontDisplay;
+  /** Metric-matched fallback faces, emitted after the webfont faces. */
+  fallbacks?: readonly ResolvedFallbackFace[];
 }
 
 /** Render planned faces as CSS whose `src` urls are relative to `fontsDir`. */
 export function renderFontFaces(
   faces: readonly PlannedFontFace[],
-  { fontsDir = './fonts', display = 'swap' }: RenderFontFacesOptions = {},
+  {
+    fontsDir = './fonts',
+    display = 'swap',
+    fallbacks = [],
+  }: RenderFontFacesOptions = {},
 ): string {
   const header = `/* Webfonts — AUTO-GENERATED by @thijulio/fonts from fonts.config.mjs; do not
    edit. Self-hosted (no third-party requests): the woff2 files and their SIL
@@ -154,7 +317,10 @@ export function renderFontFaces(
   unicode-range: ${normalizeUnicodeRange(face.unicodeRange)};
 }`,
   );
-  return [header, ...rules].join('\n\n');
+  const fallbackRules = fallbacks.length
+    ? [renderFallbackFaces(fallbacks)]
+    : [];
+  return [header, ...rules, ...fallbackRules].join('\n\n');
 }
 
 /** `U+0000-00FF,U+0131` and `U+0000-00FF, U+0131` compare equal. */
@@ -172,7 +338,13 @@ export interface ParsedFontFace {
   weight: readonly [min: number, max: number];
   display: string | undefined;
   srcUrls: string[];
+  /** `local()` names in `src`, in order. */
+  srcLocals: string[];
   unicodeRange: string | undefined;
+  sizeAdjust: string | undefined;
+  ascentOverride: string | undefined;
+  descentOverride: string | undefined;
+  lineGapOverride: string | undefined;
 }
 
 export const stripCssComments = (css: string): string =>
@@ -197,7 +369,14 @@ export function parseFontFaces(css: string): ParsedFontFace[] {
         srcUrls: [
           ...(prop('src') ?? '').matchAll(/url\(\s*(['"]?)(.*?)\1\s*\)/g),
         ].map((m) => m[2]),
+        srcLocals: [
+          ...(prop('src') ?? '').matchAll(/local\(\s*(['"]?)(.*?)\1\s*\)/g),
+        ].map((m) => m[2]),
         unicodeRange: prop('unicode-range'),
+        sizeAdjust: prop('size-adjust'),
+        ascentOverride: prop('ascent-override'),
+        descentOverride: prop('descent-override'),
+        lineGapOverride: prop('line-gap-override'),
       };
     },
   );

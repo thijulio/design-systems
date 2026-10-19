@@ -9,6 +9,9 @@ export default [
         'error',
         {
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}'],
+          // Imported by a computed path (`@capsizecss/metrics/<font>/<style>`,
+          // build-fonts.ts), which the check cannot see.
+          ignoredDependencies: ['@capsizecss/metrics'],
         },
       ],
     },
