@@ -1,9 +1,17 @@
 {
   "font": {
-    "display": { "value": "'Newsreader', Georgia, 'Times New Roman', serif" },
-    "reading": { "value": "'Spectral', Georgia, serif" },
-    "ui": { "value": "'Space Grotesk', system-ui, -apple-system, sans-serif" },
-    "mono": { "value": "'JetBrains Mono', ui-monospace, 'SF Mono', monospace" }
+    "display": {
+      "value": "'Newsreader', 'Newsreader Fallback Times', 'Newsreader Fallback Noto', Georgia, 'Times New Roman', serif"
+    },
+    "reading": {
+      "value": "'Spectral', 'Spectral Fallback Times', 'Spectral Fallback Noto', Georgia, serif"
+    },
+    "ui": {
+      "value": "'Space Grotesk', 'Space Grotesk Fallback Arial', 'Space Grotesk Fallback Roboto', system-ui, -apple-system, sans-serif"
+    },
+    "mono": {
+      "value": "'JetBrains Mono', 'JetBrains Mono Fallback Courier', ui-monospace, 'SF Mono', monospace"
+    }
   },
   "text": {
     "heading": { "value": "{font.display}" },
