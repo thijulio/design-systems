@@ -1,3 +1,15 @@
+## 0.0.10 (2026-10-19)
+
+### 🩹 Fixes
+
+- **biome-react:** style terminalhero title emphasis via css module ([3549ab7](https://github.com/thijulio/design-systems/commit/3549ab7))
+- **biome-react:** replace personal terminalhero defaults with neutral placeholders ([263134c](https://github.com/thijulio/design-systems/commit/263134c))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio @thijulio
+
 ## 0.0.9 (2026-10-17)
 
 ### 🚀 Features
