@@ -52,6 +52,19 @@
           "^typecheck",
           "^build"
         ]
+      },
+      "verify-tree-shaking": {
+        "command": "node tools/verify-tree-shaking.mjs {projectRoot} Button Carousel,Dialog,Table",
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          "{workspaceRoot}/tools/verify-tree-shaking.mjs"
+        ],
+        "outputs": []
       }
     }
   },

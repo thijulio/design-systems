@@ -258,7 +258,12 @@ vars. Data-driven palettes (e.g. status tones) are wired via inline CSS custom
 properties + the `StyleWithVars` type in `_util/style.ts` (avoids N near-identical
 classes). `react`/`react-dom` are peerDependencies; `sideEffects: ["**/*.css"]`.
 Also exports `./styles.css`→`dist/index.css` (for Storybook, which consumes built
-packages). When a prop name collides with a native HTML attribute you repurpose
+packages). The vite build emits **one module per source file** (`preserveModules`,
+`dist/lib/Name/Name.js`) so a consumer importing one component drops the rest via
+`sideEffects`; all CSS still lands in the single `dist/index.css` and no JS module
+imports CSS. The `verify-tree-shaking` target (`tools/verify-tree-shaking.mjs`, in
+CI and the release gate) bundles `import { Button }` from the built `dist` and
+fails if unrelated components leak in or it exceeds 40% of the whole package. When a prop name collides with a native HTML attribute you repurpose
 (`title`, `onChange`), `Omit` it from the extended `HTMLAttributes`.
 
 The Biome, Exodus, Faune and primitives packages are published to GitHub
@@ -365,7 +370,7 @@ redeploys automatically on push to `main` (`storybook-pages.yml`).
 ## Commands
 
 ```
-nx run-many -t build test lint typecheck          # everything
+nx run-many -t build test lint typecheck verify-tree-shaking  # everything
 nx run-many -t build test lint --projects=<name>  # one project (+ its deps)
 nx build-storybook docs                            # static Storybook → apps/docs/storybook-static
 nx verify-contract docs                           # check shared CSS variables for all three brands

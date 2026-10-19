@@ -37,6 +37,17 @@ export default defineConfig(() => ({
       formats: ['es' as const],
     },
     rolldownOptions: {
+      // One output module per source file: a consumer importing one component
+      // drops every other component module via package.json `sideEffects`.
+      // CSS still ships as the single `dist/index.css` (`./styles.css`), and
+      // no JS module imports it. Guarded by the `verify-tree-shaking` target.
+      output: {
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+        // Mirror src (`lib/Button/Button.js`) instead of lib mode's
+        // `fileName` on every module (`index1.js`, `index2.js`, …).
+        entryFileNames: '[name].js',
+      },
       // External packages that should not be bundled into your library.
       external: [
         'react',

@@ -43,13 +43,13 @@ jobs:
       # narrows `nx affected`, and no project has a graph edge to the toolchain
       # (typescript, jest, eslint, @nx/*) — so any lockfile change runs
       # everything here, as CI did before the setting.
-      - name: lint / test / build / typecheck
+      - name: lint / test / build / typecheck / tree-shaking
         run: |
           changed="$(git diff --name-only "$NX_BASE" "$NX_HEAD")"
           if grep -qx 'package-lock.json' <<< "$changed"; then
-            npx nx run-many -t lint test build typecheck
+            npx nx run-many -t lint test build typecheck verify-tree-shaking
           else
-            npx nx affected -t lint test build typecheck
+            npx nx affected -t lint test build typecheck verify-tree-shaking
           fi
 
   storybook:

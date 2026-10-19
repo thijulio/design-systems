@@ -113,8 +113,8 @@ jobs:
       - name: format check
         run: npx nx format:check --all
 
-      - name: lint / test / build / typecheck
-        run: npx nx run-many -t lint test build typecheck
+      - name: lint / test / build / typecheck / tree-shaking
+        run: npx nx run-many -t lint test build typecheck verify-tree-shaking
 
       - name: Verify the --ds-* contract across brands
         run: npx nx run docs:verify-contract
