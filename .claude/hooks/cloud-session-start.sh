@@ -14,6 +14,9 @@
 #   3. `playwright install chromium` for the *locked* Playwright version: a no-op while the
 #      setup script's pin matches the lockfile, a download once a Playwright bump outruns it.
 #      Needed by `nx test-storybook docs` and Playwright-driven visual reviews.
+#   4. a local `main` (created, or fast-forwarded): Nx's base for `nx format:check` in
+#      .husky/pre-commit and `nx affected`. Cloud clones carry only the session branch, so
+#      without it every commit logs `fatal: ambiguous argument 'main'` and checks all files.
 #
 # Network: the Playwright CDN (cdn.playwright.dev, playwright.download.prss.microsoft.com) and
 # nodejs.org are NOT among the default package-manager domains; the environment uses "Limited"
@@ -79,4 +82,13 @@ fi
 # 3. Chromium for the locked Playwright (revision must match playwright-core)
 node_modules/.bin/playwright install chromium >>"$log" 2>&1 || fail "playwright install chromium failed"
 
-echo "cloud-session-start: Node $(node -v), $deps, Playwright chromium ready."
+# 4. Nx's base branch. Best effort: an offline fetch, or `main` checked out (git refuses to
+#    fetch into it), still leaves a usable session.
+if git fetch -q origin main:main >>"$log" 2>&1 ||
+  git rev-parse -q --verify refs/heads/main >/dev/null; then
+  base="local main ready"
+else
+  base="no local main (git fetch failed, see $log)"
+fi
+
+echo "cloud-session-start: Node $(node -v), $deps, Playwright chromium ready, $base."
