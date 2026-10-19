@@ -241,7 +241,8 @@ first-screen faces. A family's optional `fallbacks` in `fonts.config.mjs` make
 <name>'`, `size-adjust` + `*-override` from capsize: the shipped woff2 via
 `@capsizecss/unpack`, the system font via `@capsizecss/metrics`) after the
 webfont faces in every face stylesheet; the brand's `--font-*` tokens name them
-right after the webfont. They make a monospace swap shift-free (equal advances)
+right after the webfont. They make a monospace swap shift-free (equal advances;
+not on Android, which has no Courier New or clone)
 and only reduce a proportional one (measured; a re-wrap still shifts), so a
 proportional face swaps only where the consumer has measured its own page.
 Biome's `verify.mjs` asserts the split and the per-face sheets are the bundle

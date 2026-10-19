@@ -70,7 +70,10 @@ advances are identical to the font they clone.
 What that buys:
 
 - **JetBrains Mono**: every glyph of both fonts is 0.6 em wide, so the swap
-  moves nothing. It can `swap` with no preload and no layout shift.
+  moves nothing. It can `swap` with no preload and no layout shift where
+  Courier New or a clone is installed (Windows, macOS, most Linux). Android
+  has none of them: it falls to its own `monospace`, the same width but with
+  other vertical metrics, which can move inline mono within prose.
 - **Newsreader, Spectral, Space Grotesk**: the average matches, single words
   and lines don't. A line can still re-wrap when the webfont arrives, which
   shifts what follows it (the 2026-10-04 measurement below). Newsreader is
