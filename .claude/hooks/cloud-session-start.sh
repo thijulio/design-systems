@@ -3,14 +3,16 @@
 #
 # Split of responsibilities (https://code.claude.com/docs/en/cloud-environments):
 # - The environment's *setup script* (claude.ai UI, runs as root, cached in the VM snapshot)
-#   provisions the machine: Node 24 into /opt/node24 (the image ships 20/21/22 only) and
-#   Chromium's apt dependencies (`playwright install-deps chromium`).
+#   provisions the machine: Node 24 into /opt/node24 (the image ships 20/21/22 only), plus
+#   Chromium and its apt dependencies (`npx -y playwright@<locked> install --with-deps
+#   chromium`) into $PLAYWRIGHT_BROWSERS_PATH (/opt/pw-browsers, not ~/.cache/ms-playwright).
 # - This hook does the project part on every startup/resume, and is cheap when nothing changed:
 #   1. puts the `.nvmrc` Node major (nvm, else /opt) first on PATH, also for Claude's later
 #      shells via CLAUDE_ENV_FILE;
 #   2. `npm ci` from the lockfile, skipped while package-lock.json + Node version are unchanged
 #      (a stale node_modules is the failure mode we've actually hit);
-#   3. `playwright install chromium` for the *locked* Playwright version (a no-op when present).
+#   3. `playwright install chromium` for the *locked* Playwright version: a no-op while the
+#      setup script's pin matches the lockfile, a download once a Playwright bump outruns it.
 #      Needed by `nx test-storybook docs` and Playwright-driven visual reviews.
 #
 # Network: the Playwright CDN (cdn.playwright.dev, playwright.download.prss.microsoft.com) and
