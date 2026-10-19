@@ -1,3 +1,18 @@
+## 0.1.1 (2026-10-19)
+
+### 🩹 Fixes
+
+- **primitives,exodus-react,biome-react,faune-react:** emit one module per source file ([eba689f](https://github.com/thijulio/design-systems/commit/eba689f))
+
+### 🧱 Updated Dependencies
+
+- Updated primitives to 0.1.1
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- thijulio @thijulio
+
 ## 0.1.0 (2026-10-17)
 
 ### 🧱 Updated Dependencies

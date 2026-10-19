@@ -1,6 +1,6 @@
 {
   "name": "@thijulio/biome-react",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "private": false,
   "type": "module",
   "files": [
@@ -77,6 +77,6 @@
     "directory": "packages/biome/react"
   },
   "dependencies": {
-    "@thijulio/primitives": "^0.1.0"
+    "@thijulio/primitives": "^0.1.1"
   }
 }
