@@ -4,6 +4,9 @@
 **Date:** 2026-10-02
 **Deciders:** Thiago Valença
 
+> **Exception:** Biome ships a hand-written Vue package instead of a generated
+> wrapper. See [ADR-0002](0002-biome-native-vue.md).
+
 ## Context
 
 - Every brand ships `<brand>-tokens → <brand>-css → <brand>-react` (AGENTS.md). All
