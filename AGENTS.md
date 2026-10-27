@@ -466,6 +466,14 @@ cross-brand consumer).
   passes were ~50 MB of RPC per run; dropping them halved the heaviest stories).
   Keep that guard and per-story payloads small; don't raise `testTimeout` to
   hide a stall.
+- **Storybook test files share a page** (`isolate: false` on the
+  `storybook:*` projects): Vite serves the module graph once per browser
+  worker instead of once per file (the run went from ~95s to ~40s, #30). A
+  story starts on whatever the previous file left. `preview.tsx` re-applies the
+  brand CSS (`#brand-tokens`) and `data-mode`/`data-theme` per story, then
+  stamps `#brand-tokens` with the story id. A play that reads that state must
+  wait for its own id first (see `withLegacyTokens(context, …)`), and a story
+  that changes global page state must undo it (as `withLegacyTokens` does).
 - **prettier** has no parser for `.swcrc` or `Dockerfile` → `**/*.swcrc` and
   `Dockerfile`/`.dockerignore` are in `.prettierignore`.
 - **Webfonts are self-hosted: never add a font CDN `@import`/`<link>`** (GDPR;

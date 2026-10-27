@@ -32,6 +32,7 @@ const withBrandTokens: Decorator = (Story, context) => {
   const css = brand ? BRAND_CSS[brand] : '';
   const mode = context.globals.mode as string;
   const accent = context.globals.accent as string;
+  const storyId = context.id;
 
   useEffect(() => {
     let el = document.getElementById('brand-tokens') as HTMLStyleElement | null;
@@ -43,7 +44,11 @@ const withBrandTokens: Decorator = (Story, context) => {
     el.textContent = css;
     document.documentElement.setAttribute('data-mode', mode);
     document.documentElement.setAttribute('data-theme', accent);
-  }, [css, mode, accent]);
+    // Marks whose brand/mode/accent is applied. Test files share one page
+    // (`isolate: false` in vitest.config.ts), so the previous file's brand CSS
+    // is still here until this effect runs; checks wait for their own id.
+    el.dataset.storyId = storyId;
+  }, [css, mode, accent, storyId]);
 
   return (
     <div style={{ padding: 24 }}>
