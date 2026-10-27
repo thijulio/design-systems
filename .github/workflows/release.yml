@@ -5,8 +5,11 @@ name: Release
 # built dist. Publishing comes last so the registry never holds a version
 # whose commit/tags didn't reach main. A run with no releasable commits is a
 # no-op (no new versions; publish skips versions already in the registry). The
-# release commit is pushed with GITHUB_TOKEN, which does not trigger workflows.
-# Independent of the Storybook Pages deploy.
+# release commit is pushed over SSH with the RELEASE_DEPLOY_KEY deploy key: the
+# `main` ruleset requires CI, and on a personal repo GitHub Actions can't be a
+# bypass actor, but deploy keys can (#29). Unlike GITHUB_TOKEN, a deploy-key
+# push triggers workflows: CI and the Storybook Pages deploy run on the release
+# commit. It can't loop, because this workflow only runs on dispatch.
 #
 # Dispatch only, never on merge: a merge used to release whatever the merge
 # method's commit message implied (a squash titled `feat:` bumped every
@@ -73,9 +76,25 @@ jobs:
           echo "::error::Real releases must be dispatched from main (got ${DISPATCH_REF}). Use dry_run=true to preview a branch."
           exit 1
 
+      # Without the deploy key the push below would go out with GITHUB_TOKEN
+      # and the ruleset would reject it, after the ~30 min gate. Fail first.
+      - name: Guard — real releases need the deploy key
+        if: ${{ !inputs.dry_run }}
+        env:
+          RELEASE_DEPLOY_KEY: ${{ secrets.RELEASE_DEPLOY_KEY }}
+        run: |
+          if [[ -z "$RELEASE_DEPLOY_KEY" ]]; then
+            echo "::error::Secret RELEASE_DEPLOY_KEY is not set. The release push to main needs it to bypass the ruleset's required checks (see #29)."
+            exit 1
+          fi
+
+      # With ssh-key, origin is the SSH remote and the push below authenticates
+      # as the deploy key. When the secret is empty (dry runs before it exists)
+      # checkout falls back to GITHUB_TOKEN, which is all a dry run needs.
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
 
       # The inputs are free text: check their shape, then hand them to the
       # release commands through env, never spliced into the script.
@@ -144,7 +163,8 @@ jobs:
       # nx release commits and tags locally but does not push. --atomic: the
       # commit and tags land together or not at all. If main moved since
       # checkout (a merge landed), this is rejected and the job stops BEFORE
-      # publishing; dispatch again to release from the new tip.
+      # publishing; dispatch again to release from the new tip. Goes over SSH
+      # as the deploy key, the ruleset's bypass actor for its required checks.
       - name: Push release commit and tags
         if: ${{ !inputs.dry_run }}
         run: git push --atomic --follow-tags origin HEAD:main

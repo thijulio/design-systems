@@ -349,8 +349,13 @@ version commit + tags to `main` with `--atomic`, and only then
 registry versions are immutable, so if `main` moved during the run the push is
 rejected **before** anything is published — dispatch again from the new tip.
 Publish skips versions already in the registry, and re-running a run that
-pushed but failed to publish recovers it. The version commit is pushed with
-`GITHUB_TOKEN`, which does not trigger workflows, so it can't loop. A breaking
+pushed but failed to publish recovers it. The version commit is pushed over
+SSH with the `RELEASE_DEPLOY_KEY` deploy key (a repo secret holding the private
+half of a write deploy key): the `main` ruleset requires the CI checks `main`
+and `Storybook browser checks`, and on a personal repo only deploy keys (not
+GitHub Actions) can bypass it. A real release fails fast without the secret.
+That push triggers CI and the Pages deploy on the release commit; it can't
+loop because Release only runs on dispatch. A breaking
 change in a 0.x package needs a hand-written changelog note: Nx only records
 it as the minor bump.
 Three hard-won gotchas are baked in: **`HUSKY=0`** (the dev pre-commit hook
