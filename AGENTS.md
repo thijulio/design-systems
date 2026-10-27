@@ -269,14 +269,21 @@ fails if unrelated components leak in or it exceeds 40% of the whole package. Wh
 (`title`, `onChange`), `Omit` it from the extended `HTMLAttributes`.
 
 **vue package** (`biome-vue` only, ADR-0002) — `@nx/vue:library --bundler=vite`,
-the react package's shape in Vue: `Name/{Name.vue, Name.spec.ts}` with
-`<style module>` on token vars, `vue` as a peerDependency, the same
-`preserveModules` build and `out-tsc` typecheck split (`vue-tsc --build`), and
+the react package's shape in Vue: `Name/{Name.vue, Name.spec.ts}`, `vue` as a
+peerDependency, the same `preserveModules` build, `verify-tree-shaking` target and
+`out-tsc` typecheck split (`vue-tsc --build`), and
 Vitest + `@vue/test-utils` (the `@nx/vitest` plugin is scoped to `packages/**`, so
 the Storybook apps' vitest configs get no `test` target). Its `./styles.css` is
 `dist/index.css` with `@import '@thijulio/biome-css/biome.css'` prepended after
 the build (a vite plugin in `vite.config.mts`), so one import gives fonts,
 tokens, reset and component styles, and `biome-css` is a real dependency.
+**It writes no CSS of its own:** each SFC's `<style module="primitive" src>` /
+`<style module="skin" src>` points at the very `*.module.css` files `biome-react`
+uses (the primitive it delegates to, then its skin), by repo-relative path (ADR-0002).
+`implicitDependencies` on `primitives` and `biome-react` make those files rebuild and
+release `biome-vue`; their class maps land in `dist/_styles/`. React props become Vue
+props + same-named slots (`ReactNode` → slot), `onChange` → `v-model`, `forwardRef`
+→ the root element (`$el`), `displayName` → `defineOptions({ name })`.
 
 The Biome, Exodus, Faune and primitives packages are published to GitHub
 Packages (`private: false`, `publishConfig`, `files: ["dist"]`); their current
