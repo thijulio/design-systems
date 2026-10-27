@@ -1,11 +1,12 @@
-// Fails when a published React package stops being tree-shakeable.
+// Fails when a published React or Vue package stops being tree-shakeable.
 //
 // usage: node tools/verify-tree-shaking.mjs <projectRoot> <Import> <Unrelated,...>
 //
 // Bundles `import { <Import> }` from the package's BUILT entry the way a
 // consumer's bundler would (package.json `sideEffects` honoured, peers and CSS
 // external) and asserts that:
-//   1. no unrelated component (matched by its `displayName`) survives, and
+//   1. no unrelated component (matched by its React `displayName` or its Vue
+//      `name` option) survives, and
 //   2. the result stays well under the size of importing everything.
 // Run it after `build` (the nx target `verify-tree-shaking` depends on it).
 import { readFileSync } from 'node:fs';
@@ -69,7 +70,9 @@ console.log(
 
 const failures = [];
 const leaked = unrelated.filter((name) =>
-  new RegExp(`displayName\\s*=\\s*["'\`]${name}["'\`]`).test(one.code),
+  new RegExp(`(?:displayName\\s*=|\\bname\\s*:)\\s*["'\`]${name}["'\`]`).test(
+    one.code,
+  ),
 );
 if (leaked.length > 0) {
   failures.push(
