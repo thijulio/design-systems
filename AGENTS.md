@@ -77,6 +77,7 @@ packages/
     tokens/        @thijulio/biome-tokens — SD JSON → tokens.css (+ .js/.d.ts)
     css/           @thijulio/biome-css    → dist/biome.css (reset+base+motion)
     react/         @thijulio/biome-react  — Button, Card, Tag, ModeToggle, TerminalHero
+    vue/           @thijulio/biome-vue    — Vue 3 port of biome-react (ADR-0002)
   exodus/
     tokens/        @thijulio/exodus-tokens
     css/           @thijulio/exodus-css   → dist/exodus.css (+ exodus-tokens.css: fonts + tokens only)
@@ -113,7 +114,8 @@ natively. Biome and Exodus wrappers (compatibility skins) are a migration bridge
 and should shrink toward that, component by component. Brands keep different
 component _sets_ and themes; only the structure is uniform.
 Vue/Angular support: Web Components alongside `-react` (accepted) — see
-[ADR-0001](docs/architecture/adr/0001-multi-framework-web-components.md).
+[ADR-0001](docs/architecture/adr/0001-multi-framework-web-components.md). Exception:
+Biome also ships a hand-written `biome-vue` ([ADR-0002](docs/architecture/adr/0002-biome-native-vue.md)).
 
 ## The token pipeline (how tokens become CSS + TS)
 
@@ -266,6 +268,16 @@ CI and the release gate) bundles `import { Button }` from the built `dist` and
 fails if unrelated components leak in or it exceeds 40% of the whole package. When a prop name collides with a native HTML attribute you repurpose
 (`title`, `onChange`), `Omit` it from the extended `HTMLAttributes`.
 
+**vue package** (`biome-vue` only, ADR-0002) — `@nx/vue:library --bundler=vite`,
+the react package's shape in Vue: `Name/{Name.vue, Name.spec.ts}` with
+`<style module>` on token vars, `vue` as a peerDependency, the same
+`preserveModules` build and `out-tsc` typecheck split (`vue-tsc --build`), and
+Vitest + `@vue/test-utils` (the `@nx/vitest` plugin is scoped to `packages/**`, so
+the Storybook apps' vitest configs get no `test` target). Its `./styles.css` is
+`dist/index.css` with `@import '@thijulio/biome-css/biome.css'` prepended after
+the build (a vite plugin in `vite.config.mts`), so one import gives fonts,
+tokens, reset and component styles, and `biome-css` is a real dependency.
+
 The Biome, Exodus, Faune and primitives packages are published to GitHub
 Packages (`private: false`, `publishConfig`, `files: ["dist"]`); their current
 versions are the `<pkg>@<version>` git tags. `core` and `fonts` stay private
@@ -389,7 +401,8 @@ gh workflow run release.yml -f version=0.1.0 -f projects=primitives -f dry_run=f
 
 ## Testing
 
-Jest + React Testing Library for react packages (behavior specs). Token/CSS
+Jest + React Testing Library for react packages (behavior specs); Vitest +
+`@vue/test-utils` for `biome-vue`. Token/CSS
 packages use a `node:assert` `verify.mjs` run as the `test` target — because
 **Style Dictionary is pure ESM and Jest's loader can't import ESM in a CJS run**,
 so the real build/output is validated by Node, not Jest. In `core`, the pure

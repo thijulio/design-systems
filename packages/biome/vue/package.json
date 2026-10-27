@@ -1,0 +1,70 @@
+{
+  "name": "@thijulio/biome-vue",
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/index.css"
+  },
+  "nx": {
+    "name": "biome-vue",
+    "tags": [
+      "scope:biome"
+    ],
+    "release": {
+      "version": {
+        "fallbackCurrentVersionResolver": "disk",
+        "preserveMatchingDependencyRanges": false
+      }
+    },
+    "targets": {
+      "typecheck": {
+        "inputs": [
+          "default",
+          "{workspaceRoot}/tsconfig.base.json",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript",
+              "vue-tsc"
+            ]
+          }
+        ],
+        "dependsOn": [
+          "^typecheck",
+          "^build"
+        ]
+      }
+    }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thijulio/design-systems.git",
+    "directory": "packages/biome/vue"
+  },
+  "dependencies": {
+    "@thijulio/biome-css": "^0.0.13"
+  }
+}

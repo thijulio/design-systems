@@ -67,6 +67,15 @@
         "buildDepsTargetName": "build-deps",
         "watchDepsTargetName": "watch-deps"
       }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "test",
+        "ciTargetName": "test-ci",
+        "testMode": "run"
+      },
+      "include": ["packages/**/*"]
     }
   ],
   "pluginsConfig": {
@@ -80,6 +89,7 @@
       "biome-tokens",
       "biome-css",
       "biome-react",
+      "biome-vue",
       "exodus-tokens",
       "exodus-css",
       "exodus-react",

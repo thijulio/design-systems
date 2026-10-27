@@ -32,6 +32,9 @@
     },
     {
       "path": "./apps/docs-web-components"
+    },
+    {
+      "path": "./packages/biome/vue"
     }
   ]
 }
