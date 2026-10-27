@@ -132,11 +132,11 @@ async function checkSkin(canvasElement: HTMLElement, dark: boolean) {
 
 export const Light: Story = {
   globals: { mode: 'light' },
-  play: ({ canvasElement }) =>
-    withLegacyTokens(() => checkSkin(canvasElement, false)),
+  play: ({ canvasElement, id }) =>
+    withLegacyTokens({ id }, () => checkSkin(canvasElement, false)),
 };
 export const Dark: Story = {
   globals: { mode: 'dark' },
-  play: ({ canvasElement }) =>
-    withLegacyTokens(() => checkSkin(canvasElement, true)),
+  play: ({ canvasElement, id }) =>
+    withLegacyTokens({ id }, () => checkSkin(canvasElement, true)),
 };

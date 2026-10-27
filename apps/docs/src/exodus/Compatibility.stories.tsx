@@ -88,8 +88,13 @@ async function checkSkin(canvasElement: HTMLElement) {
   ).toBe('4px');
 }
 
-const legacyCheck = ({ canvasElement }: { canvasElement: HTMLElement }) =>
-  withLegacyTokens(() => checkSkin(canvasElement));
+const legacyCheck = ({
+  canvasElement,
+  id,
+}: {
+  canvasElement: HTMLElement;
+  id: string;
+}) => withLegacyTokens({ id }, () => checkSkin(canvasElement));
 
 export const Sage: Story = { globals: { accent: 'sage' }, play: legacyCheck };
 export const Clay: Story = { globals: { accent: 'clay' }, play: legacyCheck };

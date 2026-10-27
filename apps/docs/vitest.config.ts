@@ -42,6 +42,14 @@ function storybookProject(designSystem: DesignSystem, order: number) {
       name: `storybook:${designSystem.toLowerCase()}`,
       exclude: isDefault ? [] : BRANDED_STORY_DIRS,
       sequence: { groupOrder: order },
+      // Test files share one page per browser worker instead of a fresh
+      // iframe each, so Vite serves the module graph once per worker, not
+      // once per file: the run drops from ~95s to ~40s (#30). Re-serving it
+      // per file saturated the orchestrator thread. Stories therefore start
+      // on the page the previous file left: preview.tsx re-applies the
+      // brand CSS and data-mode/data-theme on every story and stamps its id,
+      // and checks of that state wait for it (_test/legacy-styles.ts).
+      isolate: false,
       // Axe audits execute in a real browser and can exceed Vitest's short
       // unit-test default while the full catalog is running concurrently.
       testTimeout: 30_000,
