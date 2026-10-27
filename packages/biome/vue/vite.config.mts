@@ -58,8 +58,17 @@ export default defineConfig(() => ({
         preserveModules: true,
         preserveModulesRoot: 'src',
         // Mirror src (`lib/Name/Name.vue.js`) instead of lib mode's
-        // `fileName` on every module (`index1.js`, `index2.js`, …).
-        entryFileNames: '[name].js',
+        // `fileName` on every module (`index1.js`, `index2.js`, …). The CSS
+        // Modules class maps of the shared stylesheets (`<style module src>`
+        // into primitives and biome-react, ADR-0002) live outside src, so
+        // they go under `_styles/` instead of `primitives/src/lib/…`.
+        // A function gets the raw module id, so the `?vue&type=…` query is
+        // flattened here as `[name]` would (`Name.vue_vue_type_…`).
+        entryFileNames: ({ name }) =>
+          `${name
+            .replace(/^primitives\/src\/lib\//, '_styles/primitives/')
+            .replace(/^biome\/react\/src\/lib\//, '_styles/biome-react/')
+            .replace(/[?&=]/g, '_')}.js`,
       },
       // External packages that should not be bundled into your library.
       external: ['vue'],

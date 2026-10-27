@@ -18,8 +18,14 @@ export default [
     // Component names mirror biome-react (Button, Card, Tag), which are
     // single words; the `@thijulio/biome-vue` import path namespaces them.
     files: ['**/*.vue'],
+    // `Button` is matched case-sensitively: SFC templates resolve the
+    // imported `<Button>` binding, never the native `<button>`.
     rules: {
       'vue/multi-word-component-names': 'off',
+      'vue/no-reserved-component-names': [
+        'error',
+        { htmlElementCaseSensitive: true },
+      ],
     },
   },
   // Prettier owns formatting; turn off the stylistic rules it would fight.
