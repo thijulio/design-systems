@@ -29,6 +29,10 @@
     "tags": [
       "scope:biome"
     ],
+    "implicitDependencies": [
+      "primitives",
+      "biome-react"
+    ],
     "release": {
       "version": {
         "fallbackCurrentVersionResolver": "disk",
@@ -52,6 +56,19 @@
           "^typecheck",
           "^build"
         ]
+      },
+      "verify-tree-shaking": {
+        "command": "node tools/verify-tree-shaking.mjs {projectRoot} Button TerminalHero,ModeToggle",
+        "dependsOn": [
+          "build"
+        ],
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          "{workspaceRoot}/tools/verify-tree-shaking.mjs"
+        ],
+        "outputs": []
       }
     }
   },
